@@ -1,22 +1,33 @@
 import mongoose, { Schema, type Document } from "mongoose";
 
-export interface IUser extends Document {
+export interface IUsers extends Document {
     username: string;
     password: string;
-    createdAt: Date;
-    updatedAt: Date;
 }
 
-const UserSchema: Schema = new Schema(
+const UsersSchema: Schema = new Schema(
     {
         username: { type: String, required: true, unique: true },
         password: { type: String, required: true },
-        createdAt: { type: Date, default: Date.now },
-        updatedAt: { type: Date, default: Date.now },
+        totalExp: { type: Number, default: 0 },
+
+        currentStreak: { type: Number, default: 0 },
+        bestStreak: { type: Number, default: 0 },
+        lastPlayedDate: { type: Date, default: null },
+
+        postsProcessed: { type: Number, default: 0 },
+        postsCorrect: { type: Number, default: 0 },
+
+        postsHistory: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Posts",
+            },
+        ],
     },
     {
         timestamps: true,
     }
 );
 
-export default mongoose.model<IUser>("User", UserSchema);
+export default mongoose.model<IUsers>("Users", UsersSchema);
