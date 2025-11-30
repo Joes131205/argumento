@@ -1,22 +1,20 @@
 import { instance } from "@/utils/api";
 
-export const healthCheck = async (
+export const judge = async (
     headline: string,
     content: string,
-    isRejected: boolean,
+    correctType: string,
     reason: string
 ) => {
     try {
         const res = await instance.post("/judge", {
             headline,
             content,
-            isRejected,
+            correctType,
             reason,
         });
-        if (res.status === 200) {
-            return "OK";
-        }
-        return "NOT OK";
+        console.log(res);
+        return res.data;
     } catch (error) {
         console.log(error);
         return "SERVER ERROR";

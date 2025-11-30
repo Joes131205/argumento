@@ -1,5 +1,5 @@
 // import { authMiddleware } from "@/middleware/auth";
-import { judge } from "@/middleware/judge";
+import { judge } from "@/controllers/judge";
 import express from "express";
 
 export const judgeRouter = express.Router();

@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const instance = axios.create({
     baseURL: import.meta.env.VITE_SERVER_URL,
-    timeout: 5000,
+    timeout: 50000,
 });
 
 instance.interceptors.request.use(
