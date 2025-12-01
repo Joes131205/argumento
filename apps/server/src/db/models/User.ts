@@ -3,6 +3,13 @@ import mongoose, { Schema, type Document } from "mongoose";
 export interface IUsers extends Document {
     username: string;
     password: string;
+    totalExp: number;
+    currentStreak: number;
+    bestStreak: number;
+    lastPlayedDate: Date;
+    postProcessed: number;
+    postsCorrect: number;
+    postsHistory: string[];
 }
 
 const UsersSchema: Schema = new Schema(

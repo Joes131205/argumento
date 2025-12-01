@@ -6,7 +6,23 @@ export interface IPosts extends Document {
 
 const PostsSchema: Schema = new Schema(
     {
-        field: { type: String, required: true },
+        headline: {
+            type: String,
+            required: true,
+        },
+        content: {
+            type: String,
+            required: true,
+        },
+        type: {
+            type: String,
+            enum: ["safe", "slop"],
+            required: true,
+        },
+        slop_reason: {
+            type: String,
+            default: null,
+        },
     },
     {
         timestamps: true,

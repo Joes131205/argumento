@@ -1,6 +1,6 @@
 import { judge } from "@/apis/judge";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/play")({
     component: RouteComponent,
@@ -43,14 +43,24 @@ function RouteComponent() {
         message: string;
     } | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [shiftResult, setShiftResult] = useState<
+        { id: number; is_correct?: boolean }[]
+    >([]);
 
     const current = data[index];
+    useEffect(() => {
+        console.log(shiftResult);
+    }, [shiftResult]);
 
+    const handleEndShift = () => {};
     if (!current) {
         return (
             <div className="p-10 text-center">
                 <h2>🎉 Shift Complete!</h2>
                 <p>You cleaned the internet for today.</p>
+                <button type="button" onClick={handleEndShift}>
+                    End Shift!
+                </button>
             </div>
         );
     }
@@ -61,7 +71,18 @@ function RouteComponent() {
         setIsResult(true);
     };
 
+    const addResult = () => {
+        setShiftResult((prev) => [
+            ...prev,
+            {
+                id: current.id,
+                is_correct: verdict?.is_correct,
+            },
+        ]);
+    };
+
     const nextLevel = () => {
+        addResult();
         setIsResult(false);
         setIsRejected(false);
         setReason("");
