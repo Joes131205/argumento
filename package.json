@@ -1,26 +1,27 @@
 {
-	"name": "si-peduli",
-	"private": true,
-	"type": "module",
-	"workspaces": [
-		"apps/*",
-		"packages/*"
-	],
-	"scripts": {
-		"check": "biome check --write .",
-		"dev": "turbo dev",
-		"build": "turbo build",
-		"check-types": "turbo check-types",
-		"dev:native": "turbo -F native dev",
-		"dev:web": "turbo -F web dev",
-		"dev:server": "turbo -F server dev"
-	},
-	"dependencies": {
-		"@google/genai": "^1.30.0"
-	},
-	"devDependencies": {
-		"turbo": "^2.5.4",
-		"@biomejs/biome": "^2.2.0"
-	},
-	"packageManager": "bun@1.2.21"
+    "name": "si-peduli",
+    "private": true,
+    "type": "module",
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ],
+    "scripts": {
+        "check": "biome check --write .",
+        "dev": "turbo dev",
+        "build": "turbo build",
+        "check-types": "turbo check-types",
+        "dev:native": "turbo -F native dev",
+        "dev:web": "turbo -F web dev",
+        "dev:server": "turbo -F server dev",
+        "seed:posts": "tsx --env-file=apps/server/.env apps/server/src/db/seeder/post.ts"
+    },
+    "dependencies": {
+        "@google/genai": "^1.30.0"
+    },
+    "devDependencies": {
+        "turbo": "^2.5.4",
+        "@biomejs/biome": "^2.2.0"
+    },
+    "packageManager": "bun@1.2.21"
 }

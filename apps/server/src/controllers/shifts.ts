@@ -12,7 +12,8 @@ declare global {
 
 export const fetchPost = async (req: Request, res: Response) => {
     try {
-        const size = req.body.size || 3;
+        console.log(req.body);
+        const { postLength } = req.body;
         const userId = req.users;
 
         if (!userId) {
@@ -35,7 +36,7 @@ export const fetchPost = async (req: Request, res: Response) => {
 
         const data = await Posts.aggregate([
             { $match: { _id: { $nin: seenId } } },
-            { $sample: { size: Number(size) } },
+            { $sample: { size: Number(postLength) } },
             {
                 $project: {
                     headline: 1,

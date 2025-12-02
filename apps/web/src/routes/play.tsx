@@ -1,39 +1,46 @@
+import { getMe } from "@/apis/auth";
 import { judge } from "@/apis/judge";
-import { createFileRoute } from "@tanstack/react-router";
+import { fetchPost } from "@/apis/shifts";
+import {
+    createFileRoute,
+    redirect,
+    useLoaderData,
+} from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/play")({
     component: RouteComponent,
+    loader: async () => {
+        // Validate user's existence
+        const user = await getMe();
+        console.log(user);
+        if (!user) {
+            toast.warning("please sign in");
+            throw redirect({ to: "/sign-in" });
+        }
+
+        const storage = localStorage.getItem("shift_data");
+        if (!storage) {
+            try {
+                const posts = await fetchPost(3);
+                const postData = posts.data || posts;
+                const newGame = { currPosts: postData, log: [] };
+
+                localStorage.setItem("shift_data", JSON.stringify(newGame));
+                return newGame;
+            } catch (error) {
+                console.error(error);
+                throw redirect({ to: "/" });
+            }
+        }
+        return JSON.parse(storage);
+    },
 });
 
-const data = [
-    {
-        id: 1,
-        headline: "You won't believe what Millennials are killing now!",
-        content:
-            "The napkin industry is dead and it is entirely their fault because they hate tradition.",
-        type: "slop",
-        slop_reason: "Generational Rage Bait",
-    },
-    {
-        id: 2,
-        headline: "NASA confirms asteroid will hit Earth tomorrow",
-        content:
-            "Sources say the elite are already building bunkers. Share this to warn your family!",
-        type: "slop",
-        slop_reason: "Fear Mongering / Fake News",
-    },
-    {
-        id: 3,
-        headline: "Cat saved from tree by local fireman",
-        content:
-            "Whiskers the cat is safe after spending 3 hours stuck in an oak tree.",
-        type: "safe",
-        slop_reason: null,
-    },
-];
-
 function RouteComponent() {
+    const data = useLoaderData({ from: "/play" });
+
     const [isRejected, setIsRejected] = useState(false);
     const [isResult, setIsResult] = useState(false);
     const [index, setIndex] = useState(0);
@@ -44,15 +51,17 @@ function RouteComponent() {
     } | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [shiftResult, setShiftResult] = useState<
-        { id: number; is_correct?: boolean }[]
+        { id: string; is_correct?: boolean }[]
     >([]);
 
-    const current = data[index];
+    const current = data?.currPosts[data?.log?.length];
+
     useEffect(() => {
         console.log(shiftResult);
     }, [shiftResult]);
 
     const handleEndShift = () => {};
+
     if (!current) {
         return (
             <div className="p-10 text-center">
@@ -66,6 +75,8 @@ function RouteComponent() {
     }
 
     const { headline, content, type, slop_reason } = current;
+
+    const saveProgress = (item: { id: string; is_correct: boolean }) => {};
 
     const showResult = () => {
         setIsResult(true);
