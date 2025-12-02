@@ -1,10 +1,11 @@
 import { getMe } from "@/apis/auth";
 import { judge } from "@/apis/judge";
-import { fetchPost } from "@/apis/shifts";
+import { completeShift, fetchPost } from "@/apis/shifts";
 import {
     createFileRoute,
     redirect,
     useLoaderData,
+    useRouter,
 } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -34,6 +35,7 @@ export const Route = createFileRoute("/play")({
                 throw redirect({ to: "/" });
             }
         }
+        console.log(JSON.parse(storage));
         return JSON.parse(storage);
     },
 });
@@ -41,33 +43,59 @@ export const Route = createFileRoute("/play")({
 function RouteComponent() {
     const data = useLoaderData({ from: "/play" });
 
+    const router = useRouter();
+
     const [isRejected, setIsRejected] = useState(false);
     const [isResult, setIsResult] = useState(false);
-    const [index, setIndex] = useState(0);
+    const [index, setIndex] = useState(data.log.length);
     const [reason, setReason] = useState("");
     const [verdict, setVerdict] = useState<{
         is_correct: boolean;
         message: string;
     } | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [shiftResult, setShiftResult] = useState<
-        { id: string; is_correct?: boolean }[]
-    >([]);
 
-    const current = data?.currPosts[data?.log?.length];
+    const [isLoading, setIsLoading] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+    const [logs, setLogs] = useState(data.log);
+
+    const current = data?.currPosts[index];
 
     useEffect(() => {
-        console.log(shiftResult);
-    }, [shiftResult]);
+        console.log(logs);
+    }, [logs]);
 
-    const handleEndShift = () => {};
+    const handleEndShift = async () => {
+        setIsSaving(true);
+        try {
+            const xpEarned =
+                logs.filter((item) => item.is_correct).length * 100;
+
+            await completeShift(logs);
+
+            localStorage.removeItem("shift_data");
+
+            toast.success(`Shift Complete! +${xpEarned} XP`);
+
+            router.navigate({ to: "/" });
+
+            console.log(logs);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsSaving(false);
+        }
+    };
 
     if (!current) {
         return (
             <div className="p-10 text-center">
                 <h2>🎉 Shift Complete!</h2>
-                <p>You cleaned the internet for today.</p>
-                <button type="button" onClick={handleEndShift}>
+                <p>You finished this shift for today!</p>
+                <button
+                    type="button"
+                    onClick={handleEndShift}
+                    disabled={isSaving}
+                >
                     End Shift!
                 </button>
             </div>
@@ -76,24 +104,23 @@ function RouteComponent() {
 
     const { headline, content, type, slop_reason } = current;
 
-    const saveProgress = (item: { id: string; is_correct: boolean }) => {};
+    const saveProgress = (item: { id: string; is_correct: boolean }) => {
+        const savedLogs = [...logs, item];
+        localStorage.setItem(
+            "shift_data",
+            JSON.stringify({ currPosts: data.currPosts, log: savedLogs })
+        );
+        setLogs(savedLogs);
+    };
 
     const showResult = () => {
         setIsResult(true);
     };
 
-    const addResult = () => {
-        setShiftResult((prev) => [
-            ...prev,
-            {
-                id: current.id,
-                is_correct: verdict?.is_correct,
-            },
-        ]);
-    };
-
     const nextLevel = () => {
-        addResult();
+        if (current && verdict) {
+            saveProgress({ id: current._id, is_correct: verdict.is_correct });
+        }
         setIsResult(false);
         setIsRejected(false);
         setReason("");
@@ -147,7 +174,7 @@ function RouteComponent() {
                 <h3>{verdict?.is_correct ? "Nice Job!" : "Issue!"}</h3>
                 <p>{verdict?.message}</p>
 
-                <div className="bg-gray-100 p-2 rounded mb-4 text-sm">
+                <div className="p-2 rounded mb-4 text-sm">
                     <p>
                         <strong>Your Action:</strong>{" "}
                         {isRejected ? "Rejected (Slop)" : "Approved (Safe)"}

@@ -59,6 +59,34 @@ export const fetchPost = async (req: Request, res: Response) => {
 
 export const completeShift = async (req: Request, res: Response) => {
     try {
+        const userId = req.users;
+        const { history } = req.body;
+
+        const postId = history.map((item) => item.id);
+        const postCorrect = history.filter((item) => item.is_correct).length;
+
+        const expEarned = postCorrect * 100;
+
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(401).send({
+                success: false,
+                message: "Unauthorized",
+            });
+        }
+
+        await User.findByIdAndUpdate(userId, {
+            $addToSet: {
+                postsHistory: postId,
+            },
+            $inc: {
+                postProcessed: history.length,
+                postsCorrect: postCorrect,
+                totalExp: expEarned,
+            },
+        });
+
         res.status(200).json({ success: true, message: "Success" });
     } catch (error) {
         console.error(error);
