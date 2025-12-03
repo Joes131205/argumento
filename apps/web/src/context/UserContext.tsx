@@ -4,6 +4,14 @@ import { createContext, useEffect, useState, type ReactNode } from "react";
 interface User {
     id: string;
     username: string;
+    password: string;
+    totalExp: number;
+    currentStreak: number;
+    bestStreak: number;
+    lastPlayedDate: Date;
+    postProcessed: number;
+    postsCorrect: number;
+    postsHistory: string[];
 }
 interface UserContextType {
     user: User | null;

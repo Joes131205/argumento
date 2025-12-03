@@ -28,6 +28,31 @@ function HomeComponent() {
             <button type="button" onClick={toggleTheme}>
                 Change Theme
             </button>
+            <div>
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p>Total EXP</p>
+                    <p>{user?.totalExp || 0} EXP</p>
+                </div>
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <p className="text-xs font-bold uppercase text-gray-400 mb-2">
+                        Accuracy Rating
+                    </p>
+                    <p className="text-4xl font-black">
+                        {(user?.postProcessed ?? 0) > 0
+                            ? Math.round(
+                                  ((user?.postsCorrect ?? 0) /
+                                      (user?.postProcessed ?? 0)) *
+                                      100
+                              )
+                            : 0}
+                        %
+                    </p>
+                    <p className="text-xs text-gray-500 mt-2">
+                        {user?.postsCorrect || 0} / {user?.postProcessed || 0}{" "}
+                        Correct
+                    </p>
+                </div>
+            </div>
         </div>
     );
 }

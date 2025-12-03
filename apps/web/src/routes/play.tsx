@@ -1,6 +1,7 @@
 import { getMe } from "@/apis/auth";
 import { judge } from "@/apis/judge";
 import { completeShift, fetchPost } from "@/apis/shifts";
+import Manual from "@/components/Manual";
 import {
     createFileRoute,
     redirect,
@@ -193,9 +194,10 @@ function RouteComponent() {
     }
 
     return (
-        <div>
-            <h2>Daily Shift</h2>
+        <div className="flex gap-5 justify-between p-5">
             <div>
+                <h2>Daily Shift</h2>
+
                 <p>Post #{index + 1}</p>
                 <div className="flex flex-col gap-2">
                     <p className="text-2xl font-bold">{headline}</p>
@@ -234,6 +236,9 @@ function RouteComponent() {
                         </div>
                     )}
                 </div>
+            </div>
+            <div>
+                <Manual />
             </div>
         </div>
     );
