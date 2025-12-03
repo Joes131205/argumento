@@ -1,6 +1,14 @@
 import type { Request, Response } from "express";
 import Posts from "@/db/models/Posts";
 import User from "@/db/models/User";
+import { GoogleGenAI } from "@google/genai";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const ai = new GoogleGenAI({
+    apiKey: process.env.GEMINI_AI_API,
+});
 
 declare global {
     namespace Express {
@@ -10,6 +18,45 @@ declare global {
     }
 }
 
+// AI generate the content
+export const generateDailyShift = async (req: Request, res: Response) => {
+    try {
+        console.log(req.body);
+        const { postLength, types } = req.body;
+        const userId = req.users;
+
+        if (!userId) {
+            return res.status(401).send({
+                success: false,
+                message: "Unauthorized",
+            });
+        }
+
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(401).send({
+                success: false,
+                message: "Unauthorized",
+            });
+        }
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-pro",
+            contents: `${types}`,
+        });
+
+        res.status(200).json({ success: true, message: "Success" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error,
+        });
+    }
+};
+
+// TODO: Modify this
 export const fetchPost = async (req: Request, res: Response) => {
     try {
         console.log(req.body);
@@ -76,6 +123,25 @@ export const completeShift = async (req: Request, res: Response) => {
             });
         }
 
+        // calculate streak
+
+        let currStreak = user.currentStreak;
+        let currBest = user.bestStreak;
+        const lastPlayed = user.lastPlayedDate.getTime() || Date.now();
+        const now = Date.now();
+
+        const daysDiff = Math.floor((now - lastPlayed) / (1000 * 60 * 60 * 24));
+
+        if (daysDiff === 0) {
+            // Do nothing :)
+        } else if (daysDiff === 1) {
+            currStreak++;
+            currBest = Math.max(currStreak, currBest);
+        } else if (daysDiff > 1) {
+            currBest = Math.max(currStreak, currBest);
+            currStreak = 1;
+        }
+
         await User.findByIdAndUpdate(userId, {
             $addToSet: {
                 postsHistory: postId,
@@ -84,6 +150,11 @@ export const completeShift = async (req: Request, res: Response) => {
                 postProcessed: history.length,
                 postsCorrect: postCorrect,
                 totalExp: expEarned,
+            },
+            $set: {
+                lastPlayedDate: Date.now(),
+                currentStreak: currStreak,
+                bestStreak: currBest,
             },
         });
 
