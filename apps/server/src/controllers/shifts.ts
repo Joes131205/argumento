@@ -40,12 +40,53 @@ export const generateDailyShift = async (req: Request, res: Response) => {
                 message: "Unauthorized",
             });
         }
+
+        const prompt = `
+            ROLE: You are an Educational Content Generator for a critical thinking training app. 
+            
+            TASK: Generate ${postLength} social media posts based on the following categories: ${JSON.stringify(types)}.
+            
+            INSTRUCTIONS:
+            - If the category is "Safe", generate a boring, factual news post.
+            - If the category is a Fallacy or Bias, generate a realistic "Slop" post that uses that specific manipulation technique.
+            - The tone should be varied (some angry, some fearful, some clickbait).
+            
+            OUTPUT SCHEMA (JSON Array):
+            [
+              {
+                "headline": "string (Catchy title)",
+                "content": "string (The post body)",
+                "type": "string ('slop' or 'safe')",
+                "slop_reason": "string (The exact name of the fallacy/bias used, or null if safe)",
+                "origin": "ai"
+              }
+            ]
+        `;
         const response = await ai.models.generateContent({
             model: "gemini-2.5-pro",
-            contents: `${types}`,
+            contents: prompt,
         });
 
-        res.status(200).json({ success: true, message: "Success" });
+        console.log(
+            JSON.parse(
+                response?.candidates?.[0]?.content?.parts?.[0]?.text
+                    ?.replace("```json\n", "")
+                    .replace("\n```", "") || ""
+            )
+        );
+
+        const parsed = JSON.parse(
+            response?.candidates?.[0]?.content?.parts?.[0]?.text
+                ?.replace("```json\n", "")
+                .replace("\n```", "") || ""
+        );
+
+        const savedPosts = await Posts.insertMany(parsed);
+        res.status(200).json({
+            success: true,
+            message: "Success",
+            posts: savedPosts,
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({
@@ -59,39 +100,39 @@ export const generateDailyShift = async (req: Request, res: Response) => {
 // TODO: Modify this
 export const fetchPost = async (req: Request, res: Response) => {
     try {
-        console.log(req.body);
-        const { postLength } = req.body;
-        const userId = req.users;
+        // console.log(req.body);
+        // const { postLength } = req.body;
+        // const userId = req.users;
 
-        if (!userId) {
-            return res.status(401).send({
-                success: false,
-                message: "Unauthorized",
-            });
-        }
+        // if (!userId) {
+        //     return res.status(401).send({
+        //         success: false,
+        //         message: "Unauthorized",
+        //     });
+        // }
 
-        const user = await User.findById(userId);
+        // const user = await User.findById(userId);
 
-        if (!user) {
-            return res.status(401).send({
-                success: false,
-                message: "Unauthorized",
-            });
-        }
+        // if (!user) {
+        //     return res.status(401).send({
+        //         success: false,
+        //         message: "Unauthorized",
+        //     });
+        // }
 
-        const seenId = user.postsHistory;
+        // const seenId = user.postsHistory;
 
-        const data = await Posts.aggregate([
-            { $match: { _id: { $nin: seenId } } },
-            { $sample: { size: Number(postLength) } },
-            {
-                $project: {
-                    headline: 1,
-                    content: 1,
-                    type: 1,
-                },
-            },
-        ]);
+        // const data = await Posts.aggregate([
+        //     { $match: { _id: { $nin: seenId } } },
+        //     { $sample: { size: Number(postLength) } },
+        //     {
+        //         $project: {
+        //             headline: 1,
+        //             content: 1,
+        //             type: 1,
+        //         },
+        //     },
+        // ]);
 
         res.status(200).json({ success: true, message: "Success", data });
     } catch (error) {

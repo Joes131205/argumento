@@ -11,7 +11,7 @@ import {
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/play")({
+export const Route = createFileRoute("/playDemo")({
     component: RouteComponent,
     loader: async () => {
         // Validate user's existence

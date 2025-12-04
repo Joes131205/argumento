@@ -20,3 +20,16 @@ export const completeShift = async (history) => {
         return "SERVER ERROR";
     }
 };
+
+export const generateDailyShift = async (postLength, types) => {
+    try {
+        const res = await instance.put("/shifts/complete", {
+            postLength,
+            types,
+        });
+        console.log(res);
+    } catch (error) {
+        console.log(error);
+        return "SERVER ERROR";
+    }
+};

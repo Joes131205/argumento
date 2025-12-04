@@ -12,8 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as StatusRouteImport } from './routes/status'
 import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as SignInRouteImport } from './routes/sign-in'
-import { Route as PlayRouteImport } from './routes/play'
+import { Route as PlayDemoRouteImport } from './routes/playDemo'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PlayDailyRouteImport } from './routes/play/daily'
 
 const StatusRoute = StatusRouteImport.update({
   id: '/status',
@@ -30,9 +31,9 @@ const SignInRoute = SignInRouteImport.update({
   path: '/sign-in',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PlayRoute = PlayRouteImport.update({
-  id: '/play',
-  path: '/play',
+const PlayDemoRoute = PlayDemoRouteImport.update({
+  id: '/playDemo',
+  path: '/playDemo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -40,43 +41,65 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlayDailyRoute = PlayDailyRouteImport.update({
+  id: '/play/daily',
+  path: '/play/daily',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/play': typeof PlayRoute
+  '/playDemo': typeof PlayDemoRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/status': typeof StatusRoute
+  '/play/daily': typeof PlayDailyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/play': typeof PlayRoute
+  '/playDemo': typeof PlayDemoRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/status': typeof StatusRoute
+  '/play/daily': typeof PlayDailyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/play': typeof PlayRoute
+  '/playDemo': typeof PlayDemoRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/status': typeof StatusRoute
+  '/play/daily': typeof PlayDailyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/play' | '/sign-in' | '/sign-up' | '/status'
+  fullPaths:
+    | '/'
+    | '/playDemo'
+    | '/sign-in'
+    | '/sign-up'
+    | '/status'
+    | '/play/daily'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/play' | '/sign-in' | '/sign-up' | '/status'
-  id: '__root__' | '/' | '/play' | '/sign-in' | '/sign-up' | '/status'
+  to: '/' | '/playDemo' | '/sign-in' | '/sign-up' | '/status' | '/play/daily'
+  id:
+    | '__root__'
+    | '/'
+    | '/playDemo'
+    | '/sign-in'
+    | '/sign-up'
+    | '/status'
+    | '/play/daily'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  PlayRoute: typeof PlayRoute
+  PlayDemoRoute: typeof PlayDemoRoute
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
   StatusRoute: typeof StatusRoute
+  PlayDailyRoute: typeof PlayDailyRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -102,11 +125,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignInRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/play': {
-      id: '/play'
-      path: '/play'
-      fullPath: '/play'
-      preLoaderRoute: typeof PlayRouteImport
+    '/playDemo': {
+      id: '/playDemo'
+      path: '/playDemo'
+      fullPath: '/playDemo'
+      preLoaderRoute: typeof PlayDemoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -116,15 +139,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/play/daily': {
+      id: '/play/daily'
+      path: '/play/daily'
+      fullPath: '/play/daily'
+      preLoaderRoute: typeof PlayDailyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  PlayRoute: PlayRoute,
+  PlayDemoRoute: PlayDemoRoute,
   SignInRoute: SignInRoute,
   SignUpRoute: SignUpRoute,
   StatusRoute: StatusRoute,
+  PlayDailyRoute: PlayDailyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

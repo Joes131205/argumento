@@ -23,6 +23,11 @@ const PostsSchema: Schema = new Schema(
             type: String,
             default: null,
         },
+        origin: {
+            type: String,
+            enum: ["ai", "human"],
+            required: true,
+        },
     },
     {
         timestamps: true,

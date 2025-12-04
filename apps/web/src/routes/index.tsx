@@ -52,6 +52,9 @@ function HomeComponent() {
                         Correct
                     </p>
                 </div>
+
+                {/* Play Section */}
+                <div></div>
             </div>
         </div>
     );

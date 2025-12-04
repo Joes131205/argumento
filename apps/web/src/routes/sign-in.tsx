@@ -43,12 +43,13 @@ function RouteComponent() {
         onSubmit: async ({ value }) => {
             try {
                 const response = await login(value.username, value.password);
-                if (response?.data) {
-                    const token = response.data.token;
+                if (response?.token) {
+                    const token = response.token;
                     localStorage.setItem("token", token);
                     toast.success("Login successful!");
                     invalidateUser();
                 } else {
+                    console.log(response);
                     toast.error("Login failed! Please try again!");
                 }
             } catch (error) {
