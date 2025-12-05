@@ -43,6 +43,7 @@ function RouteComponent() {
         onSubmit: async ({ value }) => {
             try {
                 const response = await login(value.username, value.password);
+                console.log(response);
                 if (response?.token) {
                     const token = response.token;
                     localStorage.setItem("token", token);

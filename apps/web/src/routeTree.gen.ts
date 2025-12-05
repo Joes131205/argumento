@@ -12,7 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as StatusRouteImport } from './routes/status'
 import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as SignInRouteImport } from './routes/sign-in'
-import { Route as PlayDemoRouteImport } from './routes/playDemo'
+import { Route as PlayDemoRouteImport } from './routes/play-demo'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PlayDailyRouteImport } from './routes/play/daily'
 
@@ -32,8 +32,8 @@ const SignInRoute = SignInRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlayDemoRoute = PlayDemoRouteImport.update({
-  id: '/playDemo',
-  path: '/playDemo',
+  id: '/play-demo',
+  path: '/play-demo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -49,7 +49,7 @@ const PlayDailyRoute = PlayDailyRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/playDemo': typeof PlayDemoRoute
+  '/play-demo': typeof PlayDemoRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/status': typeof StatusRoute
@@ -57,7 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/playDemo': typeof PlayDemoRoute
+  '/play-demo': typeof PlayDemoRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/status': typeof StatusRoute
@@ -66,7 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/playDemo': typeof PlayDemoRoute
+  '/play-demo': typeof PlayDemoRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/status': typeof StatusRoute
@@ -76,17 +76,17 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/playDemo'
+    | '/play-demo'
     | '/sign-in'
     | '/sign-up'
     | '/status'
     | '/play/daily'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/playDemo' | '/sign-in' | '/sign-up' | '/status' | '/play/daily'
+  to: '/' | '/play-demo' | '/sign-in' | '/sign-up' | '/status' | '/play/daily'
   id:
     | '__root__'
     | '/'
-    | '/playDemo'
+    | '/play-demo'
     | '/sign-in'
     | '/sign-up'
     | '/status'
@@ -125,10 +125,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignInRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/playDemo': {
-      id: '/playDemo'
-      path: '/playDemo'
-      fullPath: '/playDemo'
+    '/play-demo': {
+      id: '/play-demo'
+      path: '/play-demo'
+      fullPath: '/play-demo'
       preLoaderRoute: typeof PlayDemoRouteImport
       parentRoute: typeof rootRouteImport
     }

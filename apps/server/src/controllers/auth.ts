@@ -112,12 +112,12 @@ export const getMe = async (req: Request, res: Response) => {
             });
         }
 
+        const userObj = user.toObject();
+        const { password, ...safeUser } = userObj as any;
+
         res.status(200).json({
             success: true,
-            data: {
-                id: user._id,
-                username: user.username,
-            },
+            user: safeUser,
         });
     } catch (error) {
         console.error(error);

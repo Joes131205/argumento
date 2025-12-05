@@ -11,7 +11,7 @@ import {
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/playDemo")({
+export const Route = createFileRoute("/play-demo")({
     component: RouteComponent,
     loader: async () => {
         // Validate user's existence
@@ -42,7 +42,7 @@ export const Route = createFileRoute("/playDemo")({
 });
 
 function RouteComponent() {
-    const data = useLoaderData({ from: "/play" });
+    const data = useLoaderData({ from: "/play-demo" });
 
     const router = useRouter();
 

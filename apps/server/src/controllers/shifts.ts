@@ -44,20 +44,26 @@ export const generateDailyShift = async (req: Request, res: Response) => {
         const prompt = `
             ROLE: You are an Educational Content Generator for a critical thinking training app. 
             
-            TASK: Generate ${postLength} social media posts based on the following categories: ${JSON.stringify(types)}.
+            TASK: Generate ${postLength} social media posts.
+            
+            DISTRIBUTION RULES (CRITICAL):
+            1. You must generate a mix of "Safe" posts and "Slop" posts.
+            2. Aim for a 50/50 split (e.g. if requesting 3 posts, make 1 Safe and 2 Slop, or vice versa).
+            3. For "Safe" posts: Ignore the provided categories. Generate boring, factual, neutral news.
+            4. For "Slop" posts: Pick randomly from this list of categories: ${JSON.stringify(types)}.
             
             INSTRUCTIONS:
-            - If the category is "Safe", generate a boring, factual news post.
-            - If the category is a Fallacy or Bias, generate a realistic "Slop" post that uses that specific manipulation technique.
-            - The tone should be varied (some angry, some fearful, some clickbait).
+            - "Safe" posts must be undeniably true (e.g. "Local library opens at 9 AM").
+            - "Slop" posts must be realistic clickbait/rage-bait using the specific fallacy requested.
+            - Shuffle the order (do not put all Safe posts first).
             
             OUTPUT SCHEMA (JSON Array):
             [
               {
-                "headline": "string (Catchy title)",
-                "content": "string (The post body)",
+                "headline": "string",
+                "content": "string",
                 "type": "string ('slop' or 'safe')",
-                "slop_reason": "string (The exact name of the fallacy/bias used, or null if safe)",
+                "slop_reason": "string (The exact name of the category used from the list, or null if safe)",
                 "origin": "ai"
               }
             ]
@@ -100,39 +106,39 @@ export const generateDailyShift = async (req: Request, res: Response) => {
 // TODO: Modify this
 export const fetchPost = async (req: Request, res: Response) => {
     try {
-        // console.log(req.body);
-        // const { postLength } = req.body;
-        // const userId = req.users;
+        console.log(req.body);
+        const { postLength } = req.body;
+        const userId = req.users;
 
-        // if (!userId) {
-        //     return res.status(401).send({
-        //         success: false,
-        //         message: "Unauthorized",
-        //     });
-        // }
+        if (!userId) {
+            return res.status(401).send({
+                success: false,
+                message: "Unauthorized",
+            });
+        }
 
-        // const user = await User.findById(userId);
+        const user = await User.findById(userId);
 
-        // if (!user) {
-        //     return res.status(401).send({
-        //         success: false,
-        //         message: "Unauthorized",
-        //     });
-        // }
+        if (!user) {
+            return res.status(401).send({
+                success: false,
+                message: "Unauthorized",
+            });
+        }
 
-        // const seenId = user.postsHistory;
+        const seenId = user.postsHistory;
 
-        // const data = await Posts.aggregate([
-        //     { $match: { _id: { $nin: seenId } } },
-        //     { $sample: { size: Number(postLength) } },
-        //     {
-        //         $project: {
-        //             headline: 1,
-        //             content: 1,
-        //             type: 1,
-        //         },
-        //     },
-        // ]);
+        const data = await Posts.aggregate([
+            { $match: { _id: { $nin: seenId } } },
+            { $sample: { size: Number(postLength) } },
+            {
+                $project: {
+                    headline: 1,
+                    content: 1,
+                    type: 1,
+                },
+            },
+        ]);
 
         res.status(200).json({ success: true, message: "Success", data });
     } catch (error) {
@@ -168,7 +174,9 @@ export const completeShift = async (req: Request, res: Response) => {
 
         let currStreak = user.currentStreak;
         let currBest = user.bestStreak;
-        const lastPlayed = user.lastPlayedDate.getTime() || Date.now();
+        const lastPlayed = new Date(
+            user.lastPlayedDate || Date.now()
+        ).getTime();
         const now = Date.now();
 
         const daysDiff = Math.floor((now - lastPlayed) / (1000 * 60 * 60 * 24));
@@ -183,22 +191,28 @@ export const completeShift = async (req: Request, res: Response) => {
             currStreak = 1;
         }
 
-        await User.findByIdAndUpdate(userId, {
-            $addToSet: {
-                postsHistory: postId,
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            {
+                $addToSet: {
+                    postsHistory: postId,
+                },
+                $inc: {
+                    postProcessed: history.length,
+                    postsCorrect: postCorrect,
+                    totalExp: expEarned,
+                },
+                $set: {
+                    lastPlayedDate: Date.now(),
+                    currentStreak: currStreak,
+                    bestStreak: currBest,
+                },
             },
-            $inc: {
-                postProcessed: history.length,
-                postsCorrect: postCorrect,
-                totalExp: expEarned,
-            },
-            $set: {
-                lastPlayedDate: Date.now(),
-                currentStreak: currStreak,
-                bestStreak: currBest,
-            },
-        });
-
+            {
+                new: true,
+            }
+        );
+        console.log(updatedUser);
         res.status(200).json({ success: true, message: "Success" });
     } catch (error) {
         console.error(error);

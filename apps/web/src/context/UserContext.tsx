@@ -34,8 +34,9 @@ export const UserProvider = ({ children }: UserProviderProps) => {
         const unsubscribe = async () => {
             try {
                 const res = await getMe();
-                setUser(res);
                 console.log(res);
+
+                setUser(res);
                 setIsLoading(true);
             } catch (error) {
                 console.log(error);

@@ -10,7 +10,7 @@ export const Route = createFileRoute("/")({
 
 function HomeComponent() {
     const { user } = useUser();
-
+    console.log(user);
     const { toggleTheme } = useTheme();
 
     const navigate = useNavigate();
@@ -38,18 +38,18 @@ function HomeComponent() {
                         Accuracy Rating
                     </p>
                     <p className="text-4xl font-black">
-                        {(user?.postProcessed ?? 0) > 0
+                        {(user?.postsHistory.length ?? 0) > 0
                             ? Math.round(
                                   ((user?.postsCorrect ?? 0) /
-                                      (user?.postProcessed ?? 0)) *
+                                      (user?.postsHistory.length ?? 0)) *
                                       100
                               )
                             : 0}
                         %
                     </p>
                     <p className="text-xs text-gray-500 mt-2">
-                        {user?.postsCorrect || 0} / {user?.postProcessed || 0}{" "}
-                        Correct
+                        {user?.postsCorrect || 0} /{" "}
+                        {user?.postsHistory.length || 0} Correct
                     </p>
                 </div>
 

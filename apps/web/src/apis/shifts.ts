@@ -23,11 +23,11 @@ export const completeShift = async (history) => {
 
 export const generateDailyShift = async (postLength, types) => {
     try {
-        const res = await instance.put("/shifts/complete", {
+        const res = await instance.post("/shifts/generate", {
             postLength,
             types,
         });
-        console.log(res);
+        return res.data.posts;
     } catch (error) {
         console.log(error);
         return "SERVER ERROR";

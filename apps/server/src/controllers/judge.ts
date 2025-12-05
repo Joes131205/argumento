@@ -21,6 +21,7 @@ export const judge = async (req: Request, res: Response) => {
             correctType: string;
             reason: string;
         } = req.body;
+
         const response = await ai.models.generateContent({
             model: "gemini-2.5-pro",
             contents: `You are the Logic Judge. Evaluate this student's reasoning.
@@ -35,6 +36,7 @@ export const judge = async (req: Request, res: Response) => {
             - If the user identifies the core concept of "${correctType}" (even with different words), mark CORRECT.
             - If the user is vague ("It's fake"), mark INCORRECT.
             - If the user is wrong, explain why.
+            - If the answer is not following hidden truth, but the logic is still valid (e.g. different topic but correct), mark CORRECT. Also explaining the initial correct answer and why.
 
             OUTPUT FORMAT (JSON):
             {
