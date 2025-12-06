@@ -12,6 +12,17 @@ export const Route = createFileRoute("/play/daily")({
     component: RouteComponent,
     loader: async () => {
         const user = await getMe();
+
+        const last = new Date(user.lastPlayedDate);
+        const today = new Date();
+
+        if (
+            last.getDate() === today.getDate() &&
+            last.getMonth() === today.getMonth() &&
+            last.getFullYear() === today.getFullYear()
+        ) {
+            throw redirect({ to: "/" });
+        }
         if (!user) {
             toast.warning("please sign in");
             throw redirect({ to: "/sign-in" });
@@ -176,7 +187,6 @@ function RouteComponent() {
 
     if (isLoadingStorage) return <div>Loading...</div>;
 
-    // --- VIEW 1: SELECTION SCREEN ---
     if (!isPlayedBefore) {
         return (
             <div className="max-w-4xl mx-auto p-6">
@@ -187,13 +197,17 @@ function RouteComponent() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                     {content_types.map((category, i) => (
-                        <div key={i} className="border p-4 rounded bg-gray-50">
+                        <div
+                            key={i.toString()}
+                            className="border p-4 rounded bg-gray-50"
+                        >
                             <h3 className="font-bold text-lg mb-1">
                                 {category.name}
                             </h3>
                             <div className="flex flex-wrap gap-2">
                                 {category.types.map((t) => (
                                     <button
+                                        type="button"
                                         key={t.name}
                                         onClick={() => toggleTopic(t.name)}
                                         className={`px-3 py-1 rounded text-sm border transition-all ${
@@ -221,6 +235,7 @@ function RouteComponent() {
                         className="border p-2 rounded w-20 text-center font-bold"
                     />
                     <button
+                        type="button"
                         onClick={generateShift}
                         disabled={isSubmitting}
                         className="bg-blue-600 text-white text-xl font-bold px-10 py-3 rounded w-full disabled:opacity-50"
@@ -243,6 +258,7 @@ function RouteComponent() {
                             🎉 Shift Complete!
                         </h2>
                         <button
+                            type="button"
                             onClick={handleEndShift}
                             disabled={isSaving}
                             className="bg-black text-white px-8 py-3 rounded font-bold disabled:opacity-50"
@@ -282,6 +298,7 @@ function RouteComponent() {
                                 </h3>
                                 <p className="mb-4">{verdict?.message}</p>
                                 <button
+                                    type="button"
                                     onClick={nextLevel}
                                     className="w-full bg-blue-600 text-white py-3 font-bold rounded"
                                 >
@@ -292,6 +309,7 @@ function RouteComponent() {
                             <div className="space-y-4">
                                 <div className="flex gap-4">
                                     <button
+                                        type="button"
                                         onClick={handleApprove}
                                         disabled={isAnalyzing}
                                         className="flex-1 bg-green-100 hover:bg-green-200 text-green-900 py-3 font-bold rounded"
@@ -299,6 +317,7 @@ function RouteComponent() {
                                         APPROVE
                                     </button>
                                     <button
+                                        type="button"
                                         onClick={() => setIsRejected(true)}
                                         disabled={isAnalyzing}
                                         className="flex-1 bg-red-100 hover:bg-red-200 text-red-900 py-3 font-bold rounded"
@@ -315,9 +334,9 @@ function RouteComponent() {
                                             }
                                             placeholder="Why is this slop?"
                                             className="w-full border-2 border-red-200 p-3 rounded mb-2 h-24"
-                                            autoFocus
                                         />
                                         <button
+                                            type="button"
                                             onClick={handleSendReport}
                                             disabled={isAnalyzing}
                                             className="w-full bg-red-600 text-white py-3 font-bold rounded disabled:opacity-50"

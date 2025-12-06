@@ -156,8 +156,10 @@ export const completeShift = async (req: Request, res: Response) => {
         const userId = req.users;
         const { history } = req.body;
 
-        const postId = history.map((item) => item.id);
-        const postCorrect = history.filter((item) => item.is_correct).length;
+        const postId = history.map((item: any) => item.id);
+        const postCorrect = history.filter(
+            (item: any) => item.is_correct
+        ).length;
 
         const expEarned = postCorrect * 100;
 
@@ -172,30 +174,36 @@ export const completeShift = async (req: Request, res: Response) => {
 
         // calculate streak
 
-        let currStreak = user.currentStreak;
-        let currBest = user.bestStreak;
+        let currStreak = user.currentStreak || 0;
+        let currBest = user.bestStreak || 0;
         const lastPlayed = new Date(
             user.lastPlayedDate || Date.now()
         ).getTime();
-        const now = Date.now();
+        const now = new Date();
+        now.setHours(0, 0, 0, 0);
+        const nowTime = now.getTime();
 
-        const daysDiff = Math.floor((now - lastPlayed) / (1000 * 60 * 60 * 24));
-
-        if (daysDiff === 0) {
-            // Do nothing :)
-        } else if (daysDiff === 1) {
-            currStreak++;
-            currBest = Math.max(currStreak, currBest);
-        } else if (daysDiff > 1) {
-            currBest = Math.max(currStreak, currBest);
+        const daysDiff = Math.floor(
+            (nowTime - lastPlayed) / (1000 * 60 * 60 * 24)
+        );
+        if (!user.lastPlayedDate) {
             currStreak = 1;
+        } else {
+            if (daysDiff === 0) {
+                // Do nothing :)
+            } else if (daysDiff === 1) {
+                currStreak++;
+            } else if (daysDiff > 1) {
+                currStreak = 1;
+            }
         }
+        currBest = Math.max(currStreak, currBest);
 
         const updatedUser = await User.findByIdAndUpdate(
             userId,
             {
                 $addToSet: {
-                    postsHistory: postId,
+                    postsHistory: { $each: postId },
                 },
                 $inc: {
                     postProcessed: history.length,

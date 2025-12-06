@@ -10,15 +10,22 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as StatusRouteImport } from './routes/status'
+import { Route as SkillsRadarRouteImport } from './routes/skills-radar'
 import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as SignInRouteImport } from './routes/sign-in'
-import { Route as PlayDemoRouteImport } from './routes/play-demo'
+import { Route as LeaderboardRouteImport } from './routes/leaderboard'
+import { Route as HistoryRouteImport } from './routes/history'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PlayDailyRouteImport } from './routes/play/daily'
 
 const StatusRoute = StatusRouteImport.update({
   id: '/status',
   path: '/status',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SkillsRadarRoute = SkillsRadarRouteImport.update({
+  id: '/skills-radar',
+  path: '/skills-radar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignUpRoute = SignUpRouteImport.update({
@@ -31,9 +38,14 @@ const SignInRoute = SignInRouteImport.update({
   path: '/sign-in',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PlayDemoRoute = PlayDemoRouteImport.update({
-  id: '/play-demo',
-  path: '/play-demo',
+const LeaderboardRoute = LeaderboardRouteImport.update({
+  id: '/leaderboard',
+  path: '/leaderboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoryRoute = HistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -49,26 +61,32 @@ const PlayDailyRoute = PlayDailyRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/play-demo': typeof PlayDemoRoute
+  '/history': typeof HistoryRoute
+  '/leaderboard': typeof LeaderboardRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
+  '/skills-radar': typeof SkillsRadarRoute
   '/status': typeof StatusRoute
   '/play/daily': typeof PlayDailyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/play-demo': typeof PlayDemoRoute
+  '/history': typeof HistoryRoute
+  '/leaderboard': typeof LeaderboardRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
+  '/skills-radar': typeof SkillsRadarRoute
   '/status': typeof StatusRoute
   '/play/daily': typeof PlayDailyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/play-demo': typeof PlayDemoRoute
+  '/history': typeof HistoryRoute
+  '/leaderboard': typeof LeaderboardRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
+  '/skills-radar': typeof SkillsRadarRoute
   '/status': typeof StatusRoute
   '/play/daily': typeof PlayDailyRoute
 }
@@ -76,28 +94,42 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/play-demo'
+    | '/history'
+    | '/leaderboard'
     | '/sign-in'
     | '/sign-up'
+    | '/skills-radar'
     | '/status'
     | '/play/daily'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/play-demo' | '/sign-in' | '/sign-up' | '/status' | '/play/daily'
+  to:
+    | '/'
+    | '/history'
+    | '/leaderboard'
+    | '/sign-in'
+    | '/sign-up'
+    | '/skills-radar'
+    | '/status'
+    | '/play/daily'
   id:
     | '__root__'
     | '/'
-    | '/play-demo'
+    | '/history'
+    | '/leaderboard'
     | '/sign-in'
     | '/sign-up'
+    | '/skills-radar'
     | '/status'
     | '/play/daily'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  PlayDemoRoute: typeof PlayDemoRoute
+  HistoryRoute: typeof HistoryRoute
+  LeaderboardRoute: typeof LeaderboardRoute
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
+  SkillsRadarRoute: typeof SkillsRadarRoute
   StatusRoute: typeof StatusRoute
   PlayDailyRoute: typeof PlayDailyRoute
 }
@@ -109,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/status'
       fullPath: '/status'
       preLoaderRoute: typeof StatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/skills-radar': {
+      id: '/skills-radar'
+      path: '/skills-radar'
+      fullPath: '/skills-radar'
+      preLoaderRoute: typeof SkillsRadarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sign-up': {
@@ -125,11 +164,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignInRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/play-demo': {
-      id: '/play-demo'
-      path: '/play-demo'
-      fullPath: '/play-demo'
-      preLoaderRoute: typeof PlayDemoRouteImport
+    '/leaderboard': {
+      id: '/leaderboard'
+      path: '/leaderboard'
+      fullPath: '/leaderboard'
+      preLoaderRoute: typeof LeaderboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/history': {
+      id: '/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof HistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -151,9 +197,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  PlayDemoRoute: PlayDemoRoute,
+  HistoryRoute: HistoryRoute,
+  LeaderboardRoute: LeaderboardRoute,
   SignInRoute: SignInRoute,
   SignUpRoute: SignUpRoute,
+  SkillsRadarRoute: SkillsRadarRoute,
   StatusRoute: StatusRoute,
   PlayDailyRoute: PlayDailyRoute,
 }
