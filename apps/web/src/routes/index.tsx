@@ -10,7 +10,6 @@ export const Route = createFileRoute("/")({
 
 function HomeComponent() {
     const { user } = useUser();
-    console.log(user);
     const { toggleTheme } = useTheme();
 
     const navigate = useNavigate();
@@ -127,8 +126,13 @@ function HomeComponent() {
                     </div>
 
                     {/* Decorative Background Element */}
-                    <div className="absolute right-0 top-0 h-full w-1/3 bg-gradient-to-l from-blue-900/20 to-transparent pointer-events-none" />
                 </div>
+                <Link
+                    to="/history"
+                    className="inline-block bg-blue-600 hover:bg-blue-500 text-white text-lg font-bold px-10 py-4 rounded transition-transform hover:scale-105 shadow-[0_0_20px_rgba(37,99,235,0.3)]"
+                >
+                    History
+                </Link>
             </div>
         </div>
     );

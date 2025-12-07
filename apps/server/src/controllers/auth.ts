@@ -3,6 +3,7 @@ import User from "@/db/models/User";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import z from "zod";
+import Posts from "@/db/models/Posts";
 
 declare global {
     namespace Express {
@@ -103,8 +104,8 @@ export const getMe = async (req: Request, res: Response) => {
             });
         }
 
-        const user = await User.findById(userId);
-
+        const user = await User.findById(userId).populate("postsHistory");
+        console.log(user);
         if (!user) {
             return res.status(401).send({
                 success: false,

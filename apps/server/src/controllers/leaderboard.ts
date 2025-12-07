@@ -3,22 +3,29 @@ import User from "@/db/models/User";
 
 export const getLeaderboard = async (req: Request, res: Response) => {
     try {
-        const { type } = req.params;
-        const sortField =
-            type === "exp"
-                ? "totalExp"
+        const { type = "totalExp" } = req.params;
+
+        const sortType =
+            type === "totalExp"
+                ? "Total EXP"
                 : type === "bestStreak"
-                  ? "bestStreak"
+                  ? "Best Streak"
                   : type === "currentStreak"
-                    ? "currentStreak"
+                    ? "Current Streak"
                     : type === "postsProcessed"
-                      ? "postsProcessed"
-                      : "postsCorrect";
+                      ? "Post Processed"
+                      : "Posts Correct";
+
         const data = await User.find({}, "-password")
-            .sort({ [sortField]: -1 })
+            .sort({ [type]: -1 })
             .limit(100);
         console.log(data);
-        res.status(200).json({ success: true, message: "Success", data });
+        res.status(200).json({
+            success: true,
+            message: "Success",
+            data,
+            type: sortType,
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({
