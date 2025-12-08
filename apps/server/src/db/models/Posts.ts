@@ -1,7 +1,18 @@
 import mongoose, { Schema, type Document } from "mongoose";
 
 export interface IPosts extends Document {
-    field: string;
+    headline: string;
+    content: string;
+    type: "slop" | "safe";
+    slop_reason?: string | null;
+    category?:
+        | "fallacies"
+        | "biases"
+        | "manipulation"
+        | "ai_hallucinations"
+        | "safe";
+    reason: string;
+    origin: "human" | "ai";
 }
 
 const PostsSchema: Schema = new Schema(
@@ -19,10 +30,23 @@ const PostsSchema: Schema = new Schema(
             enum: ["safe", "slop"],
             required: true,
         },
-        slop_reason: {
+        category: {
             type: String,
-            default: null,
+            enum: [
+                "fallacies",
+                "biases",
+                "manipulation",
+                "ai_hallucinations",
+                "safe",
+            ],
+            required: true,
         },
+        reason: [
+            {
+                type: String,
+                default: null,
+            },
+        ],
         origin: {
             type: String,
             enum: ["ai", "human"],

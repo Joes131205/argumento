@@ -12,6 +12,17 @@ export interface IUsers extends Document {
     postsHistory: string[];
 }
 
+const StatSchema: Schema = new Schema({
+    correct: {
+        type: Number,
+        default: 0,
+    },
+    total: {
+        type: Number,
+        default: 0,
+    },
+});
+
 const UsersSchema: Schema = new Schema(
     {
         username: { type: String, required: true, unique: true },
@@ -27,10 +38,34 @@ const UsersSchema: Schema = new Schema(
 
         postsHistory: [
             {
-                type: Schema.Types.ObjectId,
-                ref: "Posts",
+                post_id: {
+                    type: String,
+                    required: true,
+                },
+                is_correct: {
+                    type: Boolean,
+                    required: true,
+                },
             },
         ],
+        stats: {
+            fallacies: {
+                type: StatSchema,
+                default: () => ({}),
+            },
+            biases: {
+                type: StatSchema,
+                default: () => ({}),
+            },
+            media_manipulation: {
+                type: StatSchema,
+                default: () => ({}),
+            },
+            ai_hallucination: {
+                type: StatSchema,
+                default: () => ({}),
+            },
+        },
     },
     {
         timestamps: true,

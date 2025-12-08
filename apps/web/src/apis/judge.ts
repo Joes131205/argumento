@@ -3,15 +3,15 @@ import { instance } from "@/utils/api";
 export const judge = async (
     headline: string,
     content: string,
-    correctType: string,
-    reason: string
+    slop_reasons: string[],
+    user_reason: string
 ) => {
     try {
         const res = await instance.post("/judge", {
             headline,
             content,
-            correctType,
-            reason,
+            slop_reasons,
+            user_reason,
         });
         console.log(res);
         return res.data;

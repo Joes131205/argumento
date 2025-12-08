@@ -33,18 +33,15 @@ export const Route = createFileRoute("/play/daily")({
 function RouteComponent() {
     const router = useRouter();
     const { invalidateUser } = useUser();
-    // --- GLOBAL STATE ---
+
     const [isPlayedBefore, setIsPlayedBefore] = useState(false);
     const [data, setData] = useState<any>(null); // The Game Object
     const [isLoadingStorage, setIsLoadingStorage] = useState(true);
 
-    // --- FORM STATE ---
     const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
     const [postAmount, setPostAmount] = useState(3);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // --- GAME STATE ---
-    // We initialize these safely. We will sync them when 'data' loads.
     const [index, setIndex] = useState(0);
     const [logs, setLogs] = useState<any[]>([]);
 
@@ -58,7 +55,6 @@ function RouteComponent() {
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
-    // 1. LOAD GAME ON MOUNT
     useEffect(() => {
         const storage = localStorage.getItem("shift_data");
         if (storage) {
@@ -66,14 +62,12 @@ function RouteComponent() {
             setData(parsed);
             setIsPlayedBefore(true);
 
-            // SYNC GAME STATE
             setLogs(parsed.log);
             setIndex(parsed.log.length);
         }
         setIsLoadingStorage(false);
     }, []);
 
-    // 2. GENERATE NEW GAME
     const generateShift = async () => {
         if (selectedTopics.length === 0) return toast.error("Select a topic!");
         setIsSubmitting(true);
@@ -97,7 +91,6 @@ function RouteComponent() {
         }
     };
 
-    // 3. FORM HANDLERS
     const toggleTopic = (type: string) => {
         if (selectedTopics.includes(type)) {
             setSelectedTopics((prev) => prev.filter((item) => item !== type));
@@ -106,14 +99,12 @@ function RouteComponent() {
         }
     };
 
-    // 4. GAME LOGIC HANDLERS
     const current = data?.currPosts?.[index];
 
     const saveProgress = (item: { id: string; is_correct: boolean }) => {
         const newLogs = [...logs, item];
         setLogs(newLogs);
 
-        // Persist to storage
         localStorage.setItem(
             "shift_data",
             JSON.stringify({ ...data, log: newLogs })
@@ -147,7 +138,7 @@ function RouteComponent() {
             const { response } = await judge(
                 current.headline,
                 current.content,
-                current.slop_reason || "",
+                current.slop_reason || [],
                 reason
             );
             const aiData = response.data || response;

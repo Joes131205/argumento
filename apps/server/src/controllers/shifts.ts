@@ -49,21 +49,30 @@ export const generateDailyShift = async (req: Request, res: Response) => {
             DISTRIBUTION RULES (CRITICAL):
             1. You must generate a mix of "Safe" posts and "Slop" posts.
             2. Aim for a 50/50 split (e.g. if requesting 3 posts, make 1 Safe and 2 Slop, or vice versa).
-            3. For "Safe" posts: Ignore the provided categories. Generate boring, factual, neutral news.
+            3. For "Safe" posts: Ignore the provided categories. Generate factual, neutral news.
             4. For "Slop" posts: Pick randomly from this list of categories: ${JSON.stringify(types)}.
             
             INSTRUCTIONS:
             - "Safe" posts must be undeniably true (e.g. "Local library opens at 9 AM").
             - "Slop" posts must be realistic clickbait/rage-bait using the specific fallacy requested.
             - Shuffle the order (do not put all Safe posts first).
-            
+            - If "Safe": Set type="safe", category="safe", slop_reason=null.
+            - If "Slop": Set type="slop".
+            - Determine the "category" based on the "slop_reason":
+                - Logical Fallacies -> "fallacies"
+                - Cognitive Biases -> "biases"
+                - Media Manipulation -> "manipulation"
+                - AI Hallucinations -> "ai_hallucinations"
+            - If "Slop": It usually contains multiple flaws. Identify 1 to 3 applicable tags.
+            - Example: A post might be "Ad Hominem" AND "Rage Bait".    
             OUTPUT SCHEMA (JSON Array):
             [
               {
                 "headline": "string",
                 "content": "string",
-                "type": "string ('slop' or 'safe')",
-                "slop_reason": "string (The exact name of the category used from the list, or null if safe)",
+                "type": "string",
+                "slop_reasons": ["string", "string"], 
+                "category": "string (fallacies, biases, manipulation, ai_hallucinations, or safe)",
                 "origin": "ai"
               }
             ]
@@ -103,63 +112,19 @@ export const generateDailyShift = async (req: Request, res: Response) => {
     }
 };
 
-// TODO: Modify this
-export const fetchPost = async (req: Request, res: Response) => {
-    try {
-        console.log(req.body);
-        const { postLength } = req.body;
-        const userId = req.users;
-
-        if (!userId) {
-            return res.status(401).send({
-                success: false,
-                message: "Unauthorized",
-            });
-        }
-
-        const user = await User.findById(userId);
-
-        if (!user) {
-            return res.status(401).send({
-                success: false,
-                message: "Unauthorized",
-            });
-        }
-
-        const seenId = user.postsHistory;
-
-        const data = await Posts.aggregate([
-            { $match: { _id: { $nin: seenId } } },
-            { $sample: { size: Number(postLength) } },
-            {
-                $project: {
-                    headline: 1,
-                    content: 1,
-                    type: 1,
-                },
-            },
-        ]);
-
-        res.status(200).json({ success: true, message: "Success", data });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            success: false,
-            message: "Server error",
-            error,
-        });
-    }
-};
-
 export const completeShift = async (req: Request, res: Response) => {
     try {
         const userId = req.users;
         const { history } = req.body;
 
-        const postId = history.map((item: any) => item.id);
         const postCorrect = history.filter(
             (item: any) => item.is_correct
         ).length;
+
+        const sentData = history.map((item) => ({
+            post_id: item.id,
+            is_correct: item.is_correct,
+        }));
 
         const expEarned = postCorrect * 100;
 
@@ -203,7 +168,7 @@ export const completeShift = async (req: Request, res: Response) => {
             userId,
             {
                 $addToSet: {
-                    postsHistory: { $each: postId },
+                    postsHistory: { $each: sentData },
                 },
                 $inc: {
                     postProcessed: history.length,

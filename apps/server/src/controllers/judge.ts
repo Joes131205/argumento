@@ -10,41 +10,35 @@ const ai = new GoogleGenAI({
 
 export const judge = async (req: Request, res: Response) => {
     try {
-        const {
-            headline,
-            content,
-            correctType,
-            reason,
-        }: {
-            headline: string;
-            content: string;
-            correctType: string;
-            reason: string;
-        } = req.body;
-
+        const { headline, content, slop_reasons, user_reason } = req.body;
         const response = await ai.models.generateContent({
             model: "gemini-2.5-pro",
-            contents: `You are the Logic Judge. Evaluate this student's reasoning.
-
-            INPUT DATA:
-            1. Post Headline: "${headline}"
-            2. Post Content: "${content}"
-            3. The Hidden Truth (Correct Answer): "${correctType}"
-            4. User's Reasoning: "${reason}"
-
-            EVALUATION RULES:
-            - If the user identifies the core concept of "${correctType}" (even with different words), mark CORRECT.
-            - If the user is vague ("It's fake"), mark INCORRECT.
-            - If the user is wrong, explain why.
-            - If the answer is not following hidden truth, but the logic is still valid (e.g. different topic but correct), mark CORRECT. Also explaining the initial correct answer and why.
-
-            OUTPUT FORMAT (JSON):
-            {
-                "is_correct": boolean, 
-                "confidence_score": number,
-                "feedback_title": string,
-                "feedback_message": string
-            }`,
+            contents: `
+        ROLE: You are an impartial referee for a logic game.
+        
+        THE POST:
+        Headline: "${headline}"
+        Content: "${content}"
+        
+        OFFICIAL VIOLATIONS (HIDDEN TRUTH): 
+        ${JSON.stringify(slop_reasons)}
+        
+        USER'S ARGUMENT:
+        "${user_reason}"
+        
+        TASK:
+        Does the user correctly identify AT LEAST ONE of the official violations?
+        
+        RULES:
+        - If the user identifies a valid logical flaw that is in the "OFFICIAL VIOLATIONS" list, mark as CORRECT.
+        - If the user identifies a valid flaw that is NOT in the list but is clearly present in the text, mark as CORRECT (be generous).
+        - If the user is vague, off-topic, or defending the slop, mark as INCORRECT.
+        
+        OUTPUT JSON:
+        {
+            "is_correct": boolean,
+            "feedback_message": "string (Short feedback explaining why they are right/wrong. Mention the official tags.)"
+        }`,
         });
         console.log(
             JSON.parse(
