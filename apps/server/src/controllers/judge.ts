@@ -12,7 +12,7 @@ export const judge = async (req: Request, res: Response) => {
     try {
         const { headline, content, slop_reasons, user_reason } = req.body;
         const response = await ai.models.generateContent({
-            model: "gemini-2.5-pro",
+            model: "gemini-2.5-flash-lite",
             contents: `
         ROLE: You are an impartial referee for a logic game.
         

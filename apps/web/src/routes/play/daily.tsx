@@ -16,13 +16,13 @@ export const Route = createFileRoute("/play/daily")({
         const last = new Date(user.lastPlayedDate);
         const today = new Date();
 
-        if (
-            last.getDate() === today.getDate() &&
-            last.getMonth() === today.getMonth() &&
-            last.getFullYear() === today.getFullYear()
-        ) {
-            throw redirect({ to: "/" });
-        }
+        // if (
+        //     last.getDate() === today.getDate() &&
+        //     last.getMonth() === today.getMonth() &&
+        //     last.getFullYear() === today.getFullYear()
+        // ) {
+        //     throw redirect({ to: "/" });
+        // }
         if (!user) {
             toast.warning("please sign in");
             throw redirect({ to: "/sign-in" });
@@ -73,6 +73,10 @@ function RouteComponent() {
         setIsSubmitting(true);
         try {
             const posts = await generateDailyShift(postAmount, selectedTopics);
+            if (posts === "SERVER ERROR") {
+                toast("Error while generating a shift, try again later");
+                return;
+            }
             const postData = posts?.data || posts;
             const newGame = { currPosts: postData, log: [] };
 

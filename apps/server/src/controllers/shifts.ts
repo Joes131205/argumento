@@ -54,31 +54,32 @@ export const generateDailyShift = async (req: Request, res: Response) => {
             
             INSTRUCTIONS:
             - "Safe" posts must be undeniably true (e.g. "Local library opens at 9 AM").
-            - "Slop" posts must be realistic clickbait/rage-bait using the specific fallacy requested.
+            - "Slop" posts must be realistic using the specific fallacy requested.
             - Shuffle the order (do not put all Safe posts first).
             - If "Safe": Set type="safe", category="safe", slop_reason=null.
             - If "Slop": Set type="slop".
             - Determine the "category" based on the "slop_reason":
                 - Logical Fallacies -> "fallacies"
                 - Cognitive Biases -> "biases"
-                - Media Manipulation -> "manipulation"
+                - Media Manipulation -> "media_manipulation"
                 - AI Hallucinations -> "ai_hallucinations"
             - If "Slop": It usually contains multiple flaws. Identify 1 to 3 applicable tags.
-            - Example: A post might be "Ad Hominem" AND "Rage Bait".    
+            - Example: A post might be "Ad Hominem" AND "Rage Bait".  
+
             OUTPUT SCHEMA (JSON Array):
             [
               {
                 "headline": "string",
                 "content": "string",
                 "type": "string",
-                "slop_reasons": ["string", "string"], 
-                "category": "string (fallacies, biases, manipulation, ai_hallucinations, or safe)",
+                "reasons": ["string", "string"], 
+                "category": "string (fallacies, biases, media_manipulation, ai_hallucinations, or safe)",
                 "origin": "ai"
               }
             ]
         `;
         const response = await ai.models.generateContent({
-            model: "gemini-2.5-pro",
+            model: "gemini-2.5-flash-lite",
             contents: prompt,
         });
 
@@ -121,11 +122,43 @@ export const completeShift = async (req: Request, res: Response) => {
             (item: any) => item.is_correct
         ).length;
 
-        const sentData = history.map((item) => ({
-            post_id: item.id,
-            is_correct: item.is_correct,
-        }));
+        const sentData = await Promise.all(
+            history.map(async (item) => {
+                const post = await Posts.findById(item.id);
 
+                if (!post) {
+                    throw new Error(`Post not found: ${item.id}`);
+                }
+
+                return {
+                    post_id: item.id,
+                    is_correct: item.is_correct,
+                    category: post.category,
+                };
+            })
+        );
+
+        console.log(sentData);
+
+        const statUpdate: Record<string, number> = {};
+
+        for (let i = 0; i < sentData.length; i++) {
+            const ct = sentData[i]?.category;
+            console.log(ct);
+            if (ct) {
+                if (!statUpdate[`stats.${ct}.total`]) {
+                    statUpdate[`stats.${ct}.total`] = 0;
+                    statUpdate[`stats.${ct}.correct`] = 0;
+                }
+
+                statUpdate[`stats.${ct}.total`] += 1;
+
+                if (sentData[i]?.is_correct) {
+                    statUpdate[`stats.${ct}.correct`] += 1;
+                }
+            }
+        }
+        console.log(statUpdate);
         const expEarned = postCorrect * 100;
 
         const user = await User.findById(userId);
@@ -174,6 +207,7 @@ export const completeShift = async (req: Request, res: Response) => {
                     postProcessed: history.length,
                     postsCorrect: postCorrect,
                     totalExp: expEarned,
+                    ...statUpdate,
                 },
                 $set: {
                     lastPlayedDate: Date.now(),

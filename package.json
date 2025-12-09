@@ -1,11 +1,11 @@
 {
     "name": "si-peduli",
+    "devDependencies": {
+        "turbo": "^2.5.4",
+        "@biomejs/biome": "^2.2.0"
+    },
+    "packageManager": "bun@1.2.21",
     "private": true,
-    "type": "module",
-    "workspaces": [
-        "apps/*",
-        "packages/*"
-    ],
     "scripts": {
         "check": "biome check --write .",
         "dev": "turbo dev",
@@ -16,12 +16,9 @@
         "dev:server": "turbo -F server dev",
         "seed:posts": "tsx --env-file=apps/server/.env apps/server/src/db/seeder/post.ts"
     },
-    "dependencies": {
-        "@google/genai": "^1.30.0"
-    },
-    "devDependencies": {
-        "turbo": "^2.5.4",
-        "@biomejs/biome": "^2.2.0"
-    },
-    "packageManager": "bun@1.2.21"
+    "type": "module",
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ]
 }

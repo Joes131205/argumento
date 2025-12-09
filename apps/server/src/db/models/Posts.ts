@@ -8,10 +8,10 @@ export interface IPosts extends Document {
     category?:
         | "fallacies"
         | "biases"
-        | "manipulation"
+        | "media_manipulation"
         | "ai_hallucinations"
         | "safe";
-    reason: string;
+    reasons: string[];
     origin: "human" | "ai";
 }
 
@@ -35,13 +35,13 @@ const PostsSchema: Schema = new Schema(
             enum: [
                 "fallacies",
                 "biases",
-                "manipulation",
+                "media_manipulation",
                 "ai_hallucinations",
                 "safe",
             ],
             required: true,
         },
-        reason: [
+        reasons: [
             {
                 type: String,
                 default: null,
