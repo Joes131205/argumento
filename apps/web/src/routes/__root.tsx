@@ -8,6 +8,7 @@ import "../index.css";
 
 import useTheme from "@/hooks/useTheme";
 import { Toaster } from "sonner";
+import ErrorPage from "@/components/ErrorPage";
 
 export const Route = createRootRouteWithContext()({
     component: RootComponent,

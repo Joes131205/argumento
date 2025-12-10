@@ -12,6 +12,7 @@ interface User {
     postProcessed: number;
     postsCorrect: number;
     postsHistory: string[];
+    stats: Record<string, { name: string; correct: number; total: number }>;
 }
 interface UserContextType {
     user: User | null;
