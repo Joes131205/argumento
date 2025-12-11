@@ -1,11 +1,11 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useForm } from "@tanstack/react-form";
 import { z } from "zod";
 import { login } from "@/apis/auth";
 import useUser from "@/hooks/useUser";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
-
+import { motion } from "motion/react";
 export const Route = createFileRoute("/sign-in")({
     component: RouteComponent,
 });
@@ -60,57 +60,106 @@ function RouteComponent() {
             }
         },
     });
+
+    const [showPassword, setShowPassword] = useState(false);
+
     return (
-        <div>
-            <form
+        <div className="bg-zinc-950 w-screen h-screen flex flex-col items-center justify-center">
+            <motion.form
                 onSubmit={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     form.handleSubmit();
                 }}
+                initial={{ y: 5 }}
+                animate={{ y: 0 }}
+                transition={{
+                    duration: 0.02,
+                }}
+                className="w-[90%] sm:w-120 bg-black/80 border-5 border-green-500/50 text-green-500 p-5 flex flex-col gap-10 items-center justify-center items-start"
             >
+                <h2 className="text-2xl font-bold text-center w-full">
+                    Sign In
+                </h2>
                 <form.Field name="username">
                     {(field) => (
-                        <>
+                        <div className="flex items-start justify-start flex-col w-full gap-2">
+                            <label htmlFor={field.name} className="font-bold">
+                                Username
+                            </label>
                             <input
                                 value={field.state.value}
                                 type="text"
                                 onChange={(e) =>
                                     field.handleChange(e.target.value)
                                 }
+                                id={field.name}
+                                className="rounded-full w-full py-2 border-1 bg-black/80 focus:outline-none border-green-500 border-2 px-3"
                             />
                             {!field.state.meta.isValid && (
-                                <em>{field.state.meta.errors[0]?.message}</em>
+                                <p className="text-red-500 font-bold">
+                                    {field.state.meta.errors[0]?.message}
+                                </p>
                             )}
-                        </>
+                        </div>
                     )}
                 </form.Field>
                 <form.Field name="password">
                     {(field) => (
-                        <>
+                        <div className="flex items-start justify-center flex-col w-full gap-2">
+                            <label htmlFor={field.name} className="font-bold">
+                                Password
+                            </label>
                             <input
                                 value={field.state.value}
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 onChange={(e) =>
                                     field.handleChange(e.target.value)
                                 }
+                                id={field.name}
+                                className="rounded-full w-full py-2 border-1 bg-black/80 focus:outline-none border-green-500 border-2 px-3"
                             />
+                            <p
+                                className="cursor-pointer underline"
+                                onClick={() => setShowPassword(!showPassword)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" || e.key === " ") {
+                                        setShowPassword(!showPassword);
+                                    }
+                                }}
+                            >
+                                {showPassword ? "Hide" : "Show"} Password
+                            </p>
                             {!field.state.meta.isValid && (
-                                <em>{field.state.meta.errors[0]?.message}</em>
+                                <p className="text-red-500 font-bold">
+                                    {field.state.meta.errors[0]?.message}
+                                </p>
                             )}
-                        </>
+                        </div>
                     )}
                 </form.Field>
                 <form.Subscribe
                     selector={(state) => [state.canSubmit, state.isSubmitting]}
                 >
                     {([canSubmit, isSubmitting]) => (
-                        <button type="submit" disabled={!canSubmit}>
-                            {isSubmitting ? "..." : "Submit"}
-                        </button>
+                        <div className="w-full">
+                            <button
+                                type="submit"
+                                disabled={!canSubmit}
+                                className="w-full text-center cursor-pointer bg-green-500 font-bold text-white py-2 rounded-full hover:bg-green-600 transition-all"
+                            >
+                                {isSubmitting ? "Loading..." : "Sign In"}
+                            </button>
+                        </div>
                     )}
                 </form.Subscribe>
-            </form>
+                <p>
+                    Don't have an account?{" "}
+                    <Link to="/sign-up" className="underline">
+                        Sign Up
+                    </Link>
+                </p>
+            </motion.form>
         </div>
     );
 }

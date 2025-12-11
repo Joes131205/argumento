@@ -37,7 +37,7 @@ function RootComponent() {
         <>
             <HeadContent />
             <div
-                className={`min-h-screen transition-colors duration-300 ${
+                className={`min-h-screen min-w-screen transition-colors duration-300 font-mono ${
                     theme === "dark" ? "dark" : ""
                 } bg-background text-foreground`}
             >
@@ -47,7 +47,6 @@ function RootComponent() {
                 position="bottom-right"
                 theme={theme as "dark" | "light" | "system"}
             />
-            <TanStackRouterDevtools position="bottom-left" />
         </>
     );
 }
