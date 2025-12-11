@@ -1,4 +1,3 @@
-import useTheme from "@/hooks/useTheme";
 import useUser from "@/hooks/useUser";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
@@ -10,8 +9,6 @@ export const Route = createFileRoute("/")({
 
 function HomeComponent() {
     const { user } = useUser();
-    const { toggleTheme } = useTheme();
-
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -34,104 +31,144 @@ function HomeComponent() {
         );
     };
 
+    const accuracy = user?.postsHistory.length
+        ? (((user.postsCorrect || 0) / user.postsHistory.length) * 100).toFixed(
+              1
+          )
+        : "0";
+
     const isShiftDone = hasPlayedToday();
+
     return (
-        <div className="container mx-auto max-w-3xl px-4 py-2">
-            <h3>Welcome back! {user?.username}</h3>
-            <button type="button" onClick={toggleTheme}>
-                Change Theme
-            </button>
-            <div>
-                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                    <p>Total EXP</p>
-                    <p>{user?.totalExp || 0} EXP</p>
-                </div>
-                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                    <p className="text-xs font-bold uppercase text-gray-400 mb-2">
-                        Accuracy Rating
-                    </p>
-                    <p className="text-4xl font-black">
-                        {(user?.postsHistory.length ?? 0) > 0
-                            ? Math.round(
-                                  ((user?.postsCorrect ?? 0) /
-                                      (user?.postsHistory.length ?? 0)) *
-                                      100
-                              )
-                            : 0}
-                        %
-                    </p>
-                    <p className="text-xs text-gray-500 mt-2">
-                        {user?.postsCorrect || 0} /{" "}
-                        {user?.postsHistory.length || 0} Correct
-                    </p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                    {/* CARD 2: STREAK */}
-                    <div className="bg-zinc-900 p-6 rounded border border-zinc-800">
-                        <p className="text-xs font-bold uppercase text-zinc-500 mb-2">
-                            Active Streak
+        <div className="min-h-screen bg-zinc-950 text-green-500 flex flex-col items-center p-8 gap-12">
+            {/* Header */}
+            <div className="text-center space-y-2 mt-8">
+                <h1 className="font-black text-5xl md:text-6xl tracking-tight">
+                    Welcome back,{" "}
+                    <span className="text-green-400">{user?.username}</span>!
+                </h1>
+                <p className="text-green-500/60 text-lg">
+                    {isShiftDone
+                        ? "You've completed today's shift! 🎉"
+                        : "Ready for your daily shift?"}
+                </p>
+            </div>
+
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-6xl">
+                {/* Total EXP Card */}
+                <div className="bg-black/40 border-2 border-green-500/30 rounded-lg p-6 hover:border-green-500/60 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/20 justify-center">
+                    <div className="flex flex-col items-center gap-3">
+                        <p className="text-green-500/80 text-sm font-semibold uppercase tracking-wider text-xl">
+                            Total EXP
                         </p>
-                        <div className="flex items-baseline gap-3">
-                            <p className="text-5xl font-black text-white">
-                                {user?.currentStreak}
+                        <p className="text-4xl font-black text-green-400">
+                            {user?.totalExp?.toLocaleString() || 0}
+                        </p>
+                    </div>
+                </div>
+
+                {/* Streak Card */}
+                <div className="bg-black/40 border-2 border-green-500/30 rounded-lg p-6 hover:border-green-500/60 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/20 justify-center">
+                    <p className="text-green-500/80 text-sm font-semibold uppercase tracking-wider text-xl text-center mb-4">
+                        Streak
+                    </p>
+                    <div className="flex justify-around">
+                        <div className="text-center">
+                            <p className="text-3xl font-black text-green-400">
+                                {user?.currentStreak || 0}
                             </p>
-                            <span className="text-2xl">🔥</span>
+                            <p className="text-green-500/60 text-xs mt-1">
+                                Current
+                            </p>
                         </div>
-                        <p className="text-xs text-zinc-500 mt-4 font-mono">
-                            BEST: {user?.bestStreak} DAYS
-                        </p>
-                    </div>
-
-                    {/* CARD 3: TOTAL XP */}
-                    <div className="bg-zinc-900 p-6 rounded border border-zinc-800">
-                        <p className="text-xs font-bold uppercase text-zinc-500 mb-2">
-                            Total Experience
-                        </p>
-                        <p className="text-5xl font-black text-white">
-                            {user?.totalExp}
-                        </p>
-                        <p className="text-xs text-zinc-500 mt-4 font-mono">
-                            POSTS CLEANED: {user?.postProcessed || 0}
-                        </p>
+                        <div className="text-center">
+                            <p className="text-3xl font-black text-green-400">
+                                {user?.bestStreak || 0}
+                            </p>
+                            <p className="text-green-500/60 text-xs mt-1">
+                                Best
+                            </p>
+                        </div>
                     </div>
                 </div>
-                {/* Play Section */}
-                <div className="lg:col-span-2 bg-zinc-900 p-8 rounded border border-zinc-700 relative overflow-hidden">
-                    <div className="relative z-10">
-                        <h2 className="text-3xl font-bold text-white mb-2">
-                            DAILY SIMULATION
-                        </h2>
-                        <p className="text-zinc-400 mb-8 max-w-md">
-                            {isShiftDone
-                                ? "Protocol complete. New patterns generating..."
-                                : "New viral misinformation detected. Immediate sanitization required."}
-                        </p>
 
-                        {isShiftDone ? (
-                            <button
-                                type="button"
-                                disabled
-                                className="bg-zinc-800 text-zinc-500 text-lg font-bold px-8 py-3 rounded cursor-not-allowed border border-zinc-700"
-                            >
-                                SHIFT COMPLETE (COOLDOWN)
-                            </button>
-                        ) : (
-                            <Link
-                                to="/play/daily"
-                                className="inline-block bg-blue-600 hover:bg-blue-500 text-white text-lg font-bold px-10 py-4 rounded transition-transform hover:scale-105 shadow-[0_0_20px_rgba(37,99,235,0.3)]"
-                            >
-                                INITIALIZE SHIFT
-                            </Link>
-                        )}
+                {/* Posts Card */}
+                <div className="bg-black/40 border-2 border-green-500/30 rounded-lg p-6 hover:border-green-500/60 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/20 justify-center">
+                    <p className="text-green-500/80 text-sm font-semibold uppercase tracking-wider text-xl text-center mb-4">
+                        Posts
+                    </p>
+                    <div className="flex justify-around items-center">
+                        <div className="text-center">
+                            <p className="text-2xl font-black text-green-400">
+                                {user?.postsHistory.length || 0}
+                            </p>
+                            <p className="text-green-500/60 text-xs mt-1">
+                                Processed
+                            </p>
+                        </div>
+                        <div className="text-center">
+                            <p className="text-2xl font-black text-green-400">
+                                {user?.postsCorrect || 0}
+                            </p>
+                            <p className="text-green-500/60 text-xs mt-1">
+                                Correct
+                            </p>
+                        </div>
                     </div>
-
-                    {/* Decorative Background Element */}
+                    <div className="mt-4 text-center border-t border-green-500/20 pt-3">
+                        <p className="text-lg font-bold text-green-400">
+                            {accuracy}%
+                        </p>
+                        <p className="text-green-500/60 text-xs">Accuracy</p>
+                    </div>
                 </div>
+
+                {/* Daily Shift Card */}
+                <div className="bg-black/40 border-2 border-green-500/30 rounded-lg p-6 hover:border-green-500/60 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/20 justify-center flex flex-col items-center justify-center gap-4">
+                    <p className="text-green-500/80 text-sm font-semibold uppercase tracking-wider text-xl">
+                        Daily Shift
+                    </p>
+                    {isShiftDone ? (
+                        <div className="text-center">
+                            <div className="text-4xl mb-2">✓</div>
+                            <p className="text-green-400 font-semibold">
+                                Completed
+                            </p>
+                            <p className="text-green-500/60 text-xs mt-1">
+                                Come back tomorrow
+                            </p>
+                        </div>
+                    ) : (
+                        <Link
+                            to="/play/daily"
+                            className="bg-green-500 text-black font-bold px-8 py-3 rounded-lg hover:bg-green-400 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-500/50"
+                        >
+                            Start Shift
+                        </Link>
+                    )}
+                </div>
+            </div>
+
+            {/* Quick Links */}
+            <div className="flex flex-wrap gap-4 justify-center mt-8">
                 <Link
                     to="/history"
-                    className="inline-block bg-blue-600 hover:bg-blue-500 text-white text-lg font-bold px-10 py-4 rounded transition-transform hover:scale-105 shadow-[0_0_20px_rgba(37,99,235,0.3)]"
+                    className="px-6 py-2 border border-green-500/30 rounded-lg hover:border-green-500 hover:bg-green-500/10 transition-all"
                 >
-                    History
+                    View History
+                </Link>
+                <Link
+                    to="/leaderboard"
+                    className="px-6 py-2 border border-green-500/30 rounded-lg hover:border-green-500 hover:bg-green-500/10 transition-all"
+                >
+                    Leaderboard
+                </Link>
+                <Link
+                    to="/skills-radar"
+                    className="px-6 py-2 border border-green-500/30 rounded-lg hover:border-green-500 hover:bg-green-500/10 transition-all"
+                >
+                    Skills Radar
                 </Link>
             </div>
         </div>

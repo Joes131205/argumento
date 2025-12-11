@@ -37,7 +37,7 @@ function RootComponent() {
         <>
             <HeadContent />
             <div
-                className={`min-h-screen min-w-screen transition-colors duration-300 font-mono ${
+                className={`min-h-screen min-w-screen transition-colors duration-300 font-mono bg-zinc-950 text-green-500 ${
                     theme === "dark" ? "dark" : ""
                 } bg-background text-foreground`}
             >
