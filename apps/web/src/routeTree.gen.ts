@@ -17,6 +17,7 @@ import { Route as LeaderboardRouteImport } from './routes/leaderboard'
 import { Route as HistoryRouteImport } from './routes/history'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PlayDailyRouteImport } from './routes/play/daily'
+import { Route as PlayCampaignRouteImport } from './routes/play/campaign'
 
 const StatusRoute = StatusRouteImport.update({
   id: '/status',
@@ -58,6 +59,11 @@ const PlayDailyRoute = PlayDailyRouteImport.update({
   path: '/play/daily',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlayCampaignRoute = PlayCampaignRouteImport.update({
+  id: '/play/campaign',
+  path: '/play/campaign',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -67,6 +73,7 @@ export interface FileRoutesByFullPath {
   '/sign-up': typeof SignUpRoute
   '/skills-radar': typeof SkillsRadarRoute
   '/status': typeof StatusRoute
+  '/play/campaign': typeof PlayCampaignRoute
   '/play/daily': typeof PlayDailyRoute
 }
 export interface FileRoutesByTo {
@@ -77,6 +84,7 @@ export interface FileRoutesByTo {
   '/sign-up': typeof SignUpRoute
   '/skills-radar': typeof SkillsRadarRoute
   '/status': typeof StatusRoute
+  '/play/campaign': typeof PlayCampaignRoute
   '/play/daily': typeof PlayDailyRoute
 }
 export interface FileRoutesById {
@@ -88,6 +96,7 @@ export interface FileRoutesById {
   '/sign-up': typeof SignUpRoute
   '/skills-radar': typeof SkillsRadarRoute
   '/status': typeof StatusRoute
+  '/play/campaign': typeof PlayCampaignRoute
   '/play/daily': typeof PlayDailyRoute
 }
 export interface FileRouteTypes {
@@ -100,6 +109,7 @@ export interface FileRouteTypes {
     | '/sign-up'
     | '/skills-radar'
     | '/status'
+    | '/play/campaign'
     | '/play/daily'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -110,6 +120,7 @@ export interface FileRouteTypes {
     | '/sign-up'
     | '/skills-radar'
     | '/status'
+    | '/play/campaign'
     | '/play/daily'
   id:
     | '__root__'
@@ -120,6 +131,7 @@ export interface FileRouteTypes {
     | '/sign-up'
     | '/skills-radar'
     | '/status'
+    | '/play/campaign'
     | '/play/daily'
   fileRoutesById: FileRoutesById
 }
@@ -131,6 +143,7 @@ export interface RootRouteChildren {
   SignUpRoute: typeof SignUpRoute
   SkillsRadarRoute: typeof SkillsRadarRoute
   StatusRoute: typeof StatusRoute
+  PlayCampaignRoute: typeof PlayCampaignRoute
   PlayDailyRoute: typeof PlayDailyRoute
 }
 
@@ -192,6 +205,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlayDailyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/play/campaign': {
+      id: '/play/campaign'
+      path: '/play/campaign'
+      fullPath: '/play/campaign'
+      preLoaderRoute: typeof PlayCampaignRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -203,6 +223,7 @@ const rootRouteChildren: RootRouteChildren = {
   SignUpRoute: SignUpRoute,
   SkillsRadarRoute: SkillsRadarRoute,
   StatusRoute: StatusRoute,
+  PlayCampaignRoute: PlayCampaignRoute,
   PlayDailyRoute: PlayDailyRoute,
 }
 export const routeTree = rootRouteImport

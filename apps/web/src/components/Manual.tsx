@@ -17,7 +17,9 @@ const Manual = () => {
                         <p className="text-white text-2xl font-bold">
                             Manual v1.1
                         </p>
-                        <p className="text-white">Use it whenever necessary</p>
+                        <p className="text-white">
+                            Use it whenever is necessary
+                        </p>
                     </div>
                 </div>
 
@@ -28,7 +30,7 @@ const Manual = () => {
                             <button
                                 type="button"
                                 onClick={() => setIsOpened(false)}
-                                className="mb-6 flex items-center gap-2 text-green-500 hover:text-green-300 transition-colors font-mono text-sm font-bold uppercase tracking-wide"
+                                className="mb-6 cursor-pointer flex items-center gap-2 text-green-500 hover:text-green-300 transition-colors font-mono text-sm font-bold uppercase tracking-wide"
                             >
                                 ← Return to Index
                             </button>
@@ -68,12 +70,12 @@ const Manual = () => {
                                         <p className="text-zinc-400 text-sm mb-3">
                                             {item.description}
                                         </p>
-                                        <div className="flex flex-wrap gap-2">
+                                        <div className="flex flex-wrap gap-2 items-center">
                                             {item.types.map((type, j) => (
                                                 <button
                                                     type="button"
                                                     key={type.name}
-                                                    className="text-xs bg-zinc-800 text-green-400 px-2 py-1 rounded-full font-mono"
+                                                    className="text-xs bg-zinc-800 text-green-400 px-2 py-1 rounded-full cursor-pointer hover:bg-zinc-700 transition-all"
                                                     onClick={() => {
                                                         setCurrTypeIndex(i);
                                                         setCurrTopicIndex(j);

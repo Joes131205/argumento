@@ -50,7 +50,7 @@ export const generateDailyShift = async (req: Request, res: Response) => {
             1. You must generate a mix of "Safe" posts and "Slop" posts.
             2. Aim for a 50/50 split (e.g. if requesting 3 posts, make 1 Safe and 2 Slop, or vice versa).
             3. For "Safe" posts: Ignore the provided categories. Generate factual, neutral news.
-            4. For "Slop" posts: Pick randomly from this list of categories: ${JSON.stringify(types)}.
+            4. For "Slop" posts: Pick randomly from this list of categories: ${JSON.stringify(types)} (If the array is empty within the category, ignore them).
             
             INSTRUCTIONS:
             - "Safe" posts must be undeniably true (e.g. "Local library opens at 9 AM").
@@ -78,6 +78,8 @@ export const generateDailyShift = async (req: Request, res: Response) => {
               }
             ]
         `;
+
+        console.log(prompt);
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash-lite",
             contents: prompt,

@@ -16,13 +16,13 @@ export const Route = createFileRoute("/play/daily")({
         const last = new Date(user.lastPlayedDate);
         const today = new Date();
 
-        // if (
-        //     last.getDate() === today.getDate() &&
-        //     last.getMonth() === today.getMonth() &&
-        //     last.getFullYear() === today.getFullYear()
-        // ) {
-        //     throw redirect({ to: "/" });
-        // }
+        if (
+            last.getDate() === today.getDate() &&
+            last.getMonth() === today.getMonth() &&
+            last.getFullYear() === today.getFullYear()
+        ) {
+            throw redirect({ to: "/" });
+        }
         if (!user) {
             toast.warning("please sign in");
             throw redirect({ to: "/sign-in" });
@@ -35,10 +35,17 @@ function RouteComponent() {
     const { invalidateUser } = useUser();
 
     const [isPlayedBefore, setIsPlayedBefore] = useState(false);
-    const [data, setData] = useState<any>(null); // The Game Object
+    const [data, setData] = useState<any>(null);
     const [isLoadingStorage, setIsLoadingStorage] = useState(true);
 
-    const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
+    const [selectedTopics, setSelectedTopics] = useState<
+        Record<string, string[]>
+    >({
+        logical_fallacies: [],
+        cognitive_biases: [],
+        media_manipulations: [],
+        ai_hallucinations: [],
+    });
     const [postAmount, setPostAmount] = useState(3);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -69,7 +76,6 @@ function RouteComponent() {
     }, []);
 
     const generateShift = async () => {
-        if (selectedTopics.length === 0) return toast.error("Select a topic!");
         setIsSubmitting(true);
         try {
             const posts = await generateDailyShift(postAmount, selectedTopics);
@@ -92,14 +98,6 @@ function RouteComponent() {
             toast.error("Failed to generate");
         } finally {
             setIsSubmitting(false);
-        }
-    };
-
-    const toggleTopic = (type: string) => {
-        if (selectedTopics.includes(type)) {
-            setSelectedTopics((prev) => prev.filter((item) => item !== type));
-        } else {
-            setSelectedTopics((prev) => [...prev, type]);
         }
     };
 
@@ -184,31 +182,53 @@ function RouteComponent() {
 
     if (!isPlayedBefore) {
         return (
-            <div className="max-w-4xl mx-auto p-6">
-                <h1 className="text-3xl font-black mb-2">CUSTOM TRAINING</h1>
-                <p className="text-gray-500 mb-8">
-                    Select specific topics to practice.
-                </p>
+            <div className="flex flex-col items-center justify-center gap-5 p-5">
+                <h1 className="text-4xl font-bold">CUSTOM TRAINING</h1>
+                <p className="mb-8">Select specific topics to practice.</p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                     {content_types.map((category, i) => (
                         <div
                             key={i.toString()}
-                            className="border p-4 rounded bg-gray-50"
+                            className="border p-4 rounded bg-zinc-900 border-green-500 text-center flex flex-col gap-5 items-center hover:shadow-lg transition-all shadow-green-500"
                         >
-                            <h3 className="font-bold text-lg mb-1">
+                            <h3 className="font-bold text-xl mb-1">
                                 {category.name}
                             </h3>
-                            <div className="flex flex-wrap gap-2">
+                            <div className="flex flex-wrap gap-2 items-center justify-center">
                                 {category.types.map((t) => (
                                     <button
                                         type="button"
                                         key={t.name}
-                                        onClick={() => toggleTopic(t.name)}
-                                        className={`px-3 py-1 rounded text-sm border transition-all ${
-                                            selectedTopics.includes(t.name)
-                                                ? "bg-black text-white"
-                                                : "bg-white text-gray-700 hover:border-black"
+                                        onClick={() =>
+                                            setSelectedTopics((prev) => {
+                                                const currentTopics =
+                                                    prev[category.name] || [];
+                                                const isSelected =
+                                                    currentTopics.includes(
+                                                        t.name
+                                                    );
+                                                return {
+                                                    ...prev,
+                                                    [category.name]: isSelected
+                                                        ? currentTopics.filter(
+                                                              (name) =>
+                                                                  name !==
+                                                                  t.name
+                                                          )
+                                                        : [
+                                                              ...currentTopics,
+                                                              t.name,
+                                                          ],
+                                                };
+                                            })
+                                        }
+                                        className={`px-3 py-1 rounded text-sm border border-green-500 transition-all cursor-pointer ${
+                                            selectedTopics[
+                                                category.name
+                                            ]?.includes(t.name)
+                                                ? "border-4 font-black shadow-sm shadow-green-500"
+                                                : "hover:border-2"
                                         }`}
                                     >
                                         {t.name}
@@ -219,36 +239,46 @@ function RouteComponent() {
                     ))}
                 </div>
 
-                <div className="flex items-center gap-4 bg-white p-4 shadow-lg sticky bottom-0 border-t">
-                    <span className="font-bold">Amount:</span>
-                    <input
-                        type="number"
-                        min={1}
-                        max={5}
-                        value={postAmount}
-                        onChange={(e) => setPostAmount(Number(e.target.value))}
-                        className="border p-2 rounded w-20 text-center font-bold"
-                    />
-                    <button
-                        type="button"
-                        onClick={generateShift}
-                        disabled={isSubmitting}
-                        className="bg-blue-600 text-white text-xl font-bold px-10 py-3 rounded w-full disabled:opacity-50"
-                    >
-                        {isSubmitting ? "GENERATING..." : "START SIMULATION"}
-                    </button>
+                <div className="flex flex-col bg-zinc-800 items-center gap-4 p-4 shadow-lg sticky bottom-0 border border-2 border-green-500">
+                    <div className="flex gap-5 items-center justify-center">
+                        <div className="flex items-center gap-2">
+                            <span className="font-bold">Amount:</span>
+                            <input
+                                type="number"
+                                min={1}
+                                max={5}
+                                value={postAmount}
+                                onChange={(e) =>
+                                    setPostAmount(Number(e.target.value))
+                                }
+                                className="border-2 focus:outline-none border-green-500 p-2 rounded w-20 text-center font-bold"
+                            />
+                        </div>
+                        <button
+                            type="button"
+                            onClick={generateShift}
+                            disabled={isSubmitting}
+                            className="cursor-pointer bg-green-500 hover:bg-green-600 transition-all text-white text-xl font-bold px-10 py-3 rounded w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {isSubmitting ? "Generating" : "Start Shift"}
+                        </button>
+                    </div>
+                    <p>
+                        Both the generated posts and AI evaluation may have
+                        occasional inaccuracies. This is part of the training!
+                        :)
+                    </p>
                 </div>
             </div>
         );
     }
 
-    // --- VIEW 2: GAME SCREEN (Split Layout) ---
     return (
-        <div className="flex flex-col lg:flex-row h-[calc(100vh-64px)] gap-6 p-6 bg-gray-50">
+        <div className="flex flex-col lg:flex-row p-3 items-start">
             {/* LEFT: THE GAME */}
-            <div className="flex-1 flex flex-col justify-center max-w-2xl mx-auto w-full">
+            <div className="flex-2 flex flex-col justify-center p-3">
                 {!current ? (
-                    <div className="text-center bg-white p-10 rounded shadow border">
+                    <div className="text-center bg-zinc-800 p-10 rounded shadow">
                         <h2 className="text-3xl font-bold mb-4">
                             🎉 Shift Complete!
                         </h2>
@@ -256,18 +286,18 @@ function RouteComponent() {
                             type="button"
                             onClick={handleEndShift}
                             disabled={isSaving}
-                            className="bg-black text-white px-8 py-3 rounded font-bold disabled:opacity-50"
+                            className="bg-green-500 hover:bg-green-600 transition-all cursor-pointer text-white px-8 py-3 rounded font-bold disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {isSaving ? "Saving..." : "Clock Out"}
                         </button>
                     </div>
                 ) : (
-                    <div className="bg-white border-2 border-black p-8 rounded shadow-[6px_6px_0px_#000]">
-                        <div className="flex justify-between items-end mb-6 border-b pb-4">
-                            <h2 className="text-xl font-bold uppercase text-gray-500">
+                    <div className="bg-zinc-800 border-3 border-green-500 p-8 rounded">
+                        <div className="flex justify-between items-end mb-6 border-b border-b-green-500 pb-4">
+                            <h2 className="text-xl font-bold uppercase text-green-500">
                                 Post #{index + 1}
                             </h2>
-                            <span className="text-xs bg-gray-200 px-2 py-1 rounded">
+                            <span className="text-xs bg-zinc-700 px-2 py-1 rounded">
                                 ID: {current._id?.slice(-4)}
                             </span>
                         </div>
@@ -276,14 +306,14 @@ function RouteComponent() {
                             <h3 className="text-3xl font-black mb-4 leading-tight">
                                 {current.headline}
                             </h3>
-                            <p className="text-lg text-gray-800 leading-relaxed">
+                            <p className="text-lg text-zinc-200 leading-relaxed">
                                 {current.content}
                             </p>
                         </div>
 
                         {/* Controls */}
                         {isResult ? (
-                            <div className="bg-gray-100 p-4 rounded border-l-4 border-black">
+                            <div className="bg-zinc-700 p-4 rounded border-black">
                                 <h3
                                     className={`text-xl font-bold mb-2 ${verdict?.is_correct ? "text-green-600" : "text-red-600"}`}
                                 >
@@ -291,11 +321,13 @@ function RouteComponent() {
                                         ? "✅ CORRECT"
                                         : "❌ MISTAKE"}
                                 </h3>
-                                <p className="mb-4">{verdict?.message}</p>
+                                <p className="mb-4 text-white">
+                                    {verdict?.message}
+                                </p>
                                 <button
                                     type="button"
                                     onClick={nextLevel}
-                                    className="w-full bg-blue-600 text-white py-3 font-bold rounded"
+                                    className="w-full bg-green-500 hover:bg-green-600 transition-all text-white py-3 font-bold rounded cursor-pointer"
                                 >
                                     NEXT POST
                                 </button>
@@ -307,7 +339,7 @@ function RouteComponent() {
                                         type="button"
                                         onClick={handleApprove}
                                         disabled={isAnalyzing}
-                                        className="flex-1 bg-green-100 hover:bg-green-200 text-green-900 py-3 font-bold rounded"
+                                        className="flex-1 bg-green-500 hover:bg-green-600 text-green-100 transition-all cursor-pointer py-3 font-bold rounded"
                                     >
                                         APPROVE
                                     </button>
@@ -315,7 +347,7 @@ function RouteComponent() {
                                         type="button"
                                         onClick={() => setIsRejected(true)}
                                         disabled={isAnalyzing}
-                                        className="flex-1 bg-red-100 hover:bg-red-200 text-red-900 py-3 font-bold rounded"
+                                        className="flex-1 bg-red-500 hover:bg-red-600 text-red-100 transition-all cursor-pointer py-3 font-bold rounded"
                                     >
                                         REJECT
                                     </button>
@@ -328,17 +360,17 @@ function RouteComponent() {
                                                 setReason(e.target.value)
                                             }
                                             placeholder="Why is this slop?"
-                                            className="w-full border-2 border-red-200 p-3 rounded mb-2 h-24"
+                                            className="w-full border-2 focus:outline-none text-white resize-none border-red-500 p-3 rounded mb-2 h-24"
                                         />
                                         <button
                                             type="button"
                                             onClick={handleSendReport}
                                             disabled={isAnalyzing}
-                                            className="w-full bg-red-600 text-white py-3 font-bold rounded disabled:opacity-50"
+                                            className="w-full bg-red-500 hover:bg-red-600 cursor-pointer transition-all text-white py-3 font-bold rounded disabled:opacity-50"
                                         >
                                             {isAnalyzing
-                                                ? "ANALYZING..."
-                                                : "SUBMIT REPORT"}
+                                                ? "Analyzing..."
+                                                : "Submit Report"}
                                         </button>
                                     </div>
                                 )}
@@ -349,7 +381,7 @@ function RouteComponent() {
             </div>
 
             {/* RIGHT: THE MANUAL */}
-            <div className="hidden lg:block w-[400px] shrink-0 h-full">
+            <div className="hidden lg:block flex-2 h-auto p-3">
                 <Manual />
             </div>
         </div>
