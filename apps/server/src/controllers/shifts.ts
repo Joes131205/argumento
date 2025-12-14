@@ -3,6 +3,7 @@ import Posts from "@/db/models/Posts";
 import User from "@/db/models/User";
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
+import { content_types } from "@/utils/content_types";
 
 dotenv.config();
 
@@ -42,6 +43,9 @@ export const generateDailyShift = async (req: Request, res: Response) => {
         }
 
         const prompt = `
+            REFERENCES:
+            ${JSON.stringify(content_types)}
+            
             ROLE: You are an Educational Content Generator for a critical thinking training app. 
             
             TASK: Generate ${postLength} social media posts.

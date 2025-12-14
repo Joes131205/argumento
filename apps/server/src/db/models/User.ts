@@ -10,6 +10,7 @@ export interface IUsers extends Document {
     postProcessed: number;
     postsCorrect: number;
     postsHistory: string[];
+    campaign_progress: Record<string, string>[];
 }
 
 const StatSchema: Schema = new Schema({
@@ -26,6 +27,15 @@ const StatSchema: Schema = new Schema({
         default: 0,
     },
 });
+
+const CampaignProgressSchema = new Schema(
+    {
+        campaign_id: { type: String, required: true },
+        isCompleted: { type: Boolean, default: false },
+        levelsCompleted: [{ type: String }],
+    },
+    { _id: false }
+);
 
 const UsersSchema: Schema = new Schema(
     {
@@ -78,6 +88,7 @@ const UsersSchema: Schema = new Schema(
                 }),
             },
         },
+        campaign_progress: [CampaignProgressSchema],
     },
     {
         timestamps: true,

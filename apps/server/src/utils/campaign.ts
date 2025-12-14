@@ -1,11 +1,9 @@
-export const CAMPAIGN_LEVELS = [
-    {
-        id: "campaign_0",
+export const campaign = {
+    campaign_0: {
         title: "Orientation",
         description: "System calibration and interface training.",
-        levels: [
-            {
-                id: "level_1",
+        levels: {
+            level_1: {
                 title: "System Check",
                 briefing:
                     "Welcome to Argumento. Before we begin real monitoring, we need to calibrate your judgment. \n\nTask: Identify a Verified Truth. If a post is factual and neutral, click [APPROVE].",
@@ -21,11 +19,10 @@ export const CAMPAIGN_LEVELS = [
                     },
                 ],
             },
-            {
-                id: "level_2",
+            level_2: {
                 title: "The First Filter",
                 briefing:
-                    "Good. Now let's test the rejection protocols. \n\nTask: You will see a post using 'Clickbait'—a tactic that hides information to force clicks. This is considered Slop. Click [REJECT] and tag it.",
+                    "Good. Now let's test the rejection protocols. \n\nTask: You will see a post using 'Clickbait'—a tactic that hides information to force clicks. This is considered Slop. Click [REJECT] and tag it. For now the judging will be automatic due to the training.",
                 posts: [
                     {
                         id: "tut_2",
@@ -38,22 +35,6 @@ export const CAMPAIGN_LEVELS = [
                     },
                 ],
             },
-        ],
+        },
     },
-];
-
-export type CampaignPost = {
-    id: string;
-    headline: string;
-    content: string;
-    type: "safe" | "slop";
-    slop_reasons: string[];
-    category: string;
-};
-
-export type CampaignLevel = {
-    id: string;
-    title: string;
-    briefing: string;
-    posts: CampaignPost[];
 };
