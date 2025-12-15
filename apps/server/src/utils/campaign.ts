@@ -1,4 +1,4 @@
-export const campaign = {
+export const campaign_level = {
     campaign_0: {
         title: "Orientation",
         description: "System calibration and interface training.",

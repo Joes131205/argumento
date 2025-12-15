@@ -13,20 +13,25 @@ export interface IUsers extends Document {
     campaign_progress: Record<string, string>[];
 }
 
-const StatSchema: Schema = new Schema({
-    name: {
-        type: String,
-        required: true,
+const StatSchema: Schema = new Schema(
+    {
+        name: {
+            type: String,
+            required: true,
+        },
+        correct: {
+            type: Number,
+            default: 0,
+        },
+        total: {
+            type: Number,
+            default: 0,
+        },
     },
-    correct: {
-        type: Number,
-        default: 0,
-    },
-    total: {
-        type: Number,
-        default: 0,
-    },
-});
+    {
+        _id: false,
+    }
+);
 
 const CampaignProgressSchema = new Schema(
     {

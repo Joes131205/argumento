@@ -8,10 +8,10 @@ import {
 
 export const campaignRouter = express.Router();
 
-campaignRouter.get("/$level/$id", authMiddleware, getLevel);
+campaignRouter.get("/:level/:id", getLevel);
 campaignRouter.get("/", authMiddleware, getCampaign);
 campaignRouter.post(
-    "/complete/$level/$id",
+    "/complete/:level/:id",
     authMiddleware,
     completeCampaignLevel
 );

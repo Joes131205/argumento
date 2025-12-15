@@ -1,15 +1,16 @@
-import { campaign } from "@/utils/campaign";
+import { campaign_level } from "@/utils/campaign";
 import type { Request, Response } from "express";
 
 export const getLevel = async (req: Request, res: Response) => {
     try {
         const { level, id }: { level: String; id: String } = req.params;
-        const campaign = campaign[level];
+        console.log(level, id);
+        const campaign = campaign_level[level];
         const part = campaign.levels[id];
+        console.log(campaign, part);
         res.status(200).json({
             success: true,
             message: "Success",
-            campaign,
             part,
         });
     } catch (error) {
