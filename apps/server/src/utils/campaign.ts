@@ -1,12 +1,12 @@
 export const campaign_level = {
     campaign_0: {
         title: "Orientation",
-        description: "System calibration and interface training.",
+        description: "Get to know the system before going on with yourself.",
         levels: {
             level_1: {
-                title: "System Check",
+                title: "Safe Post",
                 briefing:
-                    "Welcome to Argumento. Before we begin real monitoring, we need to calibrate your judgment. \n\nTask: Identify a Verified Truth. If a post is factual and neutral, click [APPROVE].",
+                    "Welcome to Argumento. Before we getting started, you need to know the interface here. You will see a headline and a content, if you think this post is okay-ish, you can click [APPROVE], click [REJECT] otherwise. In this scenario, the post is safe, but be wary of the bad content.",
                 posts: [
                     {
                         id: "tut_1",
@@ -20,9 +20,9 @@ export const campaign_level = {
                 ],
             },
             level_2: {
-                title: "The First Filter",
+                title: "Bad Post",
                 briefing:
-                    "Good. Now let's test the rejection protocols. \n\nTask: You will see a post using 'Clickbait'—a tactic that hides information to force clicks. This is considered Slop. Click [REJECT] and tag it. For now the judging will be automatic due to the training.",
+                    "Nice, now, once again, if you see a bad content, [REJECT] it, and also state your reasoning, in this post, theres a clickbait element to it, you can [REJECT] it. We won't give you any more hint further as we go :D",
                 posts: [
                     {
                         id: "tut_2",
@@ -31,7 +31,7 @@ export const campaign_level = {
                             "This golden retriever did the most shocking thing ever. Click here to see the video that doctors don't want you to see!",
                         type: "slop",
                         slop_reasons: ["Clickbait", "False Urgency"],
-                        category: "manipulation",
+                        category: "media_manipulation",
                     },
                 ],
             },
