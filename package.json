@@ -1,8 +1,8 @@
 {
     "name": "si-peduli",
     "devDependencies": {
-        "turbo": "^2.5.4",
-        "@biomejs/biome": "^2.2.0"
+        "@biomejs/biome": "^2.2.0",
+        "turbo": "^2.6.3"
     },
     "packageManager": "bun@1.2.21",
     "private": true,

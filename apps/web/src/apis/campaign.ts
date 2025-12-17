@@ -29,6 +29,7 @@ export const getCampaign = async () => {
 export const completeCampaignLevel = async (level: string, id: string) => {
     try {
         const res = await instance.post(`/campaign/complete/${level}/${id}`);
+        console.log(res);
         return res;
     } catch (error) {
         console.log(error);

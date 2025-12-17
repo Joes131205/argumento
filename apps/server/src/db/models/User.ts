@@ -10,7 +10,10 @@ export interface IUsers extends Document {
     postProcessed: number;
     postsCorrect: number;
     postsHistory: string[];
-    campaign_progress: Record<string, string>[];
+    campaign_progress: Record<
+        string,
+        { campaign_id: string; isCompleted: boolean; levelsCompleted: string[] }
+    >[];
 }
 
 const StatSchema: Schema = new Schema(

@@ -37,7 +37,7 @@ export const getCampaign = async (req: Request, res: Response) => {
 };
 export const completeCampaignLevel = async (req: Request, res: Response) => {
     try {
-        const { level, id }: { level: string; id: string } = req.params;
+        const { level, id } = req.params as { level: string; id: string };
 
         const userId = req.users;
 
@@ -57,12 +57,39 @@ export const completeCampaignLevel = async (req: Request, res: Response) => {
             });
         }
 
-        // TODO
-        await User.findByIdAndUpdate(userId, {
-            $addToSet: {
-                [`campaign_progress.${level}`]: id,
-            },
-        });
+        const campaign = campaign_level[level];
+        if (!campaign) {
+            return res.status(404).json({
+                success: false,
+                message: "Campaign not found",
+            });
+        }
+
+        const campaignProgress = user.campaign_progress.find(
+            (cp) => cp.campaign_id === level
+        );
+
+        const totalLevelsCompleted = Object.keys(campaign.levels).length;
+
+        if (campaignProgress) {
+            if (!campaignProgress.levelsCompleted.includes(id)) {
+                campaignProgress.levelsCompleted.push(id);
+            }
+
+            if (
+                campaignProgress.levelsCompleted.length >= totalLevelsCompleted
+            ) {
+                campaignProgress.isCompleted = true;
+            }
+        } else {
+            user.campaign_progress.push({
+                campaign_id: level,
+                isCompleted: false,
+                levelsCompleted: [id],
+            });
+        }
+
+        await user.save();
 
         res.status(200).json({ success: true, message: "Success" });
     } catch (error) {

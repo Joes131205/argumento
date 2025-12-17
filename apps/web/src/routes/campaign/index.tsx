@@ -1,4 +1,5 @@
 import { getCampaign } from "@/apis/campaign";
+import useUser from "@/hooks/useUser";
 import { createFileRoute, Link, useLoaderData } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/campaign/")({
@@ -12,32 +13,65 @@ export const Route = createFileRoute("/campaign/")({
 
 function RouteComponent() {
     const data = useLoaderData({ from: "/campaign/" });
-    console.log(data);
+    const { user } = useUser();
+
     return (
-        <div>
-            <h2>Campaign</h2>
-            <p>Before starting the shift, get to know the system! :D</p>
-            {/* TODO */}
-            <div>
-                {Object.entries(data).map(([key1, item1]) => {
+        <div className="p-6">
+            <div className="mb-8">
+                <h2 className="text-3xl font-bold mb-2">Campaign</h2>
+                <p className="">
+                    Before starting the shift, get to know the system! :D
+                </p>
+            </div>
+
+            <div className="space-y-8">
+                {Object.entries(data).map(([campaignId, campaign]) => {
+                    const campaignProgress = user?.campaign_progress?.find(
+                        (cp) => cp.campaign_id === campaignId
+                    );
+
                     return (
-                        <div key={key1}>
-                            <p className="text-2xl font-bold">{item1?.title}</p>
-                            <p>{item1?.description}</p>
-                            <div>
-                                {Object.entries(item1?.levels).map(
-                                    ([key2, item2]) => {
+                        <div key={campaignId} className="border rounded-lg p-6">
+                            <div className="mb-4">
+                                <h3 className="text-2xl font-bold mb-2">
+                                    {campaign?.title}
+                                </h3>
+                                <p className="mb-2">{campaign?.description}</p>
+                                {campaignProgress?.isCompleted && (
+                                    <span className="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
+                                        Completed
+                                    </span>
+                                )}
+                            </div>
+
+                            <div className="space-y-2">
+                                {Object.entries(campaign?.levels).map(
+                                    ([levelId, level]) => {
+                                        const isLevelCompleted =
+                                            campaignProgress?.levelsCompleted.includes(
+                                                levelId
+                                            );
+
                                         return (
-                                            <div key={key2}>
+                                            <div
+                                                key={levelId}
+                                                className="flex items-center gap-2"
+                                            >
                                                 <Link
                                                     to="/campaign/$level/$id"
                                                     params={{
-                                                        level: key1,
-                                                        id: key2,
+                                                        level: campaignId,
+                                                        id: levelId,
                                                     }}
+                                                    className="text-blue-600 hover:underline"
                                                 >
-                                                    {item2?.title}
+                                                    {level?.title}
                                                 </Link>
+                                                {isLevelCompleted && (
+                                                    <span className="text-sm text-green-600">
+                                                        ✓ Completed
+                                                    </span>
+                                                )}
                                             </div>
                                         );
                                     }
