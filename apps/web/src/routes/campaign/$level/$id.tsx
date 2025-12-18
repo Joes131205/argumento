@@ -89,14 +89,17 @@ function RouteComponent() {
     };
 
     return (
-        <div>
-            <div>
-                <p>{data.title}</p>
+        <div className="flex items-center justify-center h-screen p-3 gap-2">
+            <div className="flex-1 text-center border-5 border-green-500 h-full p-3 flex flex-col gap-5">
+                <p className="text-2xl font-bold">{data.title}</p>
                 <p>{data.briefing}</p>
             </div>
-            <div className="flex-2 flex flex-col justify-center p-3">
+            <div className="flex-1 flex flex-col justify-center h-full">
                 {!current ? (
-                    <div className="text-center bg-zinc-800 p-10 rounded shadow">
+                    <div
+                        className="text-center border-5 border-green-500 bg-zinc-800 p-10 rounded shadow h-full flex flex-col items-center justify-center
+                    "
+                    >
                         <h2 className="text-3xl font-bold mb-4">
                             🎉 Training Complete!
                         </h2>
@@ -110,7 +113,7 @@ function RouteComponent() {
                         </button>
                     </div>
                 ) : (
-                    <div className="bg-zinc-800 border-3 border-green-500 p-8 rounded">
+                    <div className="bg-zinc-800 border-5 border-green-500 p-8 rounded h-full">
                         <div className="flex justify-between items-end mb-6 border-b border-b-green-500 pb-4">
                             <h2 className="text-xl font-bold uppercase text-green-500">
                                 Post #{index + 1}

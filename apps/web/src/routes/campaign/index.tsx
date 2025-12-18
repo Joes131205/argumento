@@ -31,14 +31,17 @@ function RouteComponent() {
                     );
 
                     return (
-                        <div key={campaignId} className="border rounded-lg p-6">
-                            <div className="mb-4">
+                        <div
+                            key={campaignId}
+                            className="border-5 border-green-500 p-6"
+                        >
+                            <div className="mb-4 flex flex-col gap-2.5 items-start">
                                 <h3 className="text-2xl font-bold mb-2">
                                     {campaign?.title}
                                 </h3>
                                 <p className="mb-2">{campaign?.description}</p>
                                 {campaignProgress?.isCompleted && (
-                                    <span className="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
+                                    <span className="inline-block px-3 py-1 border-green-500 border-5 text-green-500 rounded-full text-sm">
                                         Completed
                                     </span>
                                 )}
@@ -63,12 +66,12 @@ function RouteComponent() {
                                                         level: campaignId,
                                                         id: levelId,
                                                     }}
-                                                    className="text-blue-600 hover:underline"
+                                                    className="text-green-500 underline p-3 w-[8%]"
                                                 >
                                                     {level?.title}
                                                 </Link>
                                                 {isLevelCompleted && (
-                                                    <span className="text-sm text-green-600">
+                                                    <span className="text-lg text-green-500 border-4 p-3  border-green-500">
                                                         ✓ Completed
                                                     </span>
                                                 )}

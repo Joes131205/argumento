@@ -44,64 +44,68 @@ function RouteComponent() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
-                {Object.entries(user?.stats ?? {}).map(([key, value]) => {
-                    const accuracy =
-                        value.total > 0
-                            ? ((value.correct / value.total) * 100).toFixed(1)
-                            : "0.0";
-                    const accuracyNum = Number.parseFloat(accuracy);
+                {user?.stats?.length
+                    ? user?.stats.map((item) => {
+                          const accuracy =
+                              item.total > 0
+                                  ? ((item.correct / item.total) * 100).toFixed(
+                                        1
+                                    )
+                                  : "0.0";
+                          const accuracyNum = Number.parseFloat(accuracy);
 
-                    return (
-                        <div
-                            key={key}
-                            className={`flex flex-col p-6 rounded-xl border-2 ${getAccuracyColor(accuracyNum)} shadow-lg hover:shadow-xl transition-all duration-300`}
-                        >
-                            <h3 className="text-2xl font-bold mb-4 capitalize">
-                                {value.name}
-                            </h3>
+                          return (
+                              <div
+                                  key={item.stats_id}
+                                  className={`flex flex-col p-6 rounded-xl border-2 ${getAccuracyColor(accuracyNum)} shadow-lg hover:shadow-xl transition-all duration-300`}
+                              >
+                                  <h3 className="text-2xl font-bold mb-4 capitalize">
+                                      {item.name}
+                                  </h3>
 
-                            <div className="space-y-3 mb-4">
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">
-                                        Correct
-                                    </span>
-                                    <span className="font-semibold">
-                                        {value.correct}
-                                    </span>
-                                </div>
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">
-                                        Total
-                                    </span>
-                                    <span className="font-semibold">
-                                        {value.total}
-                                    </span>
-                                </div>
-                            </div>
+                                  <div className="space-y-3 mb-4">
+                                      <div className="flex justify-between text-sm">
+                                          <span className="text-muted-foreground">
+                                              Correct
+                                          </span>
+                                          <span className="font-semibold">
+                                              {item.correct}
+                                          </span>
+                                      </div>
+                                      <div className="flex justify-between text-sm">
+                                          <span className="text-muted-foreground">
+                                              Total
+                                          </span>
+                                          <span className="font-semibold">
+                                              {item.total}
+                                          </span>
+                                      </div>
+                                  </div>
 
-                            <div className="mt-auto">
-                                <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm font-medium">
-                                        Accuracy
-                                    </span>
-                                    <span
-                                        className={`text-2xl font-bold ${getAccuracyColor(accuracyNum)}`}
-                                    >
-                                        {accuracy}%
-                                    </span>
-                                </div>
-                                <div className="w-full bg-zinc-800 rounded-full h-3 overflow-hidden">
-                                    <div
-                                        className={`h-full ${getProgressColor(accuracyNum)} transition-all duration-500 rounded-full`}
-                                        style={{
-                                            width: `${Math.min(accuracyNum, 100)}%`,
-                                        }}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    );
-                })}
+                                  <div className="mt-auto">
+                                      <div className="flex items-center justify-between mb-2">
+                                          <span className="text-sm font-medium">
+                                              Accuracy
+                                          </span>
+                                          <span
+                                              className={`text-2xl font-bold ${getAccuracyColor(accuracyNum)}`}
+                                          >
+                                              {accuracy}%
+                                          </span>
+                                      </div>
+                                      <div className="w-full bg-zinc-800 rounded-full h-3 overflow-hidden">
+                                          <div
+                                              className={`h-full ${getProgressColor(accuracyNum)} transition-all duration-500 rounded-full`}
+                                              style={{
+                                                  width: `${Math.min(accuracyNum, 100)}%`,
+                                              }}
+                                          />
+                                      </div>
+                                  </div>
+                              </div>
+                          );
+                      })
+                    : ""}
             </div>
 
             {(!user?.stats || Object.keys(user.stats).length === 0) && (

@@ -37,4 +37,9 @@ export const campaign_level = {
             },
         },
     },
+    campaign_1: {
+        title: "Logical Fallacies",
+        description: "The thing that bends the logic, no pun intended.",
+        levels: [],
+    },
 };

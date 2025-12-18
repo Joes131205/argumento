@@ -18,6 +18,10 @@ export interface IUsers extends Document {
 
 const StatSchema: Schema = new Schema(
     {
+        stat_id: {
+            type: String,
+            required: true,
+        },
         name: {
             type: String,
             required: true,
@@ -71,30 +75,7 @@ const UsersSchema: Schema = new Schema(
             },
         ],
         stats: {
-            fallacies: {
-                type: StatSchema,
-                default: () => ({
-                    name: "Logical Fallacies",
-                }),
-            },
-            biases: {
-                type: StatSchema,
-                default: () => ({
-                    name: "Cognitive Biases",
-                }),
-            },
-            media_manipulation: {
-                type: StatSchema,
-                default: () => ({
-                    name: "Media Manipulation",
-                }),
-            },
-            ai_hallucination: {
-                type: StatSchema,
-                default: () => ({
-                    name: "AI Hallucination",
-                }),
-            },
+            type: [StatSchema],
         },
         campaign_progress: [CampaignProgressSchema],
     },
