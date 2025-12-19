@@ -35,6 +35,7 @@ export const content_types = [
                     "Introducing an irrelevant topic to divert attention from the original issue.",
             },
         ],
+        requirements: "campaign_1",
     },
     {
         name: "Cognitive Biases",
@@ -67,6 +68,7 @@ export const content_types = [
                     "A cognitive bias where people with low ability at a task overestimate their ability.",
             },
         ],
+        requirements: "campaign_2",
     },
     {
         name: "Media Manipulation",
@@ -99,6 +101,7 @@ export const content_types = [
                     "Attempting to discredit an opponent's position by charging them with hypocrisy without directly refuting or disproving their argument.",
             },
         ],
+        requirements: "campaign_3",
     },
     {
         name: "AI Hallucinations",
@@ -131,5 +134,6 @@ export const content_types = [
                     "Contradicting a statement made earlier in the same paragraph.",
             },
         ],
+        requirements: "campaign_4",
     },
 ];

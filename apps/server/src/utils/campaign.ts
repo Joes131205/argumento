@@ -36,10 +36,18 @@ export const campaign_level = {
                 ],
             },
         },
+        requirement: "",
     },
     campaign_1: {
         title: "Logical Fallacies",
         description: "The thing that bends the logic, no pun intended.",
-        levels: [],
+        levels: {},
+        requirement: "campaign_0",
+    },
+    campaign_2: {
+        title: "Logical Fallacies 2",
+        description: "The thing that bends the logic, no pun intended.",
+        levels: {},
+        requirement: "campaign_1",
     },
 };

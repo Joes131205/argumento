@@ -5,8 +5,9 @@ import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { content_types } from "@/utils/content_types";
-import Manual from "@/components/Manual"; // Ensure this is imported
+import Manual from "@/components/Manual";
 import useUser from "@/hooks/useUser";
+import { Lock } from "lucide-react";
 
 export const Route = createFileRoute("/play/daily")({
     component: RouteComponent,
@@ -32,7 +33,7 @@ export const Route = createFileRoute("/play/daily")({
 
 function RouteComponent() {
     const router = useRouter();
-    const { invalidateUser } = useUser();
+    const { invalidateUser, user } = useUser();
 
     const [isPlayedBefore, setIsPlayedBefore] = useState(false);
     const [data, setData] = useState<any>(null);
@@ -78,6 +79,13 @@ function RouteComponent() {
     const generateShift = async () => {
         setIsSubmitting(true);
         try {
+            const isCompleted = user?.campaign_progress?.find(
+                (item) => item?.campaign_id === "campaign_1" && item.isCompleted
+            );
+            if (!isCompleted) {
+                toast.error("Complete campaign_1 first to continue!");
+                return;
+            }
             const posts = await generateDailyShift(postAmount, selectedTopics);
             if (posts === "SERVER ERROR") {
                 toast("Error while generating a shift, try again later");
@@ -187,56 +195,81 @@ function RouteComponent() {
                 <p className="mb-8">Select specific topics to practice.</p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    {content_types.map((category, i) => (
-                        <div
-                            key={i.toString()}
-                            className="border p-4 rounded bg-zinc-900 border-green-500 text-center flex flex-col gap-5 items-center hover:shadow-lg transition-all shadow-green-500"
-                        >
-                            <h3 className="font-bold text-xl mb-1">
-                                {category.name}
-                            </h3>
-                            <div className="flex flex-wrap gap-2 items-center justify-center">
-                                {category.types.map((t) => (
-                                    <button
-                                        type="button"
-                                        key={t.name}
-                                        onClick={() =>
-                                            setSelectedTopics((prev) => {
-                                                const currentTopics =
-                                                    prev[category.name] || [];
-                                                const isSelected =
-                                                    currentTopics.includes(
-                                                        t.name
-                                                    );
-                                                return {
-                                                    ...prev,
-                                                    [category.name]: isSelected
-                                                        ? currentTopics.filter(
-                                                              (name) =>
-                                                                  name !==
-                                                                  t.name
-                                                          )
-                                                        : [
-                                                              ...currentTopics,
-                                                              t.name,
-                                                          ],
-                                                };
-                                            })
-                                        }
-                                        className={`px-3 py-1 rounded text-sm border border-green-500 transition-all cursor-pointer ${
-                                            selectedTopics[
-                                                category.name
-                                            ]?.includes(t.name)
-                                                ? "border-4 font-black shadow-sm shadow-green-500"
-                                                : "hover:border-2"
-                                        }`}
-                                    >
-                                        {t.name}
-                                    </button>
-                                ))}
+                    {content_types.map((category, i) => {
+                        const isCompleted = user?.campaign_progress?.find(
+                            (item) =>
+                                item?.campaign_id === category?.requirements &&
+                                item.isCompleted
+                        );
+                        if (isCompleted === undefined) {
+                            return (
+                                <div
+                                    key={i.toString()}
+                                    className="border p-4 rounded bg-zinc-900 border-green-500 text-center flex flex-col gap-5 items-center hover:shadow-lg transition-all shadow-green-500"
+                                >
+                                    <p>Locked!</p>
+                                    <Lock size={100} />
+                                    <p>
+                                        Missing the requirements of{" "}
+                                        {category?.requirements}
+                                    </p>
+                                </div>
+                            );
+                        }
+
+                        return (
+                            <div
+                                key={i.toString()}
+                                className="border p-4 rounded bg-zinc-900 border-green-500 text-center flex flex-col gap-5 items-center hover:shadow-lg transition-all shadow-green-500"
+                            >
+                                <h3 className="font-bold text-xl mb-1">
+                                    {category.name}
+                                </h3>
+                                <div className="flex flex-wrap gap-2 items-center justify-center">
+                                    {category.types.map((t) => (
+                                        <button
+                                            type="button"
+                                            key={t.name}
+                                            onClick={() =>
+                                                setSelectedTopics((prev) => {
+                                                    const currentTopics =
+                                                        prev[category.name] ||
+                                                        [];
+                                                    const isSelected =
+                                                        currentTopics.includes(
+                                                            t.name
+                                                        );
+                                                    return {
+                                                        ...prev,
+                                                        [category.name]:
+                                                            isSelected
+                                                                ? currentTopics.filter(
+                                                                      (name) =>
+                                                                          name !==
+                                                                          t.name
+                                                                  )
+                                                                : [
+                                                                      ...currentTopics,
+                                                                      t.name,
+                                                                  ],
+                                                    };
+                                                })
+                                            }
+                                            className={`px-3 py-1 rounded text-sm border border-green-500 transition-all cursor-pointer ${
+                                                selectedTopics[
+                                                    category.name
+                                                ]?.includes(t.name)
+                                                    ? "border-4 font-black shadow-sm shadow-green-500"
+                                                    : "hover:border-2"
+                                            }`}
+                                        >
+                                            {t.name}
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
 
                 <div className="flex flex-col bg-zinc-800 items-center gap-4 p-4 shadow-lg sticky bottom-0 border border-2 border-green-500">

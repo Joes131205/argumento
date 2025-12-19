@@ -13,6 +13,11 @@ interface User {
     postsCorrect: number;
     postsHistory: string[];
     stats: Record<string, { name: string; correct: number; total: number }>;
+    campaign_progress: {
+        campaign_id: string;
+        isCompleted: boolean;
+        levelsCompleted: string[];
+    }[];
 }
 interface UserContextType {
     user: User | null;
