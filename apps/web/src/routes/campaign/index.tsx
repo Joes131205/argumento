@@ -1,6 +1,7 @@
 import { getCampaign } from "@/apis/campaign";
 import useUser from "@/hooks/useUser";
 import { createFileRoute, Link, useLoaderData } from "@tanstack/react-router";
+import { Lock } from "lucide-react";
 
 export const Route = createFileRoute("/campaign/")({
     component: RouteComponent,
@@ -24,7 +25,7 @@ function RouteComponent() {
                 </p>
             </div>
 
-            <div className="space-y-8 flex gap-5 flex-wrap">
+            <div className="grid grid-cols-2 gap-5">
                 {Object.entries(data).map(([campaignId, campaign]) => {
                     const campaignProgress = user?.campaign_progress?.find(
                         (cp) => cp.campaign_id === campaignId
@@ -34,11 +35,13 @@ function RouteComponent() {
                     );
                     if (!isUnlocked?.isCompleted && campaign.requirement) {
                         return (
-                            <div
-                                key={campaignId}
-                                className="border-5 border-green-500 p-6 flex-1 h-auto"
-                            >
-                                locked
+                            <div className="border-5 border-green-500 p-6 flex flex-col items-center justify-center gap-5">
+                                <p className="text-2xl font-bold">Locked!</p>
+                                <Lock size={100} />
+                                <p>
+                                    Missing the requirements of{" "}
+                                    {campaign?.requirement}
+                                </p>
                             </div>
                         );
                     }
@@ -50,7 +53,7 @@ function RouteComponent() {
                         >
                             <div className="mb-4 flex flex-col gap-2.5 items-start">
                                 <h3 className="text-2xl font-bold mb-2">
-                                    {campaign?.title}
+                                    {campaign?.title} | {campaignId}
                                 </h3>
                                 <p className="mb-2">{campaign?.description}</p>
                                 {campaignProgress?.isCompleted && (

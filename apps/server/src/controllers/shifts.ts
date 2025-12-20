@@ -43,43 +43,49 @@ export const generateDailyShift = async (req: Request, res: Response) => {
         }
 
         const prompt = `
-            REFERENCES:
-            ${JSON.stringify(content_types)}
-            
-            ROLE: You are an Educational Content Generator for a critical thinking training app. 
-            
+            ROLE: You are an Educational Content Generator for a critical thinking training app.
+
             TASK: Generate ${postLength} social media posts.
-            
-            DISTRIBUTION RULES (CRITICAL):
-            1. You must generate a mix of "Safe" posts and "Slop" posts.
-            2. Aim for a 50/50 split (e.g. if requesting 3 posts, make 1 Safe and 2 Slop, or vice versa).
-            3. For "Safe" posts: Ignore the provided categories. Generate factual, neutral news.
-            4. For "Slop" posts: Pick randomly from this list of categories: ${JSON.stringify(types)} (If the array is empty within the category, ignore them).
-            
-            INSTRUCTIONS:
-            - "Safe" posts must be undeniably true (e.g. "Local library opens at 9 AM").
-            - "Slop" posts must be realistic using the specific fallacy requested.
-            - Shuffle the order (do not put all Safe posts first).
-            - If "Safe": Set type="safe", category="safe", slop_reason=null.
-            - If "Slop": Set type="slop".
-            - Determine the "category" based on the "slop_reason":
-                - Logical Fallacies -> "fallacies"
-                - Cognitive Biases -> "biases"
-                - Media Manipulation -> "media_manipulation"
-                - AI Hallucinations -> "ai_hallucinations"
-            - If "Slop": It usually contains multiple flaws. Identify 1 to 3 applicable tags.
-            - Example: A post might be "Ad Hominem" AND "Rage Bait".  
+
+            // --- CONTEXT ---
+            // 1. THE DICTIONARY (Use this to understand what the fallacies MEAN)
+            REFERENCE_DB: 
+            ${JSON.stringify(content_types)}
+
+            // 2. THE ASSIGNMENT (Only generate the types listed here)
+            INPUT_TARGETS: 
+            ${JSON.stringify(types)}
+
+            // --- RULES ---
+            DISTRIBUTION:
+            1. **50/50 SPLIT**: Generate a mix of roughly 50% "Safe" and 50% "Slop".
+            2. **SAFE POSTS**: Ignore INPUT_TARGETS. Generate factual, neutral, undeniably true news (e.g. "City library hours", "Weather report").
+            3. **SLOP POSTS**: Generate realistic misinformation.
+            - **STRICT FILTERING**: You must ONLY use types found in the *non-empty* arrays within INPUT_TARGETS.
+            - If a category in INPUT_TARGETS is empty (e.g. "logical_fallacies": []), IGNORE IT.
+
+            INSTRUCTIONS FOR "SLOP":
+            1. **SELECT**: Pick a target type from valid INPUT_TARGETS (e.g. "Ad Hominem").
+            2. **STUDY**: Look up that type in REFERENCE_DB. Analyze the official definition and example to understand the specific nuance.
+            3. **WRITE**: Create a *new* post that uses that exact same logical flaw, but on a fresh topic.
+            4. **TAG**: 
+            - "reasons": Must include the target type. You may add 1 extra relevant tag if applicable.
+            - "category": Map the input key to the Schema Key strictly:
+                * "Logical Fallacies" -> "fallacies"
+                * "Cognitive Biases" -> "biases"
+                * "Media Manipulation" -> "media_manipulation"
+                * "AI Hallucinations" -> "ai_hallucinations"
 
             OUTPUT SCHEMA (JSON Array):
             [
-              {
+            {
                 "headline": "string",
                 "content": "string",
-                "type": "string",
-                "reasons": ["string", "string"], 
+                "type": "string ('slop' or 'safe')",
+                "reasons": ["string"], 
                 "category": "string (fallacies, biases, media_manipulation, ai_hallucinations, or safe)",
                 "origin": "ai"
-              }
+            }
             ]
         `;
 
