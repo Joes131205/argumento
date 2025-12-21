@@ -1,7 +1,13 @@
 import { getCampaign } from "@/apis/campaign";
 import useUser from "@/hooks/useUser";
 import { createFileRoute, Link, useLoaderData } from "@tanstack/react-router";
-import { Lock } from "lucide-react";
+import {
+    ArrowLeft,
+    CheckCircle,
+    Circle,
+    CircleCheck,
+    Lock,
+} from "lucide-react";
 
 export const Route = createFileRoute("/campaign/")({
     component: RouteComponent,
@@ -19,6 +25,9 @@ function RouteComponent() {
     return (
         <div className="p-6">
             <div className="mb-8">
+                <Link to=".." className="flex gap-2">
+                    <ArrowLeft /> Go back
+                </Link>
                 <h2 className="text-3xl font-bold mb-2">Campaign</h2>
                 <p className="">
                     Before starting the shift, get to know the system! :D
@@ -36,11 +45,18 @@ function RouteComponent() {
                     if (!isUnlocked?.isCompleted && campaign.requirement) {
                         return (
                             <div className="border-5 border-green-500 p-6 flex flex-col items-center justify-center gap-5">
-                                <p className="text-2xl font-bold">Locked!</p>
                                 <Lock size={100} />
+
+                                <p className="text-2xl font-bold">
+                                    Access Denied!
+                                </p>
                                 <p>
-                                    Missing the requirements of{" "}
-                                    {campaign?.requirement}
+                                    You need to complete [
+                                    {campaign?.requirement?.replace(
+                                        "campaign_",
+                                        "Campaign "
+                                    )}
+                                    ] first!
                                 </p>
                             </div>
                         );
@@ -49,21 +65,21 @@ function RouteComponent() {
                     return (
                         <div
                             key={campaignId}
-                            className="border-5 border-green-500 p-6 flex-1 h-auto"
+                            className="border-5 border-green-500 flex-1 h-auto"
                         >
-                            <div className="mb-4 flex flex-col gap-2.5 items-start">
+                            <div className="mb-4 flex flex-col gap-2.5 items-start border-b-2 border-b-green-500 p-5">
                                 <h3 className="text-2xl font-bold mb-2">
-                                    {campaign?.title} | {campaignId}
+                                    {campaign?.title}
                                 </h3>
                                 <p className="mb-2">{campaign?.description}</p>
                                 {campaignProgress?.isCompleted && (
-                                    <span className="inline-block px-3 py-1 border-green-500 border-5 text-green-500 rounded-full text-sm">
-                                        Completed
+                                    <span className="inline-block px-3 py-1 bg-green-500 text-black font-bold text-sm">
+                                        [ Completed ]
                                     </span>
                                 )}
                             </div>
 
-                            <div className="space-y-2">
+                            <div className="space-y-2 p-5">
                                 {Object.entries(campaign?.levels).map(
                                     ([levelId, level]) => {
                                         const isLevelCompleted =
@@ -72,30 +88,47 @@ function RouteComponent() {
                                             );
 
                                         return (
-                                            <div
+                                            <Link
                                                 key={levelId}
-                                                className="flex items-center justify-between gap-2"
+                                                to="/campaign/$level/$id"
+                                                params={{
+                                                    level: campaignId,
+                                                    id: levelId,
+                                                }}
+                                                className={`
+                                            group flex items-center justify-between p-3 border border-transparent
+                                            hover:border-green-500/50 hover:bg-green-500/10 transition-all cursor-pointer
+                                            ${isLevelCompleted ? "opacity-50 hover:opacity-100" : "opacity-100"}
+                                        `}
                                             >
-                                                <Link
-                                                    to="/campaign/$level/$id"
-                                                    params={{
-                                                        level: campaignId,
-                                                        id: levelId,
-                                                    }}
-                                                    className="text-green-500 underline p-3"
-                                                >
-                                                    {level?.title}
-                                                </Link>
+                                                <div className="flex items-center gap-3">
+                                                    <span
+                                                        className={`text-xs font-bold ${isLevelCompleted ? "text-green-700" : "text-green-400"}`}
+                                                    >
+                                                        {levelId
+                                                            .toUpperCase()
+                                                            .replace(
+                                                                "LEVEL_",
+                                                                "0"
+                                                            )}
+                                                    </span>
+                                                    <span className="font-bold group-hover:underline decoration-green-500 underline-offset-4">
+                                                        {level?.title}
+                                                    </span>
+                                                </div>
+
                                                 {isLevelCompleted ? (
-                                                    <span className="text-lg text-green-500 ">
-                                                        ✓ Completed
-                                                    </span>
+                                                    <CheckCircle
+                                                        size={18}
+                                                        className="text-green-500"
+                                                    />
                                                 ) : (
-                                                    <span className="text-lg text-red-500 ">
-                                                        Incomplete
-                                                    </span>
+                                                    <Circle
+                                                        size={18}
+                                                        className="text-green-900 group-hover:text-green-500"
+                                                    />
                                                 )}
-                                            </div>
+                                            </Link>
                                         );
                                     }
                                 )}

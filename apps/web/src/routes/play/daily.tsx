@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { content_types } from "@/utils/content_types";
 import Manual from "@/components/Manual";
 import useUser from "@/hooks/useUser";
-import { Lock } from "lucide-react";
+import { AlertTriangle, Cpu, Lock, Play, Terminal } from "lucide-react";
 
 export const Route = createFileRoute("/play/daily")({
     component: RouteComponent,
@@ -187,120 +187,194 @@ function RouteComponent() {
     };
 
     if (isLoadingStorage) return <div>Loading...</div>;
-
     if (!isPlayedBefore) {
         return (
-            <div className="flex flex-col items-center justify-center gap-5 p-5">
-                <h1 className="text-4xl font-bold">CUSTOM TRAINING</h1>
-                <p className="mb-8">Select specific topics to practice.</p>
+            <div className="min-h-screen bg-zinc-950 text-green-500 font-mono relative overflow-x-hidden flex flex-col">
+                {/* Background Scanline Effect */}
+                <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] z-0" />
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    {content_types.map((category, i) => {
-                        const isCompleted = user?.campaign_progress?.find(
-                            (item) =>
-                                item?.campaign_id === category?.requirements &&
-                                item.isCompleted
-                        );
-                        if (isCompleted === undefined) {
+                <div className="relative z-10 max-w-6xl mx-auto w-full p-6 flex-1 flex flex-col">
+                    {/* HEADER */}
+                    <div className="mb-10 border-b border-green-900 pb-6">
+                        <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-white text-shadow-green">
+                            Custom Simulation
+                        </h1>
+                        <p className="mt-4 text-green-600 max-w-2xl">
+                            Select specific protocols to test your detection
+                            algorithms. Warning: AI-generated content may
+                            contain hallucinations.
+                        </p>
+                    </div>
+
+                    {/* GRID */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-24">
+                        {content_types.map((category, i) => {
+                            // Logic: Check if locked
+                            const isCompleted = user?.campaign_progress?.find(
+                                (item) =>
+                                    item?.campaign_id ===
+                                        category?.requirements &&
+                                    item.isCompleted
+                            );
+
+                            if (
+                                category.requirements &&
+                                isCompleted === undefined
+                            ) {
+                                return (
+                                    <div
+                                        key={i.toString()}
+                                        className="border-2 border-dashed border-zinc-800 bg-zinc-900/30 p-8 flex flex-col items-center justify-center text-center gap-4 opacity-60 grayscale relative overflow-hidden"
+                                    >
+                                        <div className="bg-black p-4 rounded-full border border-zinc-800 z-10">
+                                            <Lock
+                                                size={32}
+                                                className="text-zinc-500"
+                                            />
+                                        </div>
+                                        <div className="z-10">
+                                            <h3 className="font-bold text-xl uppercase tracking-widest text-zinc-500">
+                                                {category.name}
+                                            </h3>
+                                            <p className="text-xs font-mono mt-2 text-white bg-red-500/10 px-2 py-1 inline-block border border-red-900/50">
+                                                REQUIRES: [
+                                                {category?.requirements.replace(
+                                                    "campaign_",
+                                                    "CAMPAIGN "
+                                                )}
+                                                ]
+                                            </p>
+                                        </div>
+                                    </div>
+                                );
+                            }
+
                             return (
                                 <div
                                     key={i.toString()}
-                                    className="border p-4 rounded bg-zinc-900 border-green-500 text-center flex flex-col gap-5 items-center hover:shadow-lg transition-all shadow-green-500"
+                                    className="group border border-green-900 bg-black/60 p-6 hover:border-green-500 transition-all hover:shadow-[0_0_20px_rgba(34,197,94,0.1)] relative"
                                 >
-                                    <p>Locked!</p>
-                                    <Lock size={100} />
-                                    <p>
-                                        Missing the requirements of{" "}
-                                        {category?.requirements}
-                                    </p>
+                                    <div className="flex items-center gap-3 mb-6 border-b border-green-900/50 pb-4">
+                                        <h3 className="font-bold text-xl uppercase tracking-wider text-green-100">
+                                            {category.name}
+                                        </h3>
+                                    </div>
+
+                                    <div className="flex flex-wrap gap-2">
+                                        {category.types.map((t) => {
+                                            const isSelected = selectedTopics[
+                                                category.name
+                                            ]?.includes(t.name);
+                                            return (
+                                                <button
+                                                    type="button"
+                                                    key={t.name}
+                                                    onClick={() =>
+                                                        setSelectedTopics(
+                                                            (prev) => {
+                                                                const currentTopics =
+                                                                    prev[
+                                                                        category
+                                                                            .name
+                                                                    ] || [];
+                                                                const isSelected =
+                                                                    currentTopics.includes(
+                                                                        t.name
+                                                                    );
+                                                                return {
+                                                                    ...prev,
+                                                                    [category.name]:
+                                                                        isSelected
+                                                                            ? currentTopics.filter(
+                                                                                  (
+                                                                                      name
+                                                                                  ) =>
+                                                                                      name !==
+                                                                                      t.name
+                                                                              )
+                                                                            : [
+                                                                                  ...currentTopics,
+                                                                                  t.name,
+                                                                              ],
+                                                                };
+                                                            }
+                                                        )
+                                                    }
+                                                    className={`
+                                                    cursor-pointer px-4 py-2 text-xs uppercase font-bold tracking-wider transition-all
+                                                    border relative overflow-hidden group/btn
+                                                    ${
+                                                        isSelected
+                                                            ? "bg-green-600 border-green-500 text-black shadow-[0_0_10px_rgba(34,197,94,0.5)]"
+                                                            : "bg-black border-green-900 text-green-700 hover:border-green-500 hover:text-green-400"
+                                                    }
+                                                `}
+                                                >
+                                                    <span className="relative z-10 flex items-center gap-2">
+                                                        {isSelected
+                                                            ? "[V]"
+                                                            : "[ ]"}{" "}
+                                                        {t.name}
+                                                    </span>
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
                             );
-                        }
-
-                        return (
-                            <div
-                                key={i.toString()}
-                                className="border p-4 rounded bg-zinc-900 border-green-500 text-center flex flex-col gap-5 items-center hover:shadow-lg transition-all shadow-green-500"
-                            >
-                                <h3 className="font-bold text-xl mb-1">
-                                    {category.name}
-                                </h3>
-                                <div className="flex flex-wrap gap-2 items-center justify-center">
-                                    {category.types.map((t) => (
-                                        <button
-                                            type="button"
-                                            key={t.name}
-                                            onClick={() =>
-                                                setSelectedTopics((prev) => {
-                                                    const currentTopics =
-                                                        prev[category.name] ||
-                                                        [];
-                                                    const isSelected =
-                                                        currentTopics.includes(
-                                                            t.name
-                                                        );
-                                                    return {
-                                                        ...prev,
-                                                        [category.name]:
-                                                            isSelected
-                                                                ? currentTopics.filter(
-                                                                      (name) =>
-                                                                          name !==
-                                                                          t.name
-                                                                  )
-                                                                : [
-                                                                      ...currentTopics,
-                                                                      t.name,
-                                                                  ],
-                                                    };
-                                                })
-                                            }
-                                            className={`px-3 py-1 rounded text-sm border border-green-500 transition-all cursor-pointer ${
-                                                selectedTopics[
-                                                    category.name
-                                                ]?.includes(t.name)
-                                                    ? "border-4 font-black shadow-sm shadow-green-500"
-                                                    : "hover:border-2"
-                                            }`}
-                                        >
-                                            {t.name}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        );
-                    })}
+                        })}
+                    </div>
                 </div>
 
-                <div className="flex flex-col bg-zinc-800 items-center gap-4 p-4 shadow-lg sticky bottom-0 border border-2 border-green-500">
-                    <div className="flex gap-5 items-center justify-center">
-                        <div className="flex items-center gap-2">
-                            <span className="font-bold">Amount:</span>
-                            <input
-                                type="number"
-                                min={1}
-                                max={5}
-                                value={postAmount}
-                                onChange={(e) =>
-                                    setPostAmount(Number(e.target.value))
-                                }
-                                className="border-2 focus:outline-none border-green-500 p-2 rounded w-20 text-center font-bold"
-                            />
+                {/* BOTTOM COMMAND BAR */}
+                <div className="fixed bottom-0 left-0 right-0 bg-black border-t-2 border-green-600 p-4 z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.8)]">
+                    <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+                        {/* Disclaimer */}
+                        <div className="flex items-center gap-2 text-[10px] text-green-800 uppercase tracking-widest md:max-w-md hidden md:flex">
+                            <AlertTriangle size={14} />
+                            <span>
+                                AI output variance is expected. Treat it as
+                                training data only.
+                            </span>
                         </div>
-                        <button
-                            type="button"
-                            onClick={generateShift}
-                            disabled={isSubmitting}
-                            className="cursor-pointer bg-green-500 hover:bg-green-600 transition-all text-white text-xl font-bold px-10 py-3 rounded w-full disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            {isSubmitting ? "Generating" : "Start Shift"}
-                        </button>
+
+                        {/* Controls */}
+                        <div className="flex items-center gap-4 w-full md:w-auto">
+                            <div className="flex items-center bg-zinc-900 border border-green-800 px-4 py-2">
+                                <span className="font-bold text-xs uppercase mr-4 text-green-600">
+                                    BATCH_SIZE:
+                                </span>
+                                <input
+                                    type="number"
+                                    min={1}
+                                    max={5}
+                                    value={postAmount}
+                                    onChange={(e) =>
+                                        setPostAmount(Number(e.target.value))
+                                    }
+                                    className="bg-transparent border-b border-green-500 text-white w-12 text-center font-black focus:outline-none"
+                                />
+                            </div>
+
+                            <button
+                                type="button"
+                                onClick={generateShift}
+                                disabled={isSubmitting}
+                                className="flex-1 md:flex-none cursor-pointer bg-green-600 hover:bg-green-500 text-black text-lg font-black uppercase px-8 py-3 transition-all hover:scale-105 disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-2"
+                            >
+                                {isSubmitting ? (
+                                    <span className="animate-pulse">
+                                        Generating...
+                                    </span>
+                                ) : (
+                                    <>
+                                        <Play size={20} fill="black" />
+                                        Start
+                                    </>
+                                )}
+                            </button>
+                        </div>
                     </div>
-                    <p>
-                        Both the generated posts and AI evaluation may have
-                        occasional inaccuracies. This is part of the training!
-                        :)
-                    </p>
                 </div>
             </div>
         );

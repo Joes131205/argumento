@@ -71,8 +71,8 @@ export const generateDailyShift = async (req: Request, res: Response) => {
             4. **TAG**: 
             - "reasons": Must include the target type. You may add 1 extra relevant tag if applicable.
             - "category": Map the input key to the Schema Key strictly:
-                * "Logical Fallacies" -> "fallacies"
-                * "Cognitive Biases" -> "biases"
+                * "Logical Fallacies" -> "logical_fallacies"
+                * "Cognitive Biases" -> "cognitive_biases"
                 * "Media Manipulation" -> "media_manipulation"
                 * "AI Hallucinations" -> "ai_hallucinations"
 
@@ -125,53 +125,19 @@ export const generateDailyShift = async (req: Request, res: Response) => {
     }
 };
 
+// Helper to map IDs to nice names for your Schema
+const CATEGORY_NAMES: Record<string, string> = {
+    logical_fallacies: "Logical Fallacies",
+    cognitive_biases: "Cognitive Biases",
+    media_manipulation: "Media Manipulation",
+    ai_hallucinations: "AI Hallucinations",
+    safe: "Safe Content",
+};
+
 export const completeShift = async (req: Request, res: Response) => {
     try {
         const userId = req.users;
         const { history } = req.body;
-
-        const postCorrect = history.filter(
-            (item: any) => item.is_correct
-        ).length;
-
-        const sentData = await Promise.all(
-            history.map(async (item) => {
-                const post = await Posts.findById(item.id);
-
-                if (!post) {
-                    throw new Error(`Post not found: ${item.id}`);
-                }
-
-                return {
-                    post_id: item.id,
-                    is_correct: item.is_correct,
-                    category: post.category,
-                };
-            })
-        );
-
-        console.log(sentData);
-
-        const statUpdate: Record<string, number> = {};
-
-        for (let i = 0; i < sentData.length; i++) {
-            const ct = sentData[i]?.category;
-            console.log(ct);
-            if (ct) {
-                if (!statUpdate[`stats.${ct}.total`]) {
-                    statUpdate[`stats.${ct}.total`] = 0;
-                    statUpdate[`stats.${ct}.correct`] = 0;
-                }
-
-                statUpdate[`stats.${ct}.total`] += 1;
-
-                if (sentData[i]?.is_correct) {
-                    statUpdate[`stats.${ct}.correct`] += 1;
-                }
-            }
-        }
-        console.log(statUpdate);
-        const expEarned = postCorrect * 100;
 
         const user = await User.findById(userId);
 
@@ -182,57 +148,78 @@ export const completeShift = async (req: Request, res: Response) => {
             });
         }
 
-        // calculate streak
+        const postCorrect = history.filter(
+            (item: any) => item.is_correct
+        ).length;
+        const expEarned = postCorrect * 100;
 
-        let currStreak = user.currentStreak || 0;
-        let currBest = user.bestStreak || 0;
-        const lastPlayed = new Date(
-            user.lastPlayedDate || Date.now()
-        ).getTime();
+        const sentData = await Promise.all(
+            history.map(async (item: any) => {
+                const post = await Posts.findById(item.id);
+                if (!post) throw new Error(`Post not found: ${item.id}`);
+
+                return {
+                    post_id: item.id,
+                    is_correct: item.is_correct,
+                    category: post.category,
+                };
+            })
+        );
+
+        sentData.forEach((item) => {
+            if (!item.category) return;
+
+            const existingStat = user.stats.find(
+                (s) => s.stat_id === item.category
+            );
+
+            if (existingStat) {
+                existingStat.total += 1;
+                if (item.is_correct) {
+                    existingStat.correct += 1;
+                }
+            } else {
+                user.stats.push({
+                    stat_id: item.category,
+                    name: CATEGORY_NAMES[item.category] || item.category,
+                    total: 1,
+                    correct: item.is_correct ? 1 : 0,
+                });
+            }
+        });
+
+        const lastPlayed = new Date(user.lastPlayedDate || 0).getTime();
         const now = new Date();
         now.setHours(0, 0, 0, 0);
         const nowTime = now.getTime();
 
-        const daysDiff = Math.floor(
-            (nowTime - lastPlayed) / (1000 * 60 * 60 * 24)
-        );
+        const msPerDay = 1000 * 60 * 60 * 24;
+        const daysDiff = Math.floor((nowTime - lastPlayed) / msPerDay);
+
         if (!user.lastPlayedDate) {
-            currStreak = 1;
+            user.currentStreak = 1;
         } else {
-            if (daysDiff === 0) {
-                // Do nothing :)
-            } else if (daysDiff === 1) {
-                currStreak++;
+            if (daysDiff === 1) {
+                user.currentStreak += 1;
             } else if (daysDiff > 1) {
-                currStreak = 1;
+                user.currentStreak = 1;
             }
         }
-        currBest = Math.max(currStreak, currBest);
 
-        const updatedUser = await User.findByIdAndUpdate(
-            userId,
-            {
-                $addToSet: {
-                    postsHistory: { $each: sentData },
-                },
-                $inc: {
-                    postProcessed: history.length,
-                    postsCorrect: postCorrect,
-                    totalExp: expEarned,
-                    ...statUpdate,
-                },
-                $set: {
-                    lastPlayedDate: Date.now(),
-                    currentStreak: currStreak,
-                    bestStreak: currBest,
-                },
-            },
-            {
-                new: true,
-            }
-        );
-        console.log(updatedUser);
-        res.status(200).json({ success: true, message: "Success" });
+        if (user.currentStreak > user.bestStreak) {
+            user.bestStreak = user.currentStreak;
+        }
+
+        user.lastPlayedDate = new Date();
+        user.totalExp += expEarned;
+        user.postProcessed += history.length;
+        user.postsCorrect += postCorrect;
+
+        user.postsHistory.push(...(sentData as any));
+
+        await user.save();
+
+        res.status(200).json({ success: true, message: "Success", data: user });
     } catch (error) {
         console.error(error);
         res.status(500).json({

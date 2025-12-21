@@ -6,8 +6,8 @@ export interface IPosts extends Document {
     type: "slop" | "safe";
     slop_reason?: string | null;
     category?:
-        | "fallacies"
-        | "biases"
+        | "logical_fallacies"
+        | "cognitive_biases"
         | "media_manipulation"
         | "ai_hallucinations"
         | "safe";
@@ -33,8 +33,8 @@ const PostsSchema: Schema = new Schema(
         category: {
             type: String,
             enum: [
-                "fallacies",
-                "biases",
+                "logical_fallacies",
+                "cognitive_biases",
                 "media_manipulation",
                 "ai_hallucinations",
                 "safe",

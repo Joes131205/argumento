@@ -1,10 +1,12 @@
 import { completeCampaignLevel, getLevel } from "@/apis/campaign";
+import useUser from "@/hooks/useUser";
 import {
     createFileRoute,
     useLoaderData,
     useParams,
     useRouter,
 } from "@tanstack/react-router";
+import { Terminal } from "lucide-react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/campaign/$level/$id")({
@@ -20,6 +22,7 @@ function RouteComponent() {
     const data = useLoaderData({ from: "/campaign/$level/$id" });
     const router = useRouter();
     const params = useParams({ from: "/campaign/$level/$id" });
+    const { invalidateUser } = useUser();
 
     const entries = Object.entries(data?.posts);
     console.log(entries);
@@ -79,8 +82,8 @@ function RouteComponent() {
         setIsSaving(true);
         try {
             await completeCampaignLevel(params.level, params.id);
+            await invalidateUser();
             router.navigate({ to: "/campaign" });
-            console.log("Yipee");
         } catch (error) {
             console.error(error);
         } finally {
@@ -89,19 +92,32 @@ function RouteComponent() {
     };
 
     return (
-        <div className="flex items-center justify-center h-screen p-3 gap-2">
-            <div className="flex-1 text-center border-5 border-green-500 h-full p-3 flex flex-col gap-5">
-                <p className="text-2xl font-bold">{data.title}</p>
-                <p>{data.briefing}</p>
+        <div className="flex items-center justify-center h-screen p-5 gap-6">
+            <div className="flex-1 flex flex-col border-r border-green-900 bg-black/50 p-8 relative">
+                {" "}
+                <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] z-0" />
+                <div className="relative z-10 h-full flex flex-col">
+                    <div className="mb-8 border-b border-green-900 pb-4">
+                        <h1 className="text-3xl font-black uppercase text-white tracking-tight leading-none">
+                            {data.title}
+                        </h1>
+                    </div>
+
+                    <div className="flex-1 overflow-y-auto pr-4">
+                        <div className="bg-green-900/10 border border-green-800 p-6 text-sm leading-7 text-green-400 whitespace-pre-wrap font-medium">
+                            {data.briefing}
+                        </div>
+                    </div>
+                </div>
             </div>
             <div className="flex-1 flex flex-col justify-center h-full">
                 {!current ? (
                     <div
-                        className="text-center border-5 border-green-500 bg-zinc-800 p-10 rounded shadow h-full flex flex-col items-center justify-center
+                        className="text-center border-5 border-green-500 bg-zinc-950 p-10 rounded shadow flex flex-col items-center justify-center
                     "
                     >
                         <h2 className="text-3xl font-bold mb-4">
-                            🎉 Training Complete!
+                            🎉 Module Complete!
                         </h2>
                         <button
                             type="button"
@@ -113,12 +129,12 @@ function RouteComponent() {
                         </button>
                     </div>
                 ) : (
-                    <div className="bg-zinc-800 border-5 border-green-500 p-8 rounded h-full">
+                    <div className="bg-zinc-950 border-5 border-green-500 p-8 rounded ">
                         <div className="flex justify-between items-end mb-6 border-b border-b-green-500 pb-4">
                             <h2 className="text-xl font-bold uppercase text-green-500">
                                 Post #{index + 1}
                             </h2>
-                            <span className="text-xs bg-zinc-700 px-2 py-1 rounded">
+                            <span className="text-xs bg-zinc-800 px-2 py-1 rounded">
                                 ID: {current.id}
                             </span>
                         </div>
@@ -134,7 +150,7 @@ function RouteComponent() {
 
                         {/* Controls */}
                         {isResult ? (
-                            <div className="bg-zinc-700 p-4 rounded border-black">
+                            <div className="bg-zinc-900 p-4 rounded border-black">
                                 <h3
                                     className={`text-xl font-bold mb-2 ${verdict?.is_correct ? "text-green-600" : "text-red-600"}`}
                                 >
