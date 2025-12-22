@@ -1,4 +1,5 @@
 import { getLeaderboard } from "@/apis/leaderboard";
+import BackButton from "@/components/BackButton";
 import useUser from "@/hooks/useUser";
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
@@ -69,6 +70,8 @@ function RouteComponent() {
 
     return (
         <div className="flex flex-col items-center justify-center gap-5 p-5">
+            <BackButton />
+
             <h2 className="font-black text-5xl md:text-6xl tracking-tight">
                 Leaderboard
             </h2>
@@ -83,10 +86,10 @@ function RouteComponent() {
                             key={t}
                             type="button"
                             onClick={() => setType(t)}
-                            className={`cursor-pointer px-4 py-2 border-2 rounded-lg font-semibold transition-all duration-300 ${
+                            className={`group/btn relative cursor-pointer overflow-hidden border px-4 py-2 font-bold text-xs uppercase tracking-wider transition-all ${
                                 type === t
-                                    ? "border-green-400 bg-green-500/20 text-green-400 shadow-lg shadow-green-500/30"
-                                    : "border-green-500/30 hover:border-green-500 hover:bg-green-500/10"
+                                    ? "bg-green-600 border-green-500 text-black shadow-[0_0_10px_rgba(34,197,94,0.5)]"
+                                    : "bg-black border-green-900 text-green-700 hover:border-green-500 hover:text-green-400"
                             }`}
                         >
                             {sortName[t]}

@@ -2,11 +2,12 @@ import { completeCampaignLevel, getLevel } from "@/apis/campaign";
 import useUser from "@/hooks/useUser";
 import {
     createFileRoute,
+    Link,
     useLoaderData,
     useParams,
     useRouter,
 } from "@tanstack/react-router";
-import { Terminal } from "lucide-react";
+import { ArrowLeft, Terminal } from "lucide-react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/campaign/$level/$id")({
@@ -94,7 +95,6 @@ function RouteComponent() {
     return (
         <div className="flex items-center justify-center h-screen p-5 gap-6">
             <div className="flex-1 flex flex-col border-r border-green-900 bg-black/50 p-8 relative">
-                {" "}
                 <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] z-0" />
                 <div className="relative z-10 h-full flex flex-col">
                     <div className="mb-8 border-b border-green-900 pb-4">

@@ -1,4 +1,5 @@
 import { getCampaign } from "@/apis/campaign";
+import BackButton from "@/components/BackButton";
 import useUser from "@/hooks/useUser";
 import { createFileRoute, Link, useLoaderData } from "@tanstack/react-router";
 import {
@@ -24,10 +25,9 @@ function RouteComponent() {
 
     return (
         <div className="p-6">
-            <div className="mb-8">
-                <Link to=".." className="flex gap-2">
-                    <ArrowLeft /> Go back
-                </Link>
+            <div className="mb-8 text-center items-center flex flex-col gap-5">
+                <BackButton />
+
                 <h2 className="text-3xl font-bold mb-2">Campaign</h2>
                 <p className="">
                     Before starting the shift, get to know the system! :D

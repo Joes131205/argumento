@@ -9,6 +9,7 @@ import "../index.css";
 import useTheme from "@/hooks/useTheme";
 import { Toaster } from "sonner";
 import ErrorPage from "@/components/ErrorPage";
+import { ArrowLeft, Link } from "lucide-react";
 
 export const Route = createRootRouteWithContext()({
     component: RootComponent,

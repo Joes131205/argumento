@@ -1,13 +1,26 @@
 import { getMe } from "@/apis/auth";
 import { completeShift, generateDailyShift } from "@/apis/shifts";
 import { judge } from "@/apis/judge";
-import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
+import {
+    createFileRoute,
+    Link,
+    redirect,
+    useRouter,
+} from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { content_types } from "@/utils/content_types";
 import Manual from "@/components/Manual";
 import useUser from "@/hooks/useUser";
-import { AlertTriangle, Cpu, Lock, Play, Terminal } from "lucide-react";
+import {
+    AlertTriangle,
+    ArrowLeft,
+    Cpu,
+    Lock,
+    Play,
+    Terminal,
+} from "lucide-react";
+import BackButton from "@/components/BackButton";
 
 export const Route = createFileRoute("/play/daily")({
     component: RouteComponent,
@@ -190,12 +203,10 @@ function RouteComponent() {
     if (!isPlayedBefore) {
         return (
             <div className="min-h-screen bg-zinc-950 text-green-500 font-mono relative overflow-x-hidden flex flex-col">
-                {/* Background Scanline Effect */}
-                <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] z-0" />
+                <div className="relative z-10 max-w-6xl mx-auto w-full p-6 flex-1 flex flex-col gap-2">
+                    <BackButton />
 
-                <div className="relative z-10 max-w-6xl mx-auto w-full p-6 flex-1 flex flex-col">
-                    {/* HEADER */}
-                    <div className="mb-10 border-b border-green-900 pb-6">
+                    <div className="mb-10 border-b border-green-950 pb-6">
                         <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-white text-shadow-green">
                             Custom Simulation
                         </h1>
@@ -326,10 +337,8 @@ function RouteComponent() {
                     </div>
                 </div>
 
-                {/* BOTTOM COMMAND BAR */}
                 <div className="fixed bottom-0 left-0 right-0 bg-black border-t-2 border-green-600 p-4 z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.8)]">
                     <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-                        {/* Disclaimer */}
                         <div className="flex items-center gap-2 text-[10px] text-green-800 uppercase tracking-widest md:max-w-md hidden md:flex">
                             <AlertTriangle size={14} />
                             <span>
@@ -338,11 +347,10 @@ function RouteComponent() {
                             </span>
                         </div>
 
-                        {/* Controls */}
                         <div className="flex items-center gap-4 w-full md:w-auto">
                             <div className="flex items-center bg-zinc-900 border border-green-800 px-4 py-2">
                                 <span className="font-bold text-xs uppercase mr-4 text-green-600">
-                                    BATCH_SIZE:
+                                    Post Amount:
                                 </span>
                                 <input
                                     type="number"
@@ -385,7 +393,7 @@ function RouteComponent() {
             {/* LEFT: THE GAME */}
             <div className="flex-2 flex flex-col justify-center p-3">
                 {!current ? (
-                    <div className="text-center bg-zinc-800 p-10 rounded shadow">
+                    <div className="text-center bg-zinc-900 p-10 rounded shadow">
                         <h2 className="text-3xl font-bold mb-4">
                             🎉 Shift Complete!
                         </h2>
@@ -399,12 +407,12 @@ function RouteComponent() {
                         </button>
                     </div>
                 ) : (
-                    <div className="bg-zinc-800 border-3 border-green-500 p-8 rounded">
+                    <div className="bg-zinc-950 border-3 border-green-500 p-8 rounded">
                         <div className="flex justify-between items-end mb-6 border-b border-b-green-500 pb-4">
                             <h2 className="text-xl font-bold uppercase text-green-500">
                                 Post #{index + 1}
                             </h2>
-                            <span className="text-xs bg-zinc-700 px-2 py-1 rounded">
+                            <span className="text-xs bg-zinc-900 px-2 py-1 rounded">
                                 ID: {current._id?.slice(-4)}
                             </span>
                         </div>
@@ -420,7 +428,7 @@ function RouteComponent() {
 
                         {/* Controls */}
                         {isResult ? (
-                            <div className="bg-zinc-700 p-4 rounded border-black">
+                            <div className="bg-zinc-900 p-4 rounded border-black">
                                 <h3
                                     className={`text-xl font-bold mb-2 ${verdict?.is_correct ? "text-green-600" : "text-red-600"}`}
                                 >

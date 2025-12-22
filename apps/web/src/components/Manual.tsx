@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { content_types } from "@/utils/content_types";
+import { ArrowLeft } from "lucide-react";
 
 const Manual = () => {
     const [currTypeIndex, setCurrTypeIndex] = useState(0);
@@ -15,10 +16,10 @@ const Manual = () => {
                 <div className="bg-zinc-950 p-4 border-b border-zinc-700 flex justify-between items-center shrink-0">
                     <div className="flex flex-col gap-3">
                         <p className="text-white text-2xl font-bold">
-                            Manual v1.1
+                            Manual v1.1.1
                         </p>
                         <p className="text-white">
-                            Use it whenever is necessary
+                            Use the manual when it's necessary
                         </p>
                     </div>
                 </div>
@@ -32,7 +33,7 @@ const Manual = () => {
                                 onClick={() => setIsOpened(false)}
                                 className="mb-6 cursor-pointer flex items-center gap-2 text-green-500 hover:text-green-300 transition-colors font-mono text-sm font-bold uppercase tracking-wide"
                             >
-                                ← Return to Index
+                                <ArrowLeft /> Return
                             </button>
 
                             <h3 className="text-4xl font-black text-white mb-6 tracking-tight">
@@ -55,10 +56,7 @@ const Manual = () => {
                         </div>
                     ) : (
                         <div>
-                            <p className="text-zinc-400 mb-6 font-mono text-sm border-b border-zinc-800 pb-4">
-                                Select a topic to review
-                            </p>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-y-auto">
                                 {content_types.map((item, i) => (
                                     <div
                                         key={i.toString()}
@@ -75,7 +73,8 @@ const Manual = () => {
                                                 <button
                                                     type="button"
                                                     key={type.name}
-                                                    className="text-xs bg-zinc-800 text-green-400 px-2 py-1 rounded-full cursor-pointer hover:bg-zinc-700 transition-all"
+                                                    className="cursor-pointer px-4 py-2 text-xs uppercase font-bold tracking-wider transition-all
+                                                     border border-green-500 relative overflow-hidden group/btn hover:border-green-500 hover:bg-green-500 hover:text-black "
                                                     onClick={() => {
                                                         setCurrTypeIndex(i);
                                                         setCurrTopicIndex(j);

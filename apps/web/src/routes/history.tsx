@@ -1,3 +1,4 @@
+import BackButton from "@/components/BackButton";
 import useUser from "@/hooks/useUser";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
@@ -22,7 +23,9 @@ function RouteComponent() {
     const { user } = useUser();
 
     return (
-        <div className="p-6 flex flex-col items-center justify-center">
+        <div className="p-6 flex flex-col gap-5 items-center justify-center">
+            <BackButton />
+
             <h2 className="text-3xl font-bold mb-6">Your Processed Posts</h2>
             <div className="space-y-4 max-w-4xl">
                 {user?.postsHistory?.length === 0 ? (

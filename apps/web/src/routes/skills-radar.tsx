@@ -1,3 +1,4 @@
+import BackButton from "@/components/BackButton";
 import useUser from "@/hooks/useUser";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
@@ -34,6 +35,7 @@ function RouteComponent() {
 
     return (
         <div className="flex flex-col items-center justify-center gap-8 p-5 md:p-10">
+            <BackButton />
             <div className="text-center space-y-2">
                 <h2 className="font-black text-5xl md:text-6xl tracking-tight">
                     User Statistics
