@@ -4,6 +4,7 @@ import { judgeRouter } from "./judge";
 import { shiftsRouter } from "./shifts";
 import { leaderboardRouter } from "./leaderboard";
 import { campaignRouter } from "./campaign";
+import { postsRouter } from "./posts";
 
 export const appRouter = express.Router();
 
@@ -16,5 +17,6 @@ appRouter.use("/judge", judgeRouter);
 appRouter.use("/shifts", shiftsRouter);
 appRouter.use("/leaderboard", leaderboardRouter);
 appRouter.use("/campaign", campaignRouter);
+appRouter.use("/posts", postsRouter);
 
 export type AppRouter = typeof appRouter;

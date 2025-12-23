@@ -14,10 +14,11 @@ import { Route as SkillsRadarRouteImport } from './routes/skills-radar'
 import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as SignInRouteImport } from './routes/sign-in'
 import { Route as LeaderboardRouteImport } from './routes/leaderboard'
-import { Route as HistoryRouteImport } from './routes/history'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as HistoryIndexRouteImport } from './routes/history/index'
 import { Route as CampaignIndexRouteImport } from './routes/campaign/index'
 import { Route as PlayDailyRouteImport } from './routes/play/daily'
+import { Route as HistoryIdRouteImport } from './routes/history/$id'
 import { Route as CampaignLevelIdRouteImport } from './routes/campaign/$level/$id'
 
 const StatusRoute = StatusRouteImport.update({
@@ -45,14 +46,14 @@ const LeaderboardRoute = LeaderboardRouteImport.update({
   path: '/leaderboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HistoryRoute = HistoryRouteImport.update({
-  id: '/history',
-  path: '/history',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoryIndexRoute = HistoryIndexRouteImport.update({
+  id: '/history/',
+  path: '/history/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CampaignIndexRoute = CampaignIndexRouteImport.update({
@@ -65,6 +66,11 @@ const PlayDailyRoute = PlayDailyRouteImport.update({
   path: '/play/daily',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HistoryIdRoute = HistoryIdRouteImport.update({
+  id: '/history/$id',
+  path: '/history/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CampaignLevelIdRoute = CampaignLevelIdRouteImport.update({
   id: '/campaign/$level/$id',
   path: '/campaign/$level/$id',
@@ -73,90 +79,97 @@ const CampaignLevelIdRoute = CampaignLevelIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/history': typeof HistoryRoute
   '/leaderboard': typeof LeaderboardRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/skills-radar': typeof SkillsRadarRoute
   '/status': typeof StatusRoute
+  '/history/$id': typeof HistoryIdRoute
   '/play/daily': typeof PlayDailyRoute
   '/campaign': typeof CampaignIndexRoute
+  '/history': typeof HistoryIndexRoute
   '/campaign/$level/$id': typeof CampaignLevelIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/history': typeof HistoryRoute
   '/leaderboard': typeof LeaderboardRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/skills-radar': typeof SkillsRadarRoute
   '/status': typeof StatusRoute
+  '/history/$id': typeof HistoryIdRoute
   '/play/daily': typeof PlayDailyRoute
   '/campaign': typeof CampaignIndexRoute
+  '/history': typeof HistoryIndexRoute
   '/campaign/$level/$id': typeof CampaignLevelIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/history': typeof HistoryRoute
   '/leaderboard': typeof LeaderboardRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/skills-radar': typeof SkillsRadarRoute
   '/status': typeof StatusRoute
+  '/history/$id': typeof HistoryIdRoute
   '/play/daily': typeof PlayDailyRoute
   '/campaign/': typeof CampaignIndexRoute
+  '/history/': typeof HistoryIndexRoute
   '/campaign/$level/$id': typeof CampaignLevelIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/history'
     | '/leaderboard'
     | '/sign-in'
     | '/sign-up'
     | '/skills-radar'
     | '/status'
+    | '/history/$id'
     | '/play/daily'
     | '/campaign'
+    | '/history'
     | '/campaign/$level/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/history'
     | '/leaderboard'
     | '/sign-in'
     | '/sign-up'
     | '/skills-radar'
     | '/status'
+    | '/history/$id'
     | '/play/daily'
     | '/campaign'
+    | '/history'
     | '/campaign/$level/$id'
   id:
     | '__root__'
     | '/'
-    | '/history'
     | '/leaderboard'
     | '/sign-in'
     | '/sign-up'
     | '/skills-radar'
     | '/status'
+    | '/history/$id'
     | '/play/daily'
     | '/campaign/'
+    | '/history/'
     | '/campaign/$level/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  HistoryRoute: typeof HistoryRoute
   LeaderboardRoute: typeof LeaderboardRoute
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
   SkillsRadarRoute: typeof SkillsRadarRoute
   StatusRoute: typeof StatusRoute
+  HistoryIdRoute: typeof HistoryIdRoute
   PlayDailyRoute: typeof PlayDailyRoute
   CampaignIndexRoute: typeof CampaignIndexRoute
+  HistoryIndexRoute: typeof HistoryIndexRoute
   CampaignLevelIdRoute: typeof CampaignLevelIdRoute
 }
 
@@ -197,18 +210,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LeaderboardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/history': {
-      id: '/history'
-      path: '/history'
-      fullPath: '/history'
-      preLoaderRoute: typeof HistoryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/history/': {
+      id: '/history/'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof HistoryIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/campaign/': {
@@ -225,6 +238,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlayDailyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/history/$id': {
+      id: '/history/$id'
+      path: '/history/$id'
+      fullPath: '/history/$id'
+      preLoaderRoute: typeof HistoryIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/campaign/$level/$id': {
       id: '/campaign/$level/$id'
       path: '/campaign/$level/$id'
@@ -237,14 +257,15 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  HistoryRoute: HistoryRoute,
   LeaderboardRoute: LeaderboardRoute,
   SignInRoute: SignInRoute,
   SignUpRoute: SignUpRoute,
   SkillsRadarRoute: SkillsRadarRoute,
   StatusRoute: StatusRoute,
+  HistoryIdRoute: HistoryIdRoute,
   PlayDailyRoute: PlayDailyRoute,
   CampaignIndexRoute: CampaignIndexRoute,
+  HistoryIndexRoute: HistoryIndexRoute,
   CampaignLevelIdRoute: CampaignLevelIdRoute,
 }
 export const routeTree = rootRouteImport

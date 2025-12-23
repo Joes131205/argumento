@@ -1,4 +1,5 @@
 import { healthCheck } from "@/apis";
+import BackButton from "@/components/BackButton";
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/status")({
@@ -19,6 +20,7 @@ function RouteComponent() {
             <p className="text-2xl">
                 Server Status : <b>{res ?? "Loading"}</b>
             </p>
+            <BackButton />
         </div>
     );
 }

@@ -1,4 +1,6 @@
 import { completeCampaignLevel, getLevel } from "@/apis/campaign";
+import { judge } from "@/apis/judge";
+import { DailyActive } from "@/components/DailyActive";
 import useUser from "@/hooks/useUser";
 import {
     createFileRoute,
@@ -9,6 +11,7 @@ import {
 } from "@tanstack/react-router";
 import { ArrowLeft, Terminal } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/campaign/$level/$id")({
     component: RouteComponent,
@@ -21,12 +24,11 @@ export const Route = createFileRoute("/campaign/$level/$id")({
 
 function RouteComponent() {
     const data = useLoaderData({ from: "/campaign/$level/$id" });
-    const router = useRouter();
     const params = useParams({ from: "/campaign/$level/$id" });
+    const router = useRouter();
     const { invalidateUser } = useUser();
-
     const entries = Object.entries(data?.posts);
-    console.log(entries);
+
     const [index, setIndex] = useState(0);
 
     const [isRejected, setIsRejected] = useState(false);
@@ -37,61 +39,75 @@ function RouteComponent() {
         message: string;
     } | null>(null);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
+    const currentPost = entries[index]?.[1];
     const [isSaving, setIsSaving] = useState(false);
-    const current = entries[index]?.[1];
-    console.log(current);
-
-    const nextLevel = () => {
-        setIsResult(false);
-        setIsRejected(false);
-        setReason("");
-        setVerdict(null);
-        setIndex(index + 1);
-    };
 
     const handleApprove = () => {
-        setIsRejected(false);
-        const isSafe = current.type === "safe";
+        const isSafe = currentPost.type === "safe";
         setVerdict({
             is_correct: isSafe,
-            message: isSafe ? "Correct!" : "Incorrect!",
+            message: isSafe
+                ? "Correct! Verified Truth."
+                : "Incorrect. Threat detected.",
         });
         setIsResult(true);
     };
 
-    const handleSendReport = async () => {
-        setIsAnalyzing(true);
-        try {
-            const isSafe = (isRejected ? "slop" : "safe") === current.type;
-            setVerdict({
-                is_correct: isSafe,
-                message: isSafe ? "Correct!" : "Incorrect!",
-            });
-        } catch (error) {
-            console.log(error);
-            setVerdict({
-                is_correct: true,
-                message: "AI Offline. Points awarded.",
-            });
-        } finally {
-            setIsAnalyzing(false);
-            setIsResult(true);
-        }
+    const handleReject = (reason: string) => {
+        const isActuallySlop = currentPost.type === "slop";
+
+        setVerdict({
+            is_correct: isActuallySlop,
+            message: isActuallySlop
+                ? "Correct! You spotted the manipulation."
+                : "Incorrect. This content is actually verified safe.",
+        });
+
+        setIsResult(true);
+
+        console.log("User rejected because:", reason);
+    };
+    const handleNext = () => {
+        setIsResult(false);
+        setVerdict(null);
+        setIndex((prev) => prev + 1);
     };
 
-    const handleEndShift = async () => {
+    const handleCompleteLevel = async () => {
         setIsSaving(true);
         try {
             await completeCampaignLevel(params.level, params.id);
             await invalidateUser();
+            toast.success("Level Complete!");
             router.navigate({ to: "/campaign" });
         } catch (error) {
-            console.error(error);
+            toast.error("Failed to save progress.");
         } finally {
             setIsSaving(false);
         }
     };
-
+    if (!currentPost) {
+        return (
+            <div className="h-screen bg-zinc-950 flex flex-col items-center justify-center gap-8 text-green-500 font-mono">
+                <div className="border-2 border-green-500 p-10 bg-black shadow-[0_0_50px_rgba(22,163,74,0.2)] text-center max-w-md">
+                    <h2 className="text-4xl font-black text-white uppercase mb-2">
+                        Mission Complete
+                    </h2>
+                    <p className="mb-8 text-green-700">
+                        Training module processed successfully.
+                    </p>
+                    <button
+                        type="button"
+                        onClick={handleCompleteLevel}
+                        disabled={isSaving}
+                        className="cursor-pointer w-full bg-green-600 hover:bg-green-500 text-black px-8 py-4 font-bold uppercase tracking-widest disabled:opacity-50"
+                    >
+                        {isSaving ? "Uploading..." : "Confirm"}
+                    </button>
+                </div>
+            </div>
+        );
+    }
     return (
         <div className="flex items-center justify-center h-screen p-5 gap-6">
             <div className="flex-1 flex flex-col border-r border-green-900 bg-black/50 p-8 relative">
@@ -111,110 +127,21 @@ function RouteComponent() {
                 </div>
             </div>
             <div className="flex-1 flex flex-col justify-center h-full">
-                {!current ? (
-                    <div
-                        className="text-center border-5 border-green-500 bg-zinc-950 p-10 rounded shadow flex flex-col items-center justify-center
-                    "
-                    >
-                        <h2 className="text-3xl font-bold mb-4">
-                            🎉 Module Complete!
-                        </h2>
-                        <button
-                            type="button"
-                            onClick={handleEndShift}
-                            disabled={isSaving}
-                            className="bg-green-500 hover:bg-green-600 transition-all cursor-pointer text-white px-8 py-3 rounded font-bold disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            {isSaving ? "Saving..." : "Clock Out"}
-                        </button>
-                    </div>
-                ) : (
-                    <div className="bg-zinc-950 border-5 border-green-500 p-8 rounded ">
-                        <div className="flex justify-between items-end mb-6 border-b border-b-green-500 pb-4">
-                            <h2 className="text-xl font-bold uppercase text-green-500">
-                                Post #{index + 1}
-                            </h2>
-                            <span className="text-xs bg-zinc-800 px-2 py-1 rounded">
-                                ID: {current.id}
-                            </span>
-                        </div>
-
-                        <div className="mb-8">
-                            <h3 className="text-3xl font-black mb-4 leading-tight">
-                                {current.headline}
-                            </h3>
-                            <p className="text-lg text-zinc-200 leading-relaxed">
-                                {current.content}
-                            </p>
-                        </div>
-
-                        {/* Controls */}
-                        {isResult ? (
-                            <div className="bg-zinc-900 p-4 rounded border-black">
-                                <h3
-                                    className={`text-xl font-bold mb-2 ${verdict?.is_correct ? "text-green-600" : "text-red-600"}`}
-                                >
-                                    {verdict?.is_correct
-                                        ? "✅ CORRECT"
-                                        : "❌ MISTAKE"}
-                                </h3>
-                                <p className="mb-4 text-white">
-                                    {verdict?.message}
-                                </p>
-                                <button
-                                    type="button"
-                                    onClick={nextLevel}
-                                    className="w-full bg-green-500 hover:bg-green-600 transition-all text-white py-3 font-bold rounded cursor-pointer"
-                                >
-                                    NEXT POST
-                                </button>
-                            </div>
-                        ) : (
-                            <div className="space-y-4">
-                                <div className="flex gap-4">
-                                    <button
-                                        type="button"
-                                        onClick={handleApprove}
-                                        disabled={isAnalyzing}
-                                        className="flex-1 bg-green-500 hover:bg-green-600 text-green-100 transition-all cursor-pointer py-3 font-bold rounded"
-                                    >
-                                        APPROVE
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsRejected(true)}
-                                        disabled={isAnalyzing}
-                                        className="flex-1 bg-red-500 hover:bg-red-600 text-red-100 transition-all cursor-pointer py-3 font-bold rounded"
-                                    >
-                                        REJECT
-                                    </button>
-                                </div>
-
-                                {isRejected && (
-                                    <div className="animate-in fade-in slide-in-from-top-2">
-                                        <textarea
-                                            onChange={(e) =>
-                                                setReason(e.target.value)
-                                            }
-                                            placeholder="Why is this slop?"
-                                            className="w-full border-2 focus:outline-none text-white resize-none border-red-500 p-3 rounded mb-2 h-24"
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={handleSendReport}
-                                            disabled={isAnalyzing}
-                                            className="w-full bg-red-500 hover:bg-red-600 cursor-pointer transition-all text-white py-3 font-bold rounded disabled:opacity-50"
-                                        >
-                                            {isAnalyzing
-                                                ? "Analyzing..."
-                                                : "Submit Report"}
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                    </div>
-                )}
+                <DailyActive
+                    currentPost={currentPost}
+                    currentIndex={index}
+                    verdict={verdict}
+                    isResult={isResult}
+                    isAnalyzing={isAnalyzing}
+                    onApprove={handleApprove}
+                    onReject={handleReject}
+                    onNext={handleNext}
+                    headerInfo={
+                        <span className="text-green-800 text-xs font-bold uppercase">
+                            CAMPAIGN MODE
+                        </span>
+                    }
+                />
             </div>
         </div>
     );
