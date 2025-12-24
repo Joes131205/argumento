@@ -1,20 +1,12 @@
+import { getMe } from "@/apis/auth";
 import BackButton from "@/components/BackButton";
 import useUser from "@/hooks/useUser";
+import { requireAuth } from "@/utils/requireAuth";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/skills-radar")({
+    beforeLoad: requireAuth,
     component: RouteComponent,
-    beforeLoad: async () => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            throw redirect({
-                to: "/sign-in",
-                search: {
-                    redirect: "/skills-radar",
-                },
-            });
-        }
-    },
 });
 
 function RouteComponent() {

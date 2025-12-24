@@ -1,19 +1,19 @@
 import { completeCampaignLevel, getLevel } from "@/apis/campaign";
-import { judge } from "@/apis/judge";
-import { DailyActive } from "@/components/DailyActive";
+import { GameState } from "@/components/GameState";
 import useUser from "@/hooks/useUser";
+import { requireAuth } from "@/utils/requireAuth";
 import {
     createFileRoute,
-    Link,
     useLoaderData,
     useParams,
     useRouter,
 } from "@tanstack/react-router";
-import { ArrowLeft, Terminal } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/campaign/$level/$id")({
+    beforeLoad: requireAuth,
+
     component: RouteComponent,
     loader: async ({ params }) => {
         const data = await getLevel(params.level, params.id);
@@ -127,7 +127,7 @@ function RouteComponent() {
                 </div>
             </div>
             <div className="flex-1 flex flex-col justify-center h-full">
-                <DailyActive
+                <GameState
                     currentPost={currentPost}
                     currentIndex={index}
                     verdict={verdict}

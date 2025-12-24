@@ -1,26 +1,9 @@
 import { getMe } from "@/apis/auth";
+import type { IUser } from "@/types";
 import { createContext, useEffect, useState, type ReactNode } from "react";
 
-interface User {
-    id: string;
-    username: string;
-    password: string;
-    totalExp: number;
-    currentStreak: number;
-    bestStreak: number;
-    lastPlayedDate: Date;
-    postProcessed: number;
-    postsCorrect: number;
-    postsHistory: string[];
-    stats: Record<string, { name: string; correct: number; total: number }>;
-    campaign_progress: {
-        campaign_id: string;
-        isCompleted: boolean;
-        levelsCompleted: string[];
-    }[];
-}
 interface UserContextType {
-    user: User | null;
+    user: IUser | null;
     isLoading: boolean;
     invalidateUser: () => Promise<void>;
 }
@@ -33,7 +16,7 @@ export const UserContext = createContext<UserContextType | undefined>(
 );
 
 export const UserProvider = ({ children }: UserProviderProps) => {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<IUser | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {

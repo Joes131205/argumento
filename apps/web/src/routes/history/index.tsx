@@ -1,8 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import useUser from "@/hooks/useUser";
 import BackButton from "@/components/BackButton";
+import { requireAuth } from "@/utils/requireAuth";
 
 export const Route = createFileRoute("/history/")({
+    beforeLoad: requireAuth,
+
     component: RouteComponent,
 });
 

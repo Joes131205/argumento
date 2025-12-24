@@ -1,6 +1,7 @@
 import { getCampaign } from "@/apis/campaign";
 import BackButton from "@/components/BackButton";
 import useUser from "@/hooks/useUser";
+import { requireAuth } from "@/utils/requireAuth";
 import { createFileRoute, Link, useLoaderData } from "@tanstack/react-router";
 import {
     ArrowLeft,
@@ -11,6 +12,8 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/campaign/")({
+    beforeLoad: requireAuth,
+
     component: RouteComponent,
     loader: async () => {
         const data = await getCampaign();

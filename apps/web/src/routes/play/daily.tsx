@@ -5,12 +5,15 @@ import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import useUser from "@/hooks/useUser";
-import { DailyActive } from "@/components/DailyActive";
+import { GameState } from "@/components/GameState";
 import { DailySetup } from "@/components/DailySetup";
+import { requireAuth } from "@/utils/requireAuth";
 
-// Loader remains the same...
 export const Route = createFileRoute("/play/daily")({
+    beforeLoad: requireAuth,
+
     component: RouteComponent,
+
     loader: async () => {
         const user = await getMe();
         const last = new Date(user.lastPlayedDate);
@@ -20,6 +23,7 @@ export const Route = createFileRoute("/play/daily")({
             last.getMonth() === today.getMonth() &&
             last.getFullYear() === today.getFullYear()
         ) {
+            toast.info("You already played for today!");
             throw redirect({ to: "/" });
         }
     },
@@ -203,7 +207,7 @@ function RouteComponent() {
     }
 
     return (
-        <DailyActive
+        <GameState
             currentPost={currentPost}
             currentIndex={index}
             verdict={verdict}

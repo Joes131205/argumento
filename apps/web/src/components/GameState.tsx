@@ -2,7 +2,7 @@ import { useState } from "react";
 import Manual from "@/components/Manual";
 import { Loader2 } from "lucide-react";
 
-interface DailyActiveProps {
+interface GameStateProps {
     currentPost: any;
     currentIndex: number;
     verdict: { is_correct: boolean; message: string } | null;
@@ -14,7 +14,7 @@ interface DailyActiveProps {
     headerInfo?: React.ReactNode;
 }
 
-export const DailyActive = ({
+export const GameState = ({
     currentPost,
     currentIndex,
     verdict,
@@ -24,7 +24,7 @@ export const DailyActive = ({
     onReject,
     onNext,
     headerInfo,
-}: DailyActiveProps) => {
+}: GameStateProps) => {
     const [isRejecting, setIsRejecting] = useState(false);
     const [reason, setReason] = useState("");
 

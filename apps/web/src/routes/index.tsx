@@ -1,22 +1,14 @@
 import useUser from "@/hooks/useUser";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
-import { toast } from "sonner";
+import { requireAuth } from "@/utils/requireAuth";
+import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
+    beforeLoad: requireAuth,
     component: HomeComponent,
 });
 
 function HomeComponent() {
     const { user } = useUser();
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        if (!user) {
-            toast.info("Please sign in to continue!");
-            navigate({ to: "/sign-in" });
-        }
-    }, [user, navigate]);
 
     const hasPlayedToday = () => {
         if (!user?.lastPlayedDate) return false;

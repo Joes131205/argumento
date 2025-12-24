@@ -75,7 +75,6 @@ function RouteComponent() {
             <h2 className="font-black text-5xl md:text-6xl tracking-tight">
                 Leaderboard
             </h2>
-            <p className="text-green-500/60 text-lg">Strive for Excellence!</p>
             <div className="flex flex-col items-center gap-2">
                 <p className="text-green-500/80 text-sm font-semibold uppercase tracking-wider">
                     Sort by
