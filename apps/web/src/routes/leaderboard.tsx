@@ -1,8 +1,22 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { getLeaderboard } from "@/apis/leaderboard";
 import BackButton from "@/components/BackButton";
 import useUser from "@/hooks/useUser";
-import { createFileRoute, useLoaderData } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+
+interface LeaderboardEntry {
+    _id: string;
+    username: string;
+    totalExp: number;
+    bestStreak: number;
+    currentStreak: number;
+    postsProcessed: number;
+    postsCorrect: number;
+}
+
+interface LeaderboardData {
+    data: LeaderboardEntry[];
+}
 
 export const Route = createFileRoute("/leaderboard")({
     component: RouteComponent,
@@ -28,22 +42,25 @@ const sortName = {
 function RouteComponent() {
     const { user } = useUser();
 
-    const [data, setData] = useState({});
+    const [data, setData] = useState<LeaderboardData | undefined>(undefined);
     const [type, setType] = useState("totalExp");
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<Error | undefined>(undefined);
     useEffect(() => {
         const fetchLeaderboard = async () => {
             setIsLoading(true);
-            setError(null);
+            setError(undefined);
             try {
                 const response = await getLeaderboard(type);
                 if (response === "SERVER ERROR") {
                     throw new Error("Server Error");
                 }
+                console.log(response);
                 setData(response);
             } catch (error) {
-                setError(error);
+                setError(
+                    error instanceof Error ? error : new Error(String(error))
+                );
             } finally {
                 setIsLoading(false);
             }
@@ -54,8 +71,8 @@ function RouteComponent() {
 
     if (isLoading) {
         return (
-            <div className=" flex flex-col h-screen items-center justify-center">
-                <p className="text-xl font-mono">Loading leaderboard...</p>
+            <div className="flex h-screen flex-col items-center justify-center">
+                <p className="font-mono text-xl">Loading leaderboard...</p>
             </div>
         );
     }
@@ -72,11 +89,11 @@ function RouteComponent() {
         <div className="flex flex-col items-center justify-center gap-5 p-5">
             <BackButton />
 
-            <h2 className="font-black text-5xl md:text-6xl tracking-tight">
+            <h2 className="font-black text-5xl tracking-tight md:text-6xl">
                 Leaderboard
             </h2>
             <div className="flex flex-col items-center gap-2">
-                <p className="text-green-500/80 text-sm font-semibold uppercase tracking-wider">
+                <p className="font-semibold text-green-500/80 text-sm uppercase tracking-wider">
                     Sort by
                 </p>
                 <div className="space-x-5">
@@ -87,19 +104,19 @@ function RouteComponent() {
                             onClick={() => setType(t)}
                             className={`group/btn relative cursor-pointer overflow-hidden border px-4 py-2 font-bold text-xs uppercase tracking-wider transition-all ${
                                 type === t
-                                    ? "bg-green-600 border-green-500 text-black shadow-[0_0_10px_rgba(34,197,94,0.5)]"
-                                    : "bg-black border-green-900 text-green-700 hover:border-green-500 hover:text-green-400"
+                                    ? "border-green-500 bg-green-600 text-black shadow-[0_0_10px_rgba(34,197,94,0.5)]"
+                                    : "border-green-900 bg-black text-green-700 hover:border-green-500 hover:text-green-400"
                             }`}
                         >
-                            {sortName[t]}
+                            {sortName[t as keyof typeof sortName]}
                         </button>
                     ))}
                 </div>
             </div>
             {/* Leaderboard Table */}
-            <div className="w-full max-w-4xl bg-black/40 border-2 border-green-500/30 rounded-lg overflow-hidden shadow-xl shadow-green-500/10">
+            <div className="w-full max-w-4xl overflow-hidden rounded-lg border-2 border-green-500/30 bg-black/40 shadow-green-500/10 shadow-xl">
                 {/* Table Header */}
-                <div className="bg-green-500/10 border-b border-green-500/30 p-4 grid grid-cols-[60px_1fr_120px] gap-4 font-bold text-green-400">
+                <div className="grid grid-cols-[60px_1fr_120px] gap-4 border-green-500/30 border-b bg-green-500/10 p-4 font-bold text-green-400">
                     <div>Rank</div>
                     <div>Username</div>
                     <div className="text-right">
@@ -109,53 +126,58 @@ function RouteComponent() {
 
                 {/* Table Body */}
                 <div className="divide-y divide-green-500/20">
-                    {data?.data?.map((entry: any, index: number) => {
-                        const isCurrentUser = user?._id === entry._id;
-                        return (
-                            <div
-                                key={entry._id || index}
-                                className={`p-4 grid grid-cols-[60px_1fr_120px] gap-4 items-center transition-all duration-200 ${
-                                    isCurrentUser
-                                        ? "bg-green-500/20 border-b-0 border-l-4 border-green-400"
-                                        : "hover:bg-green-500/5"
-                                }`}
-                            >
-                                {/* Rank */}
-                                <div className="font-bold text-2xl">
-                                    {index < 3 ? (
-                                        <span className="text-3xl">
-                                            {medals[index]}
-                                        </span>
-                                    ) : (
-                                        <span className="text-green-500/60">
-                                            #{index + 1}
-                                        </span>
-                                    )}
-                                </div>
+                    {data?.data?.map(
+                        (entry: LeaderboardEntry, index: number) => {
+                            const isCurrentUser = user?._id === entry._id;
+                            return (
+                                <div
+                                    key={entry._id || index}
+                                    className={`grid grid-cols-[60px_1fr_120px] items-center gap-4 p-4 transition-all duration-200 ${
+                                        isCurrentUser
+                                            ? "border-green-400 border-b-0 border-l-4 bg-green-500/20"
+                                            : "hover:bg-green-500/5"
+                                    }`}
+                                >
+                                    {/* Rank */}
+                                    <div className="font-bold text-2xl">
+                                        {index < 3 ? (
+                                            <span className="text-3xl">
+                                                {medals[index]}
+                                            </span>
+                                        ) : (
+                                            <span className="text-green-500/60">
+                                                #{index + 1}
+                                            </span>
+                                        )}
+                                    </div>
 
-                                {/* Username */}
-                                <div className="font-semibold flex items-center gap-2">
-                                    {entry.username}
-                                    {isCurrentUser && (
-                                        <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded">
-                                            YOU
-                                        </span>
-                                    )}
-                                </div>
+                                    {/* Username */}
+                                    <div className="flex items-center gap-2 font-semibold">
+                                        {entry.username.slice(0, 15) +
+                                            `${entry.username.length > 15 ? "..." : ""}`}
+                                        {isCurrentUser && (
+                                            <span className="rounded bg-green-500/20 px-2 py-1 text-green-400 text-xs">
+                                                YOU
+                                            </span>
+                                        )}
+                                    </div>
 
-                                {/* Score */}
-                                <div className="text-right font-mono text-green-400 font-bold text-lg">
-                                    {entry[type]?.toLocaleString() || 0}
+                                    {/* Score */}
+                                    <div className="text-right font-bold font-mono text-green-400 text-lg">
+                                        {entry[
+                                            type as keyof LeaderboardEntry
+                                        ]?.toLocaleString() || 0}
+                                    </div>
                                 </div>
-                            </div>
-                        );
-                    })}
+                            );
+                        }
+                    )}
                 </div>
 
                 {/* Empty State */}
                 {(!data?.data || data.data.length === 0) && (
                     <div className="p-12 text-center text-green-500/60">
-                        <p className="text-2xl mb-2">👻</p>
+                        <p className="mb-2 text-2xl">👻</p>
                         <p>No entries found</p>
                     </div>
                 )}

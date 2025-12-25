@@ -1,155 +1,151 @@
+import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import Manual from "@/components/Manual";
-import { Loader2 } from "lucide-react";
 
 interface GameStateProps {
-    currentPost: any;
-    currentIndex: number;
-    verdict: { is_correct: boolean; message: string } | null;
-    isResult: boolean;
-    isAnalyzing: boolean;
-    onApprove: () => void;
-    onReject: (reason: string) => void;
-    onNext: () => void;
-    headerInfo?: React.ReactNode;
+	currentPost: any;
+	currentIndex: number;
+	verdict: { is_correct: boolean; message: string } | null;
+	isResult: boolean;
+	isAnalyzing: boolean;
+	onApprove: () => void;
+	onReject: (reason: string) => void;
+	onNext: () => void;
+	headerInfo?: React.ReactNode;
 }
 
 export const GameState = ({
-    currentPost,
-    currentIndex,
-    verdict,
-    isResult,
-    isAnalyzing,
-    onApprove,
-    onReject,
-    onNext,
-    headerInfo,
+	currentPost,
+	currentIndex,
+	verdict,
+	isResult,
+	isAnalyzing,
+	onApprove,
+	onReject,
+	onNext,
+	headerInfo,
 }: GameStateProps) => {
-    const [isRejecting, setIsRejecting] = useState(false);
-    const [reason, setReason] = useState("");
+	const [isRejecting, setIsRejecting] = useState(false);
+	const [reason, setReason] = useState("");
 
-    const handleNext = () => {
-        setIsRejecting(false);
-        setReason("");
-        onNext();
-    };
+	const handleNext = () => {
+		setIsRejecting(false);
+		setReason("");
+		onNext();
+	};
 
-    return (
-        <div className="flex flex-col lg:flex-row p-3 items-start gap-4 min-h-screen">
-            {/* LEFT: THE GAME CARD */}
-            <div className="flex-[2] w-full flex flex-col justify-center">
-                <div className="bg-zinc-950 border-2 border-green-500 p-8 rounded relative shadow-[0_0_20px_rgba(22,163,74,0.1)]">
-                    {/* Header */}
-                    <div className="flex justify-between items-end mb-6 border-b border-b-green-900 pb-4">
-                        <div className="flex flex-col">
-                            <h2 className="text-xl font-bold uppercase text-green-500">
-                                Post #{currentIndex + 1}
-                            </h2>
-                            {headerInfo}
-                        </div>
-                        <span className="text-xs font-mono text-green-700 bg-green-900/10 px-2 py-1 border border-green-900/30 rounded">
-                            ID: {currentPost._id?.slice(-4) || "UNKNOWN"}
-                        </span>
-                    </div>
+	return (
+		<div className="flex min-h-screen flex-col items-center gap-4 p-3 lg:flex-row">
+			{/* LEFT: THE GAME CARD */}
+			<div className="flex w-full flex-[2] flex-col justify-center">
+				<div className="relative rounded border-2 border-green-500 bg-zinc-950 p-8 shadow-[0_0_20px_rgba(22,163,74,0.1)]">
+					{/* Header */}
+					<div className="mb-6 flex items-end justify-between border-b border-b-green-900 pb-4">
+						<div className="flex flex-col">
+							<h2 className="font-bold text-green-500 text-xl uppercase">
+								Post #{currentIndex + 1}
+							</h2>
+							{headerInfo}
+						</div>
+						<span className="rounded border border-green-900/30 bg-green-900/10 px-2 py-1 font-mono text-green-700 text-xs">
+							ID: {currentPost._id?.slice(-4) || "UNKNOWN"}
+						</span>
+					</div>
 
-                    {/* Content */}
-                    <div className="mb-10">
-                        <h3 className="text-2xl md:text-3xl font-black mb-4 leading-tight text-white">
-                            {currentPost.headline}
-                        </h3>
-                        <p className="text-lg text-zinc-300 leading-relaxed font-light">
-                            {currentPost.content}
-                        </p>
-                    </div>
+					{/* Content */}
+					<div className="mb-10">
+						<h3 className="mb-4 font-black text-2xl text-white leading-tight md:text-3xl">
+							{currentPost.headline}
+						</h3>
+						<p className="font-light text-lg text-zinc-300 leading-relaxed">
+							{currentPost.content}
+						</p>
+					</div>
 
-                    {/* ACTION AREA */}
-                    {isResult ? (
-                        <div className="bg-zinc-900/80 p-6 border border-zinc-800 animate-in fade-in slide-in-from-bottom-2">
-                            <h3
-                                className={`text-2xl font-black mb-2 uppercase ${verdict?.is_correct ? "text-green-500" : "text-red-500"}`}
-                            >
-                                {verdict?.is_correct ? "Verified!" : "Error!"}
-                            </h3>
-                            <p className="mb-6 text-zinc-300 border-l-2 border-zinc-700 pl-4">
-                                {verdict?.message}
-                            </p>
-                            <button
-                                type="button"
-                                onClick={handleNext}
-                                className="cursor-pointer w-full bg-green-600 hover:bg-green-500 text-black py-4 font-bold uppercase tracking-widest transition-all"
-                            >
-                                Get Next Post
-                            </button>
-                        </div>
-                    ) : (
-                        <div className="space-y-4">
-                            {!isRejecting ? (
-                                <div className="flex gap-4">
-                                    <button
-                                        type="button"
-                                        onClick={onApprove}
-                                        disabled={isAnalyzing}
-                                        className="cursor-pointer flex-1 bg-green-900/20 border border-green-600 text-green-500 hover:bg-green-600 hover:text-black transition-all py-4 font-bold uppercase tracking-widest"
-                                    >
-                                        Approve
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => setIsRejecting(true)}
-                                        disabled={isAnalyzing}
-                                        className="cursor-pointer flex-1 bg-red-900/20 border border-red-600 text-red-500 hover:bg-red-600 hover:text-black transition-all py-4 font-bold uppercase tracking-widest"
-                                    >
-                                        Reject
-                                    </button>
-                                </div>
-                            ) : (
-                                <div className="animate-in fade-in slide-in-from-top-2 border-t border-zinc-800 pt-4">
-                                    <div className="flex justify-between items-center mb-2">
-                                        <span className="text-red-500 text-xs font-bold uppercase">
-                                            Reasoning Required{" "}
-                                        </span>
-                                        <button
-                                            type="button"
-                                            onClick={() =>
-                                                setIsRejecting(false)
-                                            }
-                                            className="cursor-pointer text-zinc-500 text-xs hover:text-white"
-                                        >
-                                            Cancel
-                                        </button>
-                                    </div>
-                                    <textarea
-                                        value={reason}
-                                        onChange={(e) =>
-                                            setReason(e.target.value)
-                                        }
-                                        placeholder="Identify the violation..."
-                                        className="w-full bg-black border border-red-900 focus:border-red-500 text-red-100 p-4 mb-4 h-32 focus:outline-none resize-none"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => onReject(reason)}
-                                        disabled={isAnalyzing || !reason.trim()}
-                                        className={`${isAnalyzing || !reason.trim() ? "cursor-not-allowed" : "cursor-pointer"} w-full bg-red-600 hover:bg-red-500 disabled:opacity-50 text-black py-4 font-bold uppercase tracking-widest flex items-center justify-center gap-2`}
-                                    >
-                                        {isAnalyzing ? (
-                                            <Loader2 className="animate-spin" />
-                                        ) : (
-                                            "Submit Report"
-                                        )}
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
-            </div>
+					{/* ACTION AREA */}
+					{isResult ? (
+						<div className="fade-in slide-in-from-bottom-2 animate-in border border-zinc-800 bg-zinc-900/80 p-6">
+							<h3
+								className={`mb-2 font-black text-2xl uppercase ${verdict?.is_correct ? "text-green-500" : "text-red-500"}`}
+							>
+								{verdict?.is_correct ? "Verified!" : "Error!"}
+							</h3>
+							<p className="mb-6 border-zinc-700 border-l-2 pl-4 text-zinc-300">
+								{verdict?.message}
+							</p>
+							<button
+								type="button"
+								onClick={handleNext}
+								className="w-full cursor-pointer bg-green-600 py-4 font-bold text-black uppercase tracking-widest transition-all hover:bg-green-500"
+							>
+								Get Next Post
+							</button>
+						</div>
+					) : (
+						<div className="space-y-4">
+							{!isRejecting ? (
+								<div className="flex gap-4">
+									<button
+										type="button"
+										onClick={onApprove}
+										disabled={isAnalyzing}
+										className="flex-1 cursor-pointer border border-green-600 bg-green-900/20 py-4 font-bold text-green-500 uppercase tracking-widest transition-all hover:bg-green-600 hover:text-black"
+									>
+										Approve
+									</button>
+									<button
+										type="button"
+										onClick={() => setIsRejecting(true)}
+										disabled={isAnalyzing}
+										className="flex-1 cursor-pointer border border-red-600 bg-red-900/20 py-4 font-bold text-red-500 uppercase tracking-widest transition-all hover:bg-red-600 hover:text-black"
+									>
+										Reject
+									</button>
+								</div>
+							) : (
+								<div className="fade-in slide-in-from-top-2 animate-in border-zinc-800 border-t pt-4">
+									<div className="mb-2 flex items-center justify-between">
+										<span className="font-bold text-red-500 text-xs uppercase">
+											Reasoning Required{" "}
+										</span>
+										<button
+											type="button"
+											onClick={() => setIsRejecting(false)}
+											className="cursor-pointer text-xs text-zinc-500 hover:text-white"
+										>
+											Cancel
+										</button>
+									</div>
+									<textarea
+										value={reason}
+										onChange={(e) => setReason(e.target.value)}
+										placeholder="Identify the violation..."
+										className="mb-4 h-32 w-full resize-none border border-red-900 bg-black p-4 text-red-100 focus:border-red-500 focus:outline-none"
+									/>
+									<button
+										type="button"
+										onClick={() => onReject(reason)}
+										disabled={isAnalyzing || !reason.trim()}
+										className={`${isAnalyzing || !reason.trim() ? "cursor-not-allowed" : "cursor-pointer"} flex w-full items-center justify-center gap-2 bg-red-600 py-4 font-bold text-black uppercase tracking-widest hover:bg-red-500 disabled:opacity-50`}
+									>
+										{isAnalyzing ? (
+											<Loader2 className="animate-spin" />
+										) : (
+											"Submit Report"
+										)}
+									</button>
+								</div>
+							)}
+						</div>
+					)}
+				</div>
+			</div>
 
-            {headerInfo === "CAMPAIGN_MODE" && (
-                <div className="hidden lg:block flex-2 h-auto w-full">
-                    <Manual />
-                </div>
-            )}
-        </div>
-    );
+			{headerInfo === "CAMPAIGN_MODE" && (
+				<div className="hidden h-auto w-full flex-2 lg:block">
+					<Manual />
+				</div>
+			)}
+		</div>
+	);
 };

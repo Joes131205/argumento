@@ -1,13 +1,14 @@
-import { getMe } from "@/apis/auth";
-import { completeShift, generateDailyShift } from "@/apis/shifts";
-import { judge } from "@/apis/judge";
 import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import useUser from "@/hooks/useUser";
-import { GameState } from "@/components/GameState";
+import { getMe } from "@/apis/auth";
+import { judge } from "@/apis/judge";
+import { completeShift, generateDailyShift } from "@/apis/shifts";
 import { DailySetup } from "@/components/DailySetup";
+import { GameState } from "@/components/GameState";
+import useUser from "@/hooks/useUser";
 import { requireAuth } from "@/utils/requireAuth";
+import Manual from "@/components/Manual";
 
 export const Route = createFileRoute("/play/daily")({
     beforeLoad: requireAuth,
@@ -49,7 +50,12 @@ function RouteComponent() {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const [index, setIndex] = useState(0);
-    const [logs, setLogs] = useState<any[]>([]);
+    const [logs, setLogs] = useState<
+        {
+            is_correct: boolean;
+            message: string;
+        }[]
+    >([]);
     const [isResult, setIsResult] = useState(false);
     const [verdict, setVerdict] = useState<{
         is_correct: boolean;
@@ -139,7 +145,7 @@ function RouteComponent() {
         if (currentPost && verdict) {
             const newLogs = [
                 ...logs,
-                { id: currentPost._id, is_correct: verdict.is_correct },
+                { is_correct: verdict.is_correct, message: verdict.message },
             ];
             setLogs(newLogs);
             localStorage.setItem(
@@ -161,6 +167,7 @@ function RouteComponent() {
             toast.success("Shift Complete!");
             router.navigate({ to: "/" });
         } catch (error) {
+            console.log(error);
             toast.error("Failed to save progress");
         } finally {
             setIsSaving(false);
@@ -169,7 +176,7 @@ function RouteComponent() {
 
     if (isLoadingStorage)
         return (
-            <div className="bg-black text-green-500 h-screen flex items-center justify-center">
+            <div className="flex h-screen items-center justify-center bg-black text-green-500">
                 Loading...
             </div>
         );
@@ -190,15 +197,15 @@ function RouteComponent() {
 
     if (!currentPost) {
         return (
-            <div className="h-screen bg-zinc-950 flex flex-col items-center justify-center gap-6">
-                <h2 className="text-4xl font-black uppercase">
+            <div className="flex h-screen flex-col items-center justify-center gap-6 bg-zinc-950">
+                <h2 className="font-black text-4xl uppercase">
                     Shift Complete
                 </h2>
                 <button
                     type="button"
                     onClick={handleEndShift}
                     disabled={isSaving}
-                    className="cursor-pointer bg-green-600 hover:bg-green-500 text-black px-8 py-4 font-bold uppercase tracking-widest"
+                    className="cursor-pointer bg-green-600 px-8 py-4 font-bold text-black uppercase tracking-widest hover:bg-green-500"
                 >
                     {isSaving ? "Saving..." : "Clock Out"}
                 </button>
@@ -207,15 +214,22 @@ function RouteComponent() {
     }
 
     return (
-        <GameState
-            currentPost={currentPost}
-            currentIndex={index}
-            verdict={verdict}
-            isResult={isResult}
-            isAnalyzing={isAnalyzing}
-            onApprove={handleApprove}
-            onReject={handleReject}
-            onNext={handleNext}
-        />
+        <div className="flex items-center justify-center gap-5">
+            <div className="flex-2">
+                <GameState
+                    currentPost={currentPost}
+                    currentIndex={index}
+                    verdict={verdict}
+                    isResult={isResult}
+                    isAnalyzing={isAnalyzing}
+                    onApprove={handleApprove}
+                    onReject={handleReject}
+                    onNext={handleNext}
+                />
+            </div>
+            <div className="flex-2">
+                <Manual />
+            </div>
+        </div>
     );
 }

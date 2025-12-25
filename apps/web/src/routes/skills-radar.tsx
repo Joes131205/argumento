@@ -1,8 +1,7 @@
-import { getMe } from "@/apis/auth";
+import { createFileRoute } from "@tanstack/react-router";
 import BackButton from "@/components/BackButton";
 import useUser from "@/hooks/useUser";
 import { requireAuth } from "@/utils/requireAuth";
-import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/skills-radar")({
     beforeLoad: requireAuth,
@@ -28,8 +27,8 @@ function RouteComponent() {
     return (
         <div className="flex flex-col items-center justify-center gap-8 p-5 md:p-10">
             <BackButton />
-            <div className="text-center space-y-2">
-                <h2 className="font-black text-5xl md:text-6xl tracking-tight">
+            <div className="space-y-2 text-center">
+                <h2 className="font-black text-5xl tracking-tight md:text-6xl">
                     User Statistics
                 </h2>
                 <p className="text-lg text-muted-foreground">
@@ -37,7 +36,7 @@ function RouteComponent() {
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
+            <div className="grid w-full max-w-6xl grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {user?.stats?.length
                     ? user?.stats.map((item) => {
                           const accuracy =
@@ -50,14 +49,14 @@ function RouteComponent() {
 
                           return (
                               <div
-                                  key={item.stats_id}
-                                  className={`flex flex-col p-6 rounded-xl border-2 ${getAccuracyColor(accuracyNum)} shadow-lg hover:shadow-xl transition-all duration-300`}
+                                  key={item.stat_id}
+                                  className={`flex flex-col rounded-xl border-2 p-6 ${getAccuracyColor(accuracyNum)} shadow-lg transition-all duration-300 hover:shadow-xl`}
                               >
-                                  <h3 className="text-2xl font-bold mb-4 capitalize">
+                                  <h3 className="mb-4 font-bold text-2xl capitalize">
                                       {item.name}
                                   </h3>
 
-                                  <div className="space-y-3 mb-4">
+                                  <div className="mb-4 space-y-3">
                                       <div className="flex justify-between text-sm">
                                           <span className="text-muted-foreground">
                                               Correct
@@ -77,19 +76,19 @@ function RouteComponent() {
                                   </div>
 
                                   <div className="mt-auto">
-                                      <div className="flex items-center justify-between mb-2">
-                                          <span className="text-sm font-medium">
+                                      <div className="mb-2 flex items-center justify-between">
+                                          <span className="font-medium text-sm">
                                               Accuracy
                                           </span>
                                           <span
-                                              className={`text-2xl font-bold ${getAccuracyColor(accuracyNum)}`}
+                                              className={`font-bold text-2xl ${getAccuracyColor(accuracyNum)}`}
                                           >
                                               {accuracy}%
                                           </span>
                                       </div>
-                                      <div className="w-full bg-zinc-800 rounded-full h-3 overflow-hidden">
+                                      <div className="h-3 w-full overflow-hidden rounded-full bg-zinc-800">
                                           <div
-                                              className={`h-full ${getProgressColor(accuracyNum)} transition-all duration-500 rounded-full`}
+                                              className={`h-full ${getProgressColor(accuracyNum)} rounded-full transition-all duration-500`}
                                               style={{
                                                   width: `${Math.min(accuracyNum, 100)}%`,
                                               }}
@@ -103,7 +102,7 @@ function RouteComponent() {
             </div>
 
             {(!user?.stats || Object.keys(user.stats).length === 0) && (
-                <div className="text-center p-10 text-muted-foreground">
+                <div className="p-10 text-center text-muted-foreground">
                     <p className="text-xl">
                         No statistics yet. Start playing to see your progress!
                     </p>

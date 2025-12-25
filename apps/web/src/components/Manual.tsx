@@ -1,6 +1,6 @@
+import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { content_types } from "@/utils/content_types";
-import { ArrowLeft } from "lucide-react";
 
 const Manual = () => {
     const [currTypeIndex, setCurrTypeIndex] = useState(0);
@@ -11,11 +11,11 @@ const Manual = () => {
     return (
         <div>
             {/* The Main Card Container */}
-            <div className="bg-zinc-900 w-full max-w-4xl h-[85vh] rounded-lg shadow-[0_0_30px_rgba(0,255,100,0.1)] flex flex-col border border-zinc-700 overflow-hidden relative">
+            <div className="relative flex h-[85vh] w-full max-w-4xl flex-col overflow-hidden rounded-lg border border-zinc-700 bg-zinc-900 shadow-[0_0_30px_rgba(0,255,100,0.1)]">
                 {/* --- HEADER --- */}
-                <div className="bg-zinc-950 p-4 border-b border-zinc-700 flex justify-between items-center shrink-0">
+                <div className="flex shrink-0 items-center justify-between border-zinc-700 border-b bg-zinc-950 p-4">
                     <div className="flex flex-col gap-3">
-                        <p className="text-white text-2xl font-bold">
+                        <p className="font-bold text-2xl text-white">
                             Manual v1.1.1
                         </p>
                         <p className="text-white">
@@ -25,18 +25,18 @@ const Manual = () => {
                 </div>
 
                 {/* --- CONTENT AREA --- */}
-                <div className="flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent">
+                <div className="scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent flex-1 overflow-y-auto p-6">
                     {isOpened ? (
                         <div>
                             <button
                                 type="button"
                                 onClick={() => setIsOpened(false)}
-                                className="mb-6 cursor-pointer flex items-center gap-2 text-green-500 hover:text-green-300 transition-colors font-mono text-sm font-bold uppercase tracking-wide"
+                                className="mb-6 flex cursor-pointer items-center gap-2 font-bold font-mono text-green-500 text-sm uppercase tracking-wide transition-colors hover:text-green-300"
                             >
                                 <ArrowLeft /> Return
                             </button>
 
-                            <h3 className="text-4xl font-black text-white mb-6 tracking-tight">
+                            <h3 className="mb-6 font-black text-4xl text-white tracking-tight">
                                 {
                                     content_types[currTypeIndex].types[
                                         currTopicIndex
@@ -45,7 +45,7 @@ const Manual = () => {
                             </h3>
 
                             <div className="prose prose-invert max-w-none">
-                                <p className="text-xl text-zinc-300 leading-relaxed mb-8 font-light">
+                                <p className="mb-8 font-light text-xl text-zinc-300 leading-relaxed">
                                     {
                                         content_types[currTypeIndex].types[
                                             currTopicIndex
@@ -56,25 +56,24 @@ const Manual = () => {
                         </div>
                     ) : (
                         <div>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-y-auto">
+                            <div className="grid grid-cols-1 gap-4 overflow-y-auto sm:grid-cols-2">
                                 {content_types.map((item, i) => (
                                     <div
                                         key={i.toString()}
-                                        className="bg-zinc-950 border border-zinc-800 rounded-lg p-4 hover:border-green-500/50 hover:shadow-[0_0_15px_rgba(0,255,100,0.1)] transition-all duration-300"
+                                        className="rounded-lg border border-zinc-800 bg-zinc-950 p-4 transition-all duration-300 hover:border-green-500/50 hover:shadow-[0_0_15px_rgba(0,255,100,0.1)]"
                                     >
-                                        <h3 className="text-white font-bold text-lg mb-1">
+                                        <h3 className="mb-1 font-bold text-lg text-white">
                                             {item.name}
                                         </h3>
-                                        <p className="text-zinc-400 text-sm mb-3">
+                                        <p className="mb-3 text-sm text-zinc-400">
                                             {item.description}
                                         </p>
-                                        <div className="flex flex-wrap gap-2 items-center">
+                                        <div className="flex flex-wrap items-center gap-2">
                                             {item.types.map((type, j) => (
                                                 <button
                                                     type="button"
                                                     key={type.name}
-                                                    className="cursor-pointer px-4 py-2 text-xs uppercase font-bold tracking-wider transition-all
-                                                     border border-green-500 relative overflow-hidden group/btn hover:border-green-500 hover:bg-green-500 hover:text-black "
+                                                    className="group/btn relative cursor-pointer overflow-hidden border border-green-500 px-4 py-2 font-bold text-xs uppercase tracking-wider transition-all hover:border-green-500 hover:bg-green-500 hover:text-black"
                                                     onClick={() => {
                                                         setCurrTypeIndex(i);
                                                         setCurrTopicIndex(j);

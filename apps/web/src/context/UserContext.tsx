@@ -1,11 +1,14 @@
 import { getMe } from "@/apis/auth";
 import type { IUser } from "@/types";
+import { useNavigate } from "@tanstack/react-router";
 import { createContext, useEffect, useState, type ReactNode } from "react";
+import { toast } from "sonner";
 
 interface UserContextType {
     user: IUser | null;
     isLoading: boolean;
     invalidateUser: () => Promise<void>;
+    logOut: () => void;
 }
 
 interface UserProviderProps {
@@ -18,7 +21,7 @@ export const UserContext = createContext<UserContextType | undefined>(
 export const UserProvider = ({ children }: UserProviderProps) => {
     const [user, setUser] = useState<IUser | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-
+    const navigate = useNavigate();
     useEffect(() => {
         const unsubscribe = async () => {
             try {
@@ -45,6 +48,24 @@ export const UserProvider = ({ children }: UserProviderProps) => {
             setIsLoading(true);
         } catch (error) {
             console.log(error);
+            toast.error("Error!");
+            setUser(null);
+            localStorage.removeItem("token");
+            navigate({ to: "/sign-in" });
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const logOut = () => {
+        setIsLoading(true);
+
+        try {
+            setUser(null);
+            localStorage.removeItem("token");
+            navigate({ to: "/sign-in" });
+        } catch (error) {
+            console.log(error);
         } finally {
             setIsLoading(false);
         }
@@ -54,6 +75,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
         user,
         isLoading,
         invalidateUser,
+        logOut,
     };
 
     return (

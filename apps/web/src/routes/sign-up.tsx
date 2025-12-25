@@ -1,10 +1,10 @@
-import { register } from "@/apis/auth";
-import useUser from "@/hooks/useUser";
 import { useForm } from "@tanstack/react-form";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
+import { register } from "@/apis/auth";
+import useUser from "@/hooks/useUser";
 
 export const Route = createFileRoute("/sign-up")({
     component: RouteComponent,
@@ -60,8 +60,9 @@ function RouteComponent() {
         onSubmit: async ({ value }) => {
             try {
                 const response = await register(value.username, value.password);
-                if (response?.data) {
-                    const token = response.data.token;
+                console.log(response);
+                if (response?.token) {
+                    const token = response.token;
                     localStorage.setItem("token", token);
                     toast.success("Registration successful!");
                     invalidateUser();
@@ -82,22 +83,22 @@ function RouteComponent() {
         useState(false);
 
     return (
-        <div className="bg-zinc-950 w-screen h-screen flex flex-col items-center justify-center">
+        <div className="flex h-screen w-screen flex-col items-center justify-center bg-zinc-950">
             <form
                 onSubmit={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     form.handleSubmit();
                 }}
-                className="w-[90%] sm:w-120 bg-black/80 border-5 border-green-500/50 text-green-500 p-5 flex flex-col gap-10 items-center justify-center items-start"
+                className="flex w-[90%] flex-col items-center justify-center gap-10 border-5 border-green-500/50 bg-black/80 p-5 text-green-500 sm:w-120"
             >
-                <h2 className="text-2xl font-bold text-center w-full">
+                <h2 className="w-full text-center font-bold text-2xl">
                     Sign Up
                 </h2>
 
                 <form.Field name="username">
                     {(field) => (
-                        <div className="flex items-start justify-start flex-col w-full gap-2">
+                        <div className="flex w-full flex-col justify-start gap-2">
                             <label htmlFor={field.name} className="font-bold">
                                 Username
                             </label>
@@ -107,10 +108,10 @@ function RouteComponent() {
                                 onChange={(e) =>
                                     field.handleChange(e.target.value)
                                 }
-                                className="rounded-full w-full py-2 border-1 bg-black/80 focus:outline-none border-green-500 border-2 px-3"
+                                className="w-full rounded-full border-2 border-green-500 bg-black/80 px-3 py-2 focus:outline-none"
                             />
                             {!field.state.meta.isValid && (
-                                <p className="text-red-500 font-bold">
+                                <p className="font-bold text-red-500">
                                     {field.state.meta.errors[0]?.message}
                                 </p>
                             )}
@@ -119,7 +120,7 @@ function RouteComponent() {
                 </form.Field>
                 <form.Field name="password">
                     {(field) => (
-                        <div className="flex items-start justify-start flex-col w-full gap-2">
+                        <div className="flex w-full flex-col items-start justify-start gap-2">
                             <label htmlFor={field.name} className="font-bold">
                                 Password
                             </label>
@@ -129,7 +130,7 @@ function RouteComponent() {
                                 onChange={(e) =>
                                     field.handleChange(e.target.value)
                                 }
-                                className="rounded-full w-full py-2 border-1 bg-black/80 focus:outline-none border-green-500 border-2 px-3"
+                                className="w-full rounded-full border-2 border-green-500 bg-black/80 px-3 py-2 focus:outline-none"
                             />
                             <p
                                 className="cursor-pointer underline"
@@ -143,7 +144,7 @@ function RouteComponent() {
                                 {showPassword ? "Hide" : "Show"} Password
                             </p>
                             {!field.state.meta.isValid && (
-                                <p className="text-red-500 font-bold">
+                                <p className="font-bold text-red-500">
                                     {field.state.meta.errors[0]?.message}
                                 </p>
                             )}
@@ -152,7 +153,7 @@ function RouteComponent() {
                 </form.Field>
                 <form.Field name="confirmationPassword">
                     {(field) => (
-                        <div className="flex items-start justify-start flex-col w-full gap-2">
+                        <div className="flex w-full flex-col items-start justify-start gap-2">
                             <label htmlFor={field.name} className="font-bold">
                                 Confirmation Password
                             </label>
@@ -166,7 +167,7 @@ function RouteComponent() {
                                 onChange={(e) =>
                                     field.handleChange(e.target.value)
                                 }
-                                className="rounded-full w-full py-2 border-1 bg-black/80 focus:outline-none border-green-500 border-2 px-3"
+                                className="w-full rounded-full border-2 border-green-500 bg-black/80 px-3 py-2 focus:outline-none"
                             />
                             <p
                                 className="cursor-pointer underline"
@@ -187,7 +188,7 @@ function RouteComponent() {
                                 Confirmation Password
                             </p>
                             {!field.state.meta.isValid && (
-                                <p className="text-red-500 font-bold">
+                                <p className="font-bold text-red-500">
                                     {field.state.meta.errors[0]?.message}
                                 </p>
                             )}
@@ -201,7 +202,7 @@ function RouteComponent() {
                         <button
                             type="submit"
                             disabled={!canSubmit}
-                            className="w-full text-center cursor-pointer bg-green-500 font-bold text-white py-2 rounded-full hover:bg-green-600 transition-all"
+                            className="w-full cursor-pointer rounded-full bg-green-500 py-2 text-center font-bold text-white transition-all hover:bg-green-600"
                         >
                             {isSubmitting ? "Loading..." : "Sign Up"}
                         </button>

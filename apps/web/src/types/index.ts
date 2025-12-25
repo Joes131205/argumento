@@ -1,3 +1,4 @@
+// Game Mechanics
 export interface IPost {
     headline: string;
     content: string;
@@ -13,6 +14,31 @@ export interface IPost {
     origin: "human" | "ai";
 }
 
+export interface ICampaignPost {
+    id: string;
+    headline: string;
+    content: string;
+    type: "safe" | "slop";
+    slop_reasons: string[];
+    category: "safe" | "media_manipulation" | "fallacies" | "biases";
+}
+
+export interface ICampaignLevel {
+    title: string;
+    briefing: string;
+    posts: ICampaignPost[];
+}
+
+export interface ICampaign {
+    title: string;
+    description: string;
+    requirement: string;
+    levels: Record<string, ICampaignLevel>;
+}
+
+export type ICampaignMap = Record<string, ICampaign>;
+
+// User Model
 export interface IPostHistoryItem {
     post_id: string;
     is_correct: boolean;
@@ -52,6 +78,7 @@ export interface IUser {
     updatedAt: Date;
 }
 
+// API Type
 export interface IApiResponse<T> {
     success: boolean;
     data: T;

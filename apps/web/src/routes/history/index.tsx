@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import useUser from "@/hooks/useUser";
 import BackButton from "@/components/BackButton";
+import useUser from "@/hooks/useUser";
 import { requireAuth } from "@/utils/requireAuth";
 
 export const Route = createFileRoute("/history/")({
@@ -13,18 +13,18 @@ function RouteComponent() {
     const { user } = useUser();
     console.log(user?.postsHistory);
     return (
-        <div className="p-6 flex flex-col gap-5 items-center justify-center">
+        <div className="flex flex-col items-center justify-center gap-5 p-6">
             <BackButton />
 
-            <h2 className="text-3xl font-bold mb-6">Your Processed Posts</h2>
-            <div className="space-y-4 max-w-4xl">
+            <h2 className="mb-6 font-bold text-3xl">Your Processed Posts</h2>
+            <div className="max-w-4xl space-y-4">
                 {user?.postsHistory?.length === 0 ? (
                     <p className="text-gray-500">No posts processed yet.</p>
                 ) : (
                     user?.postsHistory?.map((post: any, index: number) => (
                         <div
                             key={index.toString()}
-                            className="border border-green-500 rounded-lg p-4 hover:shadow-md transition-shadow"
+                            className="rounded-lg border border-green-500 p-4 transition-shadow hover:shadow-md"
                         >
                             <Link
                                 to="/history/$id"
@@ -32,12 +32,12 @@ function RouteComponent() {
                                     id: post?.post?._id,
                                 }}
                             >
-                                <div className="flex justify-between items-start mb-2">
+                                <div className="mb-2 flex items-start justify-between">
                                     <h3 className="font-semibold text-lg">
                                         {post.post.headline ||
                                             `Post ${index + 1}`}
                                     </h3>
-                                    <span className="text-sm text-green-700">
+                                    <span className="text-green-700 text-sm">
                                         {new Date(
                                             post.post.createdAt
                                         ).toLocaleDateString()}
