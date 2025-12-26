@@ -1,3 +1,4 @@
+import type { IPostVerdict } from "@/types";
 import { instance } from "@/utils/api";
 
 export const fetchPost = async (postLength: number) => {
@@ -11,7 +12,7 @@ export const fetchPost = async (postLength: number) => {
     }
 };
 
-export const completeShift = async (history) => {
+export const completeShift = async (history: IPostVerdict[]) => {
     try {
         const res = await instance.put("/shifts/complete", { history });
         console.log(res);
@@ -21,7 +22,10 @@ export const completeShift = async (history) => {
     }
 };
 
-export const generateDailyShift = async (postLength, types) => {
+export const generateDailyShift = async (
+    postLength: number,
+    types: Record<string, string[]>
+) => {
     try {
         const res = await instance.post("/shifts/generate", {
             postLength,

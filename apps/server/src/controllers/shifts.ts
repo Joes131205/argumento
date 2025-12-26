@@ -1,9 +1,10 @@
 import type { Request, Response } from "express";
 import Posts from "@/db/models/Posts";
-import User from "@/db/models/User";
+import User, { type IUsers } from "@/db/models/User";
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
 import { content_types } from "@/utils/content_types";
+import type { IPostLog } from "@/types";
 
 dotenv.config();
 
@@ -22,7 +23,6 @@ declare global {
 // AI generate the content
 export const generateDailyShift = async (req: Request, res: Response) => {
     try {
-        console.log(req.body);
         const { postLength, types } = req.body;
         const userId = req.users;
 
@@ -89,19 +89,10 @@ export const generateDailyShift = async (req: Request, res: Response) => {
             ]
         `;
 
-        console.log(prompt);
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash-lite",
             contents: prompt,
         });
-
-        console.log(
-            JSON.parse(
-                response?.candidates?.[0]?.content?.parts?.[0]?.text
-                    ?.replace("```json\n", "")
-                    .replace("\n```", "") || ""
-            )
-        );
 
         const parsed = JSON.parse(
             response?.candidates?.[0]?.content?.parts?.[0]?.text
@@ -125,7 +116,6 @@ export const generateDailyShift = async (req: Request, res: Response) => {
     }
 };
 
-// Helper to map IDs to nice names for your Schema
 const CATEGORY_NAMES: Record<string, string> = {
     logical_fallacies: "Logical Fallacies",
     cognitive_biases: "Cognitive Biases",
@@ -138,8 +128,9 @@ export const completeShift = async (req: Request, res: Response) => {
     try {
         const userId = req.users;
         const { history } = req.body;
+        console.log(history);
 
-        const user = await User.findById(userId);
+        const user: IUsers | null = await User.findById(userId);
 
         if (!user) {
             return res.status(401).send({
@@ -149,17 +140,17 @@ export const completeShift = async (req: Request, res: Response) => {
         }
 
         const postCorrect = history.filter(
-            (item: any) => item.is_correct
+            (item: IPostLog) => item.is_correct
         ).length;
         const expEarned = postCorrect * 100;
 
         const sentData = await Promise.all(
-            history.map(async (item: any) => {
-                const post = await Posts.findById(item.id);
-                if (!post) throw new Error(`Post not found: ${item.id}`);
+            history.map(async (item: IPostLog) => {
+                const post = await Posts.findById(item.post_id);
+                if (!post) throw new Error(`Post not found: ${item.post_id}`);
 
                 return {
-                    post_id: item.id,
+                    post_id: item.post_id,
                     is_correct: item.is_correct,
                     category: post.category,
                 };
@@ -174,9 +165,9 @@ export const completeShift = async (req: Request, res: Response) => {
             );
 
             if (existingStat) {
-                existingStat.total += 1;
+                existingStat.total++;
                 if (item.is_correct) {
-                    existingStat.correct += 1;
+                    existingStat.correct++;
                 }
             } else {
                 user.stats.push({
@@ -212,10 +203,10 @@ export const completeShift = async (req: Request, res: Response) => {
 
         user.lastPlayedDate = new Date();
         user.totalExp += expEarned;
-        user.postProcessed += history.length;
+        user.postsProcessed += history.length;
         user.postsCorrect += postCorrect;
 
-        user.postsHistory.push(...(sentData as any));
+        user.postsHistory.push(...sentData);
 
         await user.save();
 

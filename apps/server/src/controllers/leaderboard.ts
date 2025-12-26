@@ -19,7 +19,6 @@ export const getLeaderboard = async (req: Request, res: Response) => {
         const data = await User.find({}, "-password")
             .sort({ [type]: -1 })
             .limit(100);
-        console.log(data);
         res.status(200).json({
             success: true,
             message: "Success",

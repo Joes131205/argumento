@@ -4,11 +4,9 @@ import type { Request, Response } from "express";
 
 export const getLevel = async (req: Request, res: Response) => {
     try {
-        const { level, id }: { level: string; id: string } = req.params;
-        console.log(level, id);
-        const campaign = campaign_level[level];
-        const part = campaign.levels[id];
-        console.log(campaign, part);
+        const { level, id } = req.params as { level: string; id: string };
+        const campaign = campaign_level[level as keyof typeof campaign_level];
+        const part = campaign.levels[id as keyof typeof campaign.levels];
         res.status(200).json({
             success: true,
             message: "Success",
@@ -23,7 +21,7 @@ export const getLevel = async (req: Request, res: Response) => {
         });
     }
 };
-export const getCampaign = async (req: Request, res: Response) => {
+export const getCampaign = async (_req: Request, res: Response) => {
     try {
         res.status(200).json({ success: true, campaign: campaign_level });
     } catch (error) {
@@ -57,7 +55,7 @@ export const completeCampaignLevel = async (req: Request, res: Response) => {
             });
         }
 
-        const campaign = campaign_level[level];
+        const campaign = campaign_level[level as keyof typeof campaign_level];
         if (!campaign) {
             return res.status(404).json({
                 success: false,

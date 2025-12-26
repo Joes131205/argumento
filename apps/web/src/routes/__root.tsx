@@ -3,13 +3,10 @@ import {
     Outlet,
     createRootRouteWithContext,
 } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import "../index.css";
 
 import useTheme from "@/hooks/useTheme";
 import { Toaster } from "sonner";
-import ErrorPage from "@/components/ErrorPage";
-import { ArrowLeft, Link } from "lucide-react";
 
 export const Route = createRootRouteWithContext()({
     component: RootComponent,
@@ -38,7 +35,7 @@ function RootComponent() {
         <>
             <HeadContent />
             <div
-                className={`min-h-screen min-w-screen transition-colors duration-300 font-mono bg-zinc-950 text-green-500 ${
+                className={`min-h-screen min-w-screen bg-zinc-950 font-mono text-green-500 transition-colors duration-300 ${
                     theme === "dark" ? "dark" : ""
                 } bg-background text-foreground`}
             >

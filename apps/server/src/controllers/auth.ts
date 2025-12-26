@@ -105,7 +105,6 @@ export const getMe = async (req: Request, res: Response) => {
         }
 
         const user = await User.findById(userId);
-        console.log(user);
         if (!user) {
             return res.status(401).send({
                 success: false,
@@ -114,18 +113,18 @@ export const getMe = async (req: Request, res: Response) => {
         }
 
         const userObj = user.toObject();
-        const { password, ...safeUser } = userObj as any;
+        const { password, ...safeUser } = userObj;
 
         safeUser.postsHistory = await Promise.all(
             safeUser.postsHistory.map(async (item) => {
                 const post = await Posts.findById(item.post_id);
                 return {
+                    post_id: item.post_id,
                     is_correct: item.is_correct,
                     post,
                 };
             })
         );
-        console.log(safeUser);
 
         res.status(200).json({
             success: true,

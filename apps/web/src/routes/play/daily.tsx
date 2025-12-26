@@ -9,6 +9,7 @@ import { GameState } from "@/components/GameState";
 import useUser from "@/hooks/useUser";
 import { requireAuth } from "@/utils/requireAuth";
 import Manual from "@/components/Manual";
+import type { ICampaignProgress, IPost, IPostLog, IPostVerdict } from "@/types";
 
 export const Route = createFileRoute("/play/daily")({
     beforeLoad: requireAuth,
@@ -34,9 +35,12 @@ function RouteComponent() {
     const router = useRouter();
     const { invalidateUser, user } = useUser();
 
-    const [isPlayedBefore, setIsPlayedBefore] = useState(false);
-    const [data, setData] = useState<any>(null);
-    const [isLoadingStorage, setIsLoadingStorage] = useState(true);
+    const [isPlayedBefore, setIsPlayedBefore] = useState<boolean>(false);
+    const [data, setData] = useState<{
+        currPosts: IPost[];
+        log: IPostLog[];
+    } | null>(null);
+    const [isLoadingStorage, setIsLoadingStorage] = useState<boolean>(true);
 
     const [selectedTopics, setSelectedTopics] = useState<
         Record<string, string[]>
@@ -46,28 +50,24 @@ function RouteComponent() {
         media_manipulations: [],
         ai_hallucinations: [],
     });
-    const [postAmount, setPostAmount] = useState(3);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [postAmount, setPostAmount] = useState<number>(3);
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-    const [index, setIndex] = useState(0);
-    const [logs, setLogs] = useState<
-        {
-            is_correct: boolean;
-            message: string;
-        }[]
-    >([]);
-    const [isResult, setIsResult] = useState(false);
+    const [index, setIndex] = useState<number>(0);
+    const [logs, setLogs] = useState<IPostVerdict[]>([]);
+    const [isResult, setIsResult] = useState<boolean>(false);
     const [verdict, setVerdict] = useState<{
         is_correct: boolean;
         message: string;
     } | null>(null);
-    const [isAnalyzing, setIsAnalyzing] = useState(false);
-    const [isSaving, setIsSaving] = useState(false);
+    const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
+    const [isSaving, setIsSaving] = useState<boolean>(false);
 
     useEffect(() => {
         const storage = localStorage.getItem("shift_data");
         if (storage) {
             const parsed = JSON.parse(storage);
+            console.log(parsed);
             setData(parsed);
             setIsPlayedBefore(true);
             setLogs(parsed.log);
@@ -80,7 +80,7 @@ function RouteComponent() {
         setIsSubmitting(true);
         try {
             const isCompleted = user?.campaign_progress?.find(
-                (item: any) =>
+                (item: ICampaignProgress) =>
                     item?.campaign_id === "campaign_1" && item.isCompleted
             );
             if (!isCompleted) {
@@ -99,6 +99,7 @@ function RouteComponent() {
             setIndex(0);
             setIsPlayedBefore(true);
         } catch (error) {
+            console.log(error);
             toast.error("Failed to generate shift");
         } finally {
             setIsSubmitting(false);
@@ -108,7 +109,7 @@ function RouteComponent() {
     const currentPost = data?.currPosts?.[index];
 
     const handleApprove = () => {
-        const isSafe = currentPost.type === "safe";
+        const isSafe = currentPost?.type === "safe";
         setVerdict({
             is_correct: isSafe,
             message: isSafe ? "Correct!" : "Incorrect! Hidden threat detected.",
@@ -117,12 +118,16 @@ function RouteComponent() {
     };
 
     const handleReject = async (reason: string) => {
+        if (!currentPost) return;
+
         setIsAnalyzing(true);
         try {
             const { response } = await judge(
                 currentPost.headline,
                 currentPost.content,
-                currentPost.slop_reason || [],
+                Array.isArray(currentPost.slop_reason)
+                    ? currentPost.slop_reason
+                    : [currentPost.slop_reason || ""],
                 reason
             );
             const aiData = response.data || response;
@@ -145,7 +150,11 @@ function RouteComponent() {
         if (currentPost && verdict) {
             const newLogs = [
                 ...logs,
-                { is_correct: verdict.is_correct, message: verdict.message },
+                {
+                    post_id: currentPost._id,
+                    is_correct: verdict.is_correct,
+                    message: verdict.message,
+                },
             ];
             setLogs(newLogs);
             localStorage.setItem(
@@ -161,6 +170,7 @@ function RouteComponent() {
     const handleEndShift = async () => {
         setIsSaving(true);
         try {
+            console.log(logs);
             await completeShift(logs);
             await invalidateUser();
             localStorage.removeItem("shift_data");

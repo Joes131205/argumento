@@ -40,13 +40,7 @@ export const judge = async (req: Request, res: Response) => {
             "feedback_message": "string (Short feedback explaining why they are right/wrong. Mention the official tags.)"
         }`,
         });
-        console.log(
-            JSON.parse(
-                response?.candidates?.[0]?.content?.parts?.[0]?.text
-                    ?.replace("```json\n", "")
-                    .replace("\n```", "") || ""
-            )
-        );
+
         return res.status(200).json({
             success: true,
             message: "Success",

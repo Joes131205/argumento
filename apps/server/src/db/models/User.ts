@@ -1,44 +1,39 @@
-import mongoose, { Schema, type Document } from "mongoose";
+import mongoose, {
+    type Document,
+    type InferSchemaType,
+    Schema,
+} from "mongoose";
 
 export interface IUsers extends Document {
+    _id: string;
     username: string;
     password: string;
     totalExp: number;
     currentStreak: number;
     bestStreak: number;
-    lastPlayedDate: Date;
-    postProcessed: number;
+    lastPlayedDate: Date | null;
+    postsProcessed: number;
     postsCorrect: number;
-    postsHistory: string[];
-    campaign_progress: Record<
-        string,
-        { campaign_id: string; isCompleted: boolean; levelsCompleted: string[] }
-    >[];
+
+    postsHistory: IPostHistoryItem[];
+    stats: IStat[];
+    campaign_progress: ICampaignProgress[];
+
+    createdAt: Date;
+    updatedAt: Date;
 }
 
-const StatSchema: Schema = new Schema(
+const StatSchema = new Schema(
     {
-        stat_id: {
-            type: String,
-            required: true,
-        },
-        name: {
-            type: String,
-            required: true,
-        },
-        correct: {
-            type: Number,
-            default: 0,
-        },
-        total: {
-            type: Number,
-            default: 0,
-        },
+        stat_id: { type: String, required: true },
+        name: { type: String, required: true },
+        correct: { type: Number, default: 0 },
+        total: { type: Number, default: 0 },
     },
-    {
-        _id: false,
-    }
+    { _id: false }
 );
+
+export type IStat = InferSchemaType<typeof StatSchema>;
 
 const CampaignProgressSchema = new Schema(
     {
@@ -48,6 +43,13 @@ const CampaignProgressSchema = new Schema(
     },
     { _id: false }
 );
+
+export type ICampaignProgress = InferSchemaType<typeof CampaignProgressSchema>;
+
+export interface IPostHistoryItem {
+    post_id: string;
+    is_correct: boolean;
+}
 
 const UsersSchema: Schema = new Schema(
     {

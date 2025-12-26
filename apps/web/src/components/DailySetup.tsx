@@ -1,9 +1,10 @@
 import { AlertTriangle, Lock, Play } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import { content_types } from "@/utils/content_types";
+import type { ICampaignProgress, IUser } from "@/types";
 
 interface DailySetupProps {
-    user: any;
+    user: IUser | null;
     selectedTopics: Record<string, string[]>;
     setSelectedTopics: React.Dispatch<
         React.SetStateAction<Record<string, string[]>>
@@ -57,7 +58,7 @@ export const DailySetup = ({
                 <div className="mb-24 grid grid-cols-1 gap-6 lg:grid-cols-2">
                     {content_types.map((category, i) => {
                         const isCompleted = user?.campaign_progress?.find(
-                            (item: any) =>
+                            (item: ICampaignProgress) =>
                                 item?.campaign_id === category?.requirements &&
                                 item.isCompleted
                         );
