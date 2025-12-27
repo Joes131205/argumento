@@ -28,10 +28,10 @@ function RouteComponent() {
 
                 <div className="mb-12 flex flex-col justify-between gap-4 border-green-900/50 border-b pb-6 md:flex-row md:items-end">
                     <div>
-                        <h1 className="font-black text-4xl text-shadow-green uppercase tracking-tighter md:text-5xl">
+                        <h1 className="font-black text-4xl text-shadow-green text-white uppercase tracking-tighter md:text-5xl">
                             Campaign
                         </h1>
-                        <p className="mt-2 max-w-xl font-mono text-green-600 text-sm">
+                        <p className="mt-2 max-w-xl font-mono text-gray-500 text-sm">
                             Get to know the system before you go on with only
                             yourself.
                         </p>
@@ -90,7 +90,7 @@ function RouteComponent() {
                             >
                                 <div className="border-green-900/50 border-b bg-green-950/10 p-6">
                                     <div className="mb-3 flex items-start justify-between">
-                                        <span className="font-mono text-green-700 text-xs uppercase tracking-widest">
+                                        <span className="font-mono text-gray-700 text-xs uppercase tracking-widest">
                                             {campaignId
                                                 .replace("_", " ")
                                                 .toUpperCase()}
@@ -101,10 +101,10 @@ function RouteComponent() {
                                             </span>
                                         )}
                                     </div>
-                                    <h3 className="mb-2 font-black text-3xl uppercase leading-none">
+                                    <h3 className="mb-2 font-black text-3xl text-white uppercase leading-none">
                                         {typedCampaign?.title}
                                     </h3>
-                                    <p className="font-mono text-green-600/80 text-sm leading-relaxed">
+                                    <p className="font-mono text-gray-600/80 text-sm leading-relaxed">
                                         {typedCampaign?.description}
                                     </p>
                                 </div>

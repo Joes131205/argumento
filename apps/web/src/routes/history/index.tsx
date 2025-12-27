@@ -1,75 +1,154 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import {
+    Calendar,
+    CheckCircle2,
+    ChevronRight,
+    FileText,
+    XCircle,
+} from "lucide-react";
 import BackButton from "@/components/BackButton";
 import useUser from "@/hooks/useUser";
-import { requireAuth } from "@/utils/requireAuth";
 import type { IPostHistory } from "@/types";
+import { requireAuth } from "@/utils/requireAuth";
 
 export const Route = createFileRoute("/history/")({
     beforeLoad: requireAuth,
-
     component: RouteComponent,
 });
 
 function RouteComponent() {
     const { user } = useUser();
-    console.log(user?.postsHistory);
-    return (
-        <div className="flex flex-col items-center justify-center gap-5 p-6">
-            <BackButton />
 
-            <h2 className="mb-6 font-bold text-3xl">Your Processed Posts</h2>
-            <div className="max-w-4xl space-y-4">
-                {user?.postsHistory?.length === 0 ? (
-                    <p className="text-gray-500">No posts processed yet.</p>
-                ) : (
-                    user?.postsHistory?.map(
-                        (post: IPostHistory, index: number) => (
-                            <div
-                                key={index.toString()}
-                                className="rounded-lg border border-green-500 p-4 transition-shadow hover:shadow-md"
-                            >
-                                <Link
-                                    to="/history/$id"
-                                    params={{
-                                        id: post?.post?._id,
-                                    }}
-                                >
-                                    <div className="mb-2 flex items-start justify-between">
-                                        <h3 className="font-semibold text-lg">
-                                            {post.post.headline ||
-                                                `Post ${index + 1}`}
-                                        </h3>
-                                        <span className="text-green-700 text-sm">
-                                            {new Date(
-                                                post.post.createdAt
-                                            ).toLocaleDateString()}
-                                        </span>
-                                    </div>
-                                    <div className="flex gap-4 text-sm">
-                                        <span className="text-green-700">
-                                            Post Type: {post.post.type}
-                                        </span>
-                                        {post?.post?.type === "slop" && (
-                                            <span className="text-green-700">
-                                                Fallacy:{" "}
-                                                {post?.post?.reasons.join(
-                                                    ", "
-                                                ) || ""}
-                                            </span>
-                                        )}
-                                    </div>
-                                    <p
-                                        className={`${post?.is_correct ? "text-green-500" : "text-red-500"}`}
+    return (
+        <div className="min-h-screen bg-zinc-950 p-6 font-mono text-zinc-300 lg:p-12">
+            <div className="mx-auto max-w-4xl space-y-8">
+                {/* --- HEADER --- */}
+                <div className="flex flex-col gap-4">
+                    <BackButton />
+                    <div className="mt-4 flex flex-col items-end justify-between gap-4 border-zinc-800 border-b pb-6 md:flex-row">
+                        <div>
+                            <h1 className="font-black text-4xl text-white uppercase tracking-tight">
+                                Processed Logs
+                            </h1>
+                            <p className="mt-1 text-sm text-zinc-500">
+                                Review past judgments and analysis data.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* --- LOG LIST --- */}
+                <div className="space-y-3">
+                    {user?.postsHistory?.length === 0 ? (
+                        <div className="rounded-lg border-2 border-zinc-800 border-dashed bg-zinc-900/20 py-20 text-center">
+                            <FileText
+                                className="mx-auto mb-4 text-zinc-700"
+                                size={48}
+                            />
+                            <p className="font-bold text-zinc-500 uppercase tracking-widest">
+                                No Posts Processed Yet
+                            </p>
+                        </div>
+                    ) : (
+                        user?.postsHistory?.map(
+                            (entry: IPostHistory, index: number) => {
+                                // Guard clause for missing post data
+                                if (!entry.post) return null;
+
+                                const isCorrect = entry.is_correct;
+                                const isSlop = entry.post.type === "slop";
+
+                                return (
+                                    <Link
+                                        key={index.toString()}
+                                        to="/history/$id"
+                                        params={{ id: entry.post._id }}
+                                        className="group block"
                                     >
-                                        {post?.is_correct
-                                            ? "Correct"
-                                            : "Incorrect"}
-                                    </p>
-                                </Link>
-                            </div>
+                                        <div className="relative flex flex-col gap-4 overflow-hidden border border-zinc-800 bg-zinc-900/40 p-4 transition-all hover:border-green-600/50 hover:bg-zinc-900 md:flex-row md:items-center md:p-5">
+                                            {/* Status Bar Indicator */}
+                                            <div
+                                                className={`absolute top-0 bottom-0 left-0 w-1 ${isCorrect ? "bg-green-600" : "bg-red-600"}`}
+                                            />
+
+                                            {/* Icon Status */}
+                                            <div className="shrink-0">
+                                                {isCorrect ? (
+                                                    <div className="rounded border border-green-900/50 bg-green-900/20 p-2 text-green-500">
+                                                        <CheckCircle2
+                                                            size={20}
+                                                        />
+                                                    </div>
+                                                ) : (
+                                                    <div className="rounded border border-red-900/50 bg-red-900/20 p-2 text-red-500">
+                                                        <XCircle size={20} />
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* Content Info */}
+                                            <div className="min-w-0 flex-1">
+                                                <div className="mb-1.5 flex items-center gap-3">
+                                                    <span className="font-bold text-[10px] text-zinc-500 uppercase tracking-wider">
+                                                        LOG #
+                                                        {String(
+                                                            index + 1
+                                                        ).padStart(4, "0")}
+                                                    </span>
+                                                    <span className="text-zinc-700">
+                                                        |
+                                                    </span>
+                                                    <span
+                                                        className={`border px-1.5 py-0.5 font-bold text-[10px] uppercase ${
+                                                            isSlop
+                                                                ? "border-red-900/50 bg-red-900/10 text-red-400"
+                                                                : "border-blue-900/50 bg-blue-900/10 text-blue-400"
+                                                        }`}
+                                                    >
+                                                        {isSlop
+                                                            ? "CONTAINS THREAT"
+                                                            : "VERIFIED SAFE"}
+                                                    </span>
+                                                </div>
+
+                                                <h3 className="truncate pr-4 font-bold text-white transition-colors group-hover:text-green-400">
+                                                    {entry.post.headline ||
+                                                        "Corrupted Data Header"}
+                                                </h3>
+                                            </div>
+
+                                            {/* Date & Arrow */}
+                                            <div className="flex min-w-[140px] items-center justify-between gap-6 md:justify-end">
+                                                <div className="text-right">
+                                                    <div className="flex items-center justify-end gap-1.5 text-xs text-zinc-400">
+                                                        <Calendar size={12} />
+                                                        {new Date(
+                                                            entry.post.createdAt
+                                                        ).toLocaleDateString()}
+                                                    </div>
+                                                    <div className="mt-0.5 text-[10px] text-zinc-600 uppercase">
+                                                        {isCorrect
+                                                            ? "Correct"
+                                                            : "Wrong"}
+                                                    </div>
+                                                </div>
+                                                <ChevronRight
+                                                    className="text-zinc-700 transition-colors group-hover:text-green-500"
+                                                    size={20}
+                                                />
+                                            </div>
+                                        </div>
+                                    </Link>
+                                );
+                            }
                         )
-                    )
-                )}
+                    )}
+                </div>
+
+                {/* Footer Stats */}
+                <div className="flex justify-between border-zinc-800 border-t pt-6 text-xs text-zinc-500 uppercase tracking-widest">
+                    <span>Total Logs: {user?.postsHistory?.length || 0}</span>
+                </div>
             </div>
         </div>
     );

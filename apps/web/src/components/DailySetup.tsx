@@ -45,10 +45,10 @@ export const DailySetup = ({
 
                 {/* Header */}
                 <div className="mb-10 border-green-950 border-b pb-6">
-                    <h1 className="font-black text-4xl uppercase tracking-tighter md:text-5xl">
+                    <h1 className="font-black text-4xl text-white uppercase tracking-tighter md:text-5xl">
                         Custom Simulation
                     </h1>
-                    <p className="mt-4 max-w-2xl text-green-600">
+                    <p className="mt-4 max-w-2xl text-gray-600">
                         Select specific protocols to test your detection
                         ability.
                     </p>

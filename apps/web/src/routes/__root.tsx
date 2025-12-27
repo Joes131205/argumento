@@ -7,6 +7,8 @@ import "../index.css";
 
 import useTheme from "@/hooks/useTheme";
 import { Toaster } from "sonner";
+import { NotFoundComponent } from "@/components/NotFoundComponent";
+import { ErrorPage } from "@/components/ErrorPage";
 
 export const Route = createRootRouteWithContext()({
     component: RootComponent,
@@ -27,6 +29,8 @@ export const Route = createRootRouteWithContext()({
             },
         ],
     }),
+    errorComponent: ErrorPage,
+    notFoundComponent: NotFoundComponent,
 });
 
 function RootComponent() {

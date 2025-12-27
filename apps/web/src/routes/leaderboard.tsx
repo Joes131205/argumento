@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { AlertTriangle, Crown, Filter, Loader2, Medal } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getLeaderboard } from "@/apis/leaderboard";
 import BackButton from "@/components/BackButton";
@@ -22,22 +23,13 @@ export const Route = createFileRoute("/leaderboard")({
     component: RouteComponent,
 });
 
-const sortField = [
-    "totalExp",
-    "bestStreak",
-    "currentStreak",
-    "postsProcessed",
-    "postsCorrect",
+const sortFields = [
+    { key: "totalExp", label: "Total EXP" },
+    { key: "bestStreak", label: "Best Streak" },
+    { key: "currentStreak", label: "Current Streak" },
+    { key: "postsProcessed", label: "Processed" },
+    { key: "postsCorrect", label: "Accuracy Score" },
 ];
-const medals = ["🥇", "🥈", "🥉"];
-
-const sortName = {
-    totalExp: "Total EXP",
-    bestStreak: "Best Streak",
-    currentStreak: "Current Streak",
-    postsProcessed: "Posts Processed",
-    postsCorrect: "Posts Correct",
-};
 
 function RouteComponent() {
     const { user } = useUser();
@@ -46,16 +38,15 @@ function RouteComponent() {
     const [type, setType] = useState("totalExp");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<Error | undefined>(undefined);
+
     useEffect(() => {
         const fetchLeaderboard = async () => {
             setIsLoading(true);
             setError(undefined);
             try {
                 const response = await getLeaderboard(type);
-                if (response === "SERVER ERROR") {
+                if (response === "SERVER ERROR")
                     throw new Error("Server Error");
-                }
-                console.log(response);
                 setData(response);
             } catch (error) {
                 setError(
@@ -69,118 +60,153 @@ function RouteComponent() {
         fetchLeaderboard();
     }, [type]);
 
-    if (isLoading) {
+    const getRankIcon = (index: number) => {
+        if (index === 0) return <Crown className="text-yellow-400" size={24} />;
+        if (index === 1) return <Medal className="text-zinc-300" size={24} />;
+        if (index === 2) return <Medal className="text-amber-600" size={24} />;
+        return <span className="font-mono text-zinc-600">#{index + 1}</span>;
+    };
+
+    const getRowStyle = (index: number, isMe: boolean) => {
+        if (isMe) return "bg-green-900/20 border-l-4 border-l-green-500";
+        if (index === 0)
+            return "bg-yellow-900/10 border-l-2 border-l-yellow-600/50";
+        if (index === 1) return "bg-zinc-900/30 border-l-2 border-l-zinc-700";
+        if (index === 2)
+            return "bg-amber-900/10 border-l-2 border-l-amber-700/50";
+        return "bg-transparent border-l-2 border-l-transparent hover:bg-zinc-950";
+    };
+
+    if (isLoading && !data) {
         return (
-            <div className="flex h-screen flex-col items-center justify-center">
-                <p className="font-mono text-xl">Loading leaderboard...</p>
+            <div className="flex h-screen flex-col items-center justify-center gap-4 bg-zinc-950 font-mono text-green-500">
+                <Loader2 className="animate-spin" size={40} />
+                <p className="animate-pulse text-sm uppercase tracking-widest">
+                    Fetching Global Rankings...
+                </p>
             </div>
         );
     }
+
     if (error) {
         return (
-            <div>
-                <p>Error!</p>
-                <p>{error.message || String(error)}</p>
+            <div className="flex h-screen flex-col items-center justify-center gap-4 bg-zinc-950 font-mono text-red-500">
+                <AlertTriangle size={40} />
+                <p>Connection Failure: {error.message}</p>
+                <BackButton />
             </div>
         );
     }
 
     return (
-        <div className="flex flex-col items-center justify-center gap-5 p-5">
-            <BackButton />
-
-            <h2 className="font-black text-5xl tracking-tight md:text-6xl">
-                Leaderboard
-            </h2>
-            <div className="flex flex-col items-center gap-2">
-                <p className="font-semibold text-green-500/80 text-sm uppercase tracking-wider">
-                    Sort by
-                </p>
-                <div className="space-x-5">
-                    {sortField.map((t: string) => (
-                        <button
-                            key={t}
-                            type="button"
-                            onClick={() => setType(t)}
-                            className={`group/btn relative cursor-pointer overflow-hidden border px-4 py-2 font-bold text-xs uppercase tracking-wider transition-all ${
-                                type === t
-                                    ? "border-green-500 bg-green-600 text-black shadow-[0_0_10px_rgba(34,197,94,0.5)]"
-                                    : "border-green-900 bg-black text-green-700 hover:border-green-500 hover:text-green-400"
-                            }`}
-                        >
-                            {sortName[t as keyof typeof sortName]}
-                        </button>
-                    ))}
-                </div>
-            </div>
-            {/* Leaderboard Table */}
-            <div className="w-full max-w-4xl overflow-hidden rounded-lg border-2 border-green-500/30 bg-black/40 shadow-green-500/10 shadow-xl">
-                {/* Table Header */}
-                <div className="grid grid-cols-[60px_1fr_120px] gap-4 border-green-500/30 border-b bg-green-500/10 p-4 font-bold text-green-400">
-                    <div>Rank</div>
-                    <div>Username</div>
-                    <div className="text-right">
-                        {sortName[type as keyof typeof sortName]}
+        <div className="min-h-screen bg-zinc-950 p-6 font-mono text-zinc-300 lg:p-12">
+            <div className="mx-auto flex max-w-5xl flex-col gap-8">
+                {/* Header */}
+                <div className="flex flex-col gap-4">
+                    <BackButton />
+                    <div className="mt-4 border-zinc-800 border-b pb-6">
+                        <h1 className="font-black text-4xl text-white uppercase tracking-tight md:text-5xl">
+                            Leaderboard
+                        </h1>
                     </div>
                 </div>
 
-                {/* Table Body */}
-                <div className="divide-y divide-green-500/20">
-                    {data?.data?.map(
-                        (entry: LeaderboardEntry, index: number) => {
-                            const isCurrentUser = user?._id === entry._id;
-                            return (
-                                <div
-                                    key={entry._id || index}
-                                    className={`grid grid-cols-[60px_1fr_120px] items-center gap-4 p-4 transition-all duration-200 ${
-                                        isCurrentUser
-                                            ? "border-green-400 border-b-0 border-l-4 bg-green-500/20"
-                                            : "hover:bg-green-500/5"
-                                    }`}
-                                >
-                                    {/* Rank */}
-                                    <div className="font-bold text-2xl">
-                                        {index < 3 ? (
-                                            <span className="text-3xl">
-                                                {medals[index]}
-                                            </span>
-                                        ) : (
-                                            <span className="text-green-500/60">
-                                                #{index + 1}
-                                            </span>
-                                        )}
-                                    </div>
+                {/* Filter / Sort Bar */}
+                <div className="flex flex-col gap-3">
+                    <div className="flex items-center gap-2 font-bold text-xs text-zinc-500 uppercase tracking-wider">
+                        <Filter size={14} />
+                        Sort Parameters
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                        {sortFields.map((t) => (
+                            <button
+                                key={t.key}
+                                type="button"
+                                onClick={() => setType(t.key)}
+                                className={`cursor-pointer border px-4 py-2 font-bold text-xs uppercase tracking-wider transition-all ${
+                                    type === t.key
+                                        ? "border-green-500 bg-green-600 text-black shadow-[0_0_15px_rgba(34,197,94,0.3)]"
+                                        : "border-zinc-800 bg-zinc-950 text-zinc-500 hover:border-green-500 hover:text-green-400"
+                                }
+                                `}
+                            >
+                                {t.label}
+                            </button>
+                        ))}
+                    </div>
+                </div>
 
-                                    {/* Username */}
-                                    <div className="flex items-center gap-2 font-semibold">
-                                        {entry.username.slice(0, 15) +
-                                            `${entry.username.length > 15 ? "..." : ""}`}
-                                        {isCurrentUser && (
-                                            <span className="rounded bg-green-500/20 px-2 py-1 text-green-400 text-xs">
-                                                YOU
-                                            </span>
-                                        )}
-                                    </div>
+                {/* Data Table */}
+                <div className="w-full border border-zinc-800 bg-zinc-950/50">
+                    {/* Table Header */}
+                    <div className="grid grid-cols-[60px_1fr_120px] gap-4 border-zinc-800 border-b bg-zinc-950 p-4 font-bold text-xs text-zinc-500 uppercase tracking-widest md:grid-cols-[80px_1fr_150px]">
+                        <p className="text-center">Rank</p>
+                        <p>Username</p>
+                        <p className="text-right">Score Value</p>
+                    </div>
 
-                                    {/* Score */}
-                                    <div className="text-right font-bold font-mono text-green-400 text-lg">
-                                        {entry[
-                                            type as keyof LeaderboardEntry
-                                        ]?.toLocaleString() || 0}
+                    {/* Table Body */}
+                    <div className="divide-y divide-zinc-900">
+                        {data?.data?.map(
+                            (entry: LeaderboardEntry, index: number) => {
+                                const isCurrentUser = user?._id === entry._id;
+                                const activeSortLabel = sortFields.find(
+                                    (s) => s.key === type
+                                )?.label;
+
+                                return (
+                                    <div
+                                        key={entry._id || index}
+                                        className={`grid grid-cols-[60px_1fr_120px] items-center gap-4 p-4 transition-all md:grid-cols-[80px_1fr_150px] ${getRowStyle(index, isCurrentUser)}
+                                    `}
+                                    >
+                                        {/* Rank Column */}
+                                        <div className="flex items-center justify-center">
+                                            {getRankIcon(index)}
+                                        </div>
+
+                                        {/* Username Column */}
+                                        <div className="flex items-center gap-3 overflow-hidden">
+                                            <span
+                                                className={`truncate font-bold ${isCurrentUser ? "text-green-400" : "text-zinc-300"}`}
+                                            >
+                                                {entry.username}
+                                            </span>
+                                            {isCurrentUser && (
+                                                <span className="hidden rounded border border-green-700 bg-green-900/50 px-1.5 py-0.5 text-[10px] text-green-400 uppercase md:inline-block">
+                                                    YOU
+                                                </span>
+                                            )}
+                                        </div>
+
+                                        {/* Score Column */}
+                                        <div className="text-right">
+                                            <span className="block font-bold font-mono text-lg text-white">
+                                                {entry[
+                                                    type as keyof LeaderboardEntry
+                                                ]?.toLocaleString() || 0}
+                                            </span>
+                                            {index === 0 && (
+                                                <span className="hidden text-[10px] text-zinc-600 uppercase md:block">
+                                                    {activeSortLabel}
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
-                            );
-                        }
+                                );
+                            }
+                        )}
+                    </div>
+
+                    {/* Empty State */}
+                    {(!data?.data || data.data.length === 0) && (
+                        <div className="border-zinc-800 border-t p-16 text-center">
+                            <p className="text-sm text-zinc-600 uppercase tracking-widest">
+                                No Data Found
+                            </p>
+                        </div>
                     )}
                 </div>
-
-                {/* Empty State */}
-                {(!data?.data || data.data.length === 0) && (
-                    <div className="p-12 text-center text-green-500/60">
-                        <p className="mb-2 text-2xl">👻</p>
-                        <p>No entries found</p>
-                    </div>
-                )}
             </div>
         </div>
     );

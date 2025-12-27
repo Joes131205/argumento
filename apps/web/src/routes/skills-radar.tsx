@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { AlertTriangle, Crosshair, Target } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import useUser from "@/hooks/useUser";
 import { requireAuth } from "@/utils/requireAuth";
@@ -10,104 +11,163 @@ export const Route = createFileRoute("/skills-radar")({
 
 function RouteComponent() {
     const { user } = useUser();
-    console.log(user);
 
-    const getAccuracyColor = (accuracy: number) => {
-        if (accuracy >= 80) return "text-green-500 border-green-500";
-        if (accuracy >= 60) return "text-yellow-500 border-yellow-500";
-        return "text-red-500 border-red-500";
-    };
-
-    const getProgressColor = (accuracy: number) => {
-        if (accuracy >= 80) return "bg-green-500";
-        if (accuracy >= 60) return "bg-yellow-500";
-        return "bg-red-500";
+    const getPerformanceMetrics = (accuracy: number) => {
+        if (accuracy >= 90)
+            return {
+                color: "text-green-500",
+                border: "border-green-500",
+                bg: "bg-green-500",
+                grade: "S",
+            };
+        if (accuracy >= 80)
+            return {
+                color: "text-emerald-400",
+                border: "border-emerald-500",
+                bg: "bg-emerald-500",
+                grade: "A",
+            };
+        if (accuracy >= 60)
+            return {
+                color: "text-yellow-500",
+                border: "border-yellow-500",
+                bg: "bg-yellow-500",
+                grade: "B",
+            };
+        if (accuracy >= 40)
+            return {
+                color: "text-orange-500",
+                border: "border-orange-500",
+                bg: "bg-orange-500",
+                grade: "C",
+            };
+        return {
+            color: "text-red-600",
+            border: "border-red-600",
+            bg: "bg-red-600",
+            grade: "F",
+        };
     };
 
     return (
-        <div className="flex flex-col items-center justify-center gap-8 p-5 md:p-10">
-            <BackButton />
-            <div className="space-y-2 text-center">
-                <h2 className="font-black text-5xl tracking-tight md:text-6xl">
-                    User Statistics
-                </h2>
-                <p className="text-lg text-muted-foreground">
-                    Which is your weakest and strongest area?
-                </p>
-            </div>
-
-            <div className="grid w-full max-w-6xl grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {user?.stats?.length
-                    ? user?.stats.map((item) => {
-                          const accuracy =
-                              item.total > 0
-                                  ? ((item.correct / item.total) * 100).toFixed(
-                                        1
-                                    )
-                                  : "0.0";
-                          const accuracyNum = Number.parseFloat(accuracy);
-
-                          return (
-                              <div
-                                  key={item.stat_id}
-                                  className={`flex flex-col rounded-xl border-2 p-6 ${getAccuracyColor(accuracyNum)} shadow-lg transition-all duration-300 hover:shadow-xl`}
-                              >
-                                  <h3 className="mb-4 font-bold text-2xl capitalize">
-                                      {item.name}
-                                  </h3>
-
-                                  <div className="mb-4 space-y-3">
-                                      <div className="flex justify-between text-sm">
-                                          <span className="text-muted-foreground">
-                                              Correct
-                                          </span>
-                                          <span className="font-semibold">
-                                              {item.correct}
-                                          </span>
-                                      </div>
-                                      <div className="flex justify-between text-sm">
-                                          <span className="text-muted-foreground">
-                                              Total
-                                          </span>
-                                          <span className="font-semibold">
-                                              {item.total}
-                                          </span>
-                                      </div>
-                                  </div>
-
-                                  <div className="mt-auto">
-                                      <div className="mb-2 flex items-center justify-between">
-                                          <span className="font-medium text-sm">
-                                              Accuracy
-                                          </span>
-                                          <span
-                                              className={`font-bold text-2xl ${getAccuracyColor(accuracyNum)}`}
-                                          >
-                                              {accuracy}%
-                                          </span>
-                                      </div>
-                                      <div className="h-3 w-full overflow-hidden rounded-full bg-zinc-800">
-                                          <div
-                                              className={`h-full ${getProgressColor(accuracyNum)} rounded-full transition-all duration-500`}
-                                              style={{
-                                                  width: `${Math.min(accuracyNum, 100)}%`,
-                                              }}
-                                          />
-                                      </div>
-                                  </div>
-                              </div>
-                          );
-                      })
-                    : ""}
-            </div>
-
-            {(!user?.stats || Object.keys(user.stats).length === 0) && (
-                <div className="p-10 text-center text-muted-foreground">
-                    <p className="text-xl">
-                        No statistics yet. Start playing to see your progress!
-                    </p>
+        <div className="min-h-screen bg-zinc-950 p-6 font-mono text-zinc-300 lg:p-12">
+            <div className="mx-auto max-w-6xl space-y-8">
+                {/* --- HEADER --- */}
+                <div className="flex flex-col gap-4">
+                    <BackButton />
+                    <div className="mt-4 border-zinc-800 border-b pb-6">
+                        <h1 className="font-black text-4xl text-white uppercase tracking-tight md:text-5xl">
+                            Skill Radar
+                        </h1>
+                        <p className="mt-2 max-w-2xl text-sm text-zinc-500">
+                            Analyze detection accuracy across different threat
+                            vectors. Identify weak points in your reasoning.
+                        </p>
+                    </div>
                 </div>
-            )}
+
+                {/* --- STATS GRID --- */}
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    {user?.stats?.length ? (
+                        user.stats.map((item) => {
+                            const accuracy =
+                                item.total > 0
+                                    ? (item.correct / item.total) * 100
+                                    : 0;
+                            const accuracyFixed = accuracy.toFixed(1);
+                            const metrics = getPerformanceMetrics(accuracy);
+
+                            return (
+                                <div
+                                    key={item.stat_id}
+                                    className={
+                                        "group relative overflow-hidden border border-zinc-800 bg-zinc-900/50 p-6 transition-all hover:border-zinc-600"
+                                    }
+                                >
+                                    {/* Status Bar on Left */}
+                                    <div
+                                        className={`absolute top-0 bottom-0 left-0 w-1 ${metrics.bg} opacity-50`}
+                                    />
+
+                                    {/* Card Header */}
+                                    <div className="mb-6 flex items-start justify-between">
+                                        <div>
+                                            <h3 className="font-bold text-white text-xl capitalize transition-colors group-hover:text-green-400">
+                                                {item.name}
+                                            </h3>
+                                        </div>
+                                        {/* Grade Badge */}
+                                        <div
+                                            className={`flex h-10 w-10 items-center justify-center border-2 font-black text-xl ${metrics.border} ${metrics.color} bg-black`}
+                                        >
+                                            {metrics.grade}
+                                        </div>
+                                    </div>
+
+                                    {/* Data Rows */}
+                                    <div className="mb-6 space-y-4">
+                                        <div className="flex items-center justify-between border-zinc-800 border-b pb-2 text-sm">
+                                            <div className="flex items-center gap-2 text-zinc-500">
+                                                <Target size={14} />
+                                                <span>Correct</span>
+                                            </div>
+                                            <span className="font-bold text-white">
+                                                {item.correct}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center justify-between border-zinc-800 border-b pb-2 text-sm">
+                                            <div className="flex items-center gap-2 text-zinc-500">
+                                                <Crosshair size={14} />
+                                                <span>Attempts</span>
+                                            </div>
+                                            <span className="font-bold text-zinc-400">
+                                                {item.total}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Progress Meter */}
+                                    <div>
+                                        <div className="mb-2 flex items-end justify-between">
+                                            <span
+                                                className={`font-bold text-2xl ${metrics.color}`}
+                                            >
+                                                {accuracyFixed}%
+                                            </span>
+                                        </div>
+
+                                        {/* Technical Progress Bar */}
+                                        <div className="h-2 w-full border border-zinc-800 bg-black p-[1px]">
+                                            <div
+                                                className={`h-full ${metrics.bg} transition-all duration-700 ease-out`}
+                                                style={{
+                                                    width: `${Math.min(accuracy, 100)}%`,
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })
+                    ) : (
+                        // --- EMPTY STATE ---
+                        <div className="col-span-full border-2 border-zinc-800 border-dashed bg-zinc-900/20 py-20 text-center">
+                            <div className="mb-4 flex justify-center">
+                                <AlertTriangle
+                                    className="text-zinc-600"
+                                    size={48}
+                                />
+                            </div>
+                            <h3 className="font-bold text-xl text-zinc-400 uppercase tracking-widest">
+                                No Metrics Found
+                            </h3>
+                            <p className="mt-2 text-zinc-600">
+                                Begin simulation to generate stats.
+                            </p>
+                        </div>
+                    )}
+                </div>
+            </div>
         </div>
     );
 }

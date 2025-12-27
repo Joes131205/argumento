@@ -128,7 +128,6 @@ export const completeShift = async (req: Request, res: Response) => {
     try {
         const userId = req.users;
         const { history } = req.body;
-        console.log(history);
 
         const user: IUsers | null = await User.findById(userId);
 

@@ -16,11 +16,9 @@ export const Route = createFileRoute("/history/$id")({
 
 function RouteComponent() {
     const data = useLoaderData({ from: "/history/$id" });
-    console.log(data);
     return (
         <div className="flex min-h-screen flex-col items-center gap-5 p-6">
             <BackButton />
-
             <div className="relative w-full max-w-3xl overflow-hidden rounded-xl border border-green-900/50 bg-black shadow-[0_0_40px_rgba(0,0,0,0.5)]">
                 <div className="p-8 md:p-12">
                     <div className="mb-8 flex flex-wrap gap-4 border-zinc-900 border-b pb-6 font-mono text-green-700 text-xs uppercase tracking-wider">
