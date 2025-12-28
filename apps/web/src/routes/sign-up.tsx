@@ -1,25 +1,27 @@
 import { useForm } from "@tanstack/react-form";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { Eye, EyeOff } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
-import { register } from "@/apis/auth";
+import { getMe, register } from "@/apis/auth";
 import useUser from "@/hooks/useUser";
+import { motion } from "motion/react";
 
 export const Route = createFileRoute("/sign-up")({
+    beforeLoad: async () => {
+        const user = await getMe();
+        if (user) {
+            throw redirect({
+                to: "/dashboard",
+            });
+        }
+    },
     component: RouteComponent,
 });
 
 function RouteComponent() {
-    const { user, invalidateUser } = useUser();
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        if (user) {
-            navigate({ to: "/" });
-        }
-    }, [user, navigate]);
+    const { invalidateUser } = useUser();
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmationPassword, setShowConfirmationPassword] =
@@ -72,7 +74,12 @@ function RouteComponent() {
     return (
         <div className="flex min-h-screen flex-col items-center justify-center bg-zinc-950 p-6 font-mono text-zinc-300">
             {/* Main Container */}
-            <div className="w-full max-w-lg border-5 border-green-500 p-5">
+            <motion.div
+                initial={{ y: 5, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.2 }}
+                className="w-full max-w-lg border-5 border-green-500 p-5"
+            >
                 {/* Header Section */}
                 <div className="mb-8">
                     <h1 className="font-bold text-3xl text-white tracking-tight">
@@ -244,7 +251,7 @@ function RouteComponent() {
                         </div>
                     </div>
                 </form>
-            </div>
+            </motion.div>
         </div>
     );
 }

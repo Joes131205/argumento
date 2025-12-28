@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AlertTriangle, Crosshair, Target } from "lucide-react";
-import BackButton from "@/components/BackButton";
 import useUser from "@/hooks/useUser";
 import { requireAuth } from "@/utils/requireAuth";
 
@@ -54,7 +53,6 @@ function RouteComponent() {
             <div className="mx-auto max-w-6xl space-y-8">
                 {/* --- HEADER --- */}
                 <div className="flex flex-col gap-4">
-                    <BackButton />
                     <div className="mt-4 border-zinc-800 border-b pb-6">
                         <h1 className="font-black text-4xl text-white uppercase tracking-tight md:text-5xl">
                             Skill Radar

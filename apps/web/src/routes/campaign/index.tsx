@@ -1,7 +1,6 @@
 import { createFileRoute, Link, useLoaderData } from "@tanstack/react-router";
 import { CheckCircle, Circle, Lock } from "lucide-react";
 import { getCampaign } from "@/apis/campaign";
-import BackButton from "@/components/BackButton";
 import useUser from "@/hooks/useUser";
 import { requireAuth } from "@/utils/requireAuth";
 import type { ICampaign, ICampaignLevel } from "@/types";
@@ -22,13 +21,9 @@ function RouteComponent() {
     return (
         <div className="relative flex min-h-screen flex-col overflow-x-hidden bg-zinc-950 font-sans text-green-500">
             <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col gap-2 p-6">
-                <div className="flex items-center gap-4">
-                    <BackButton />
-                </div>
-
                 <div className="mb-12 flex flex-col justify-between gap-4 border-green-900/50 border-b pb-6 md:flex-row md:items-end">
                     <div>
-                        <h1 className="font-black text-4xl text-shadow-green text-white uppercase tracking-tighter md:text-5xl">
+                        <h1 className="font-black text-4xl text-white uppercase tracking-tight md:text-5xl">
                             Campaign
                         </h1>
                         <p className="mt-2 max-w-xl font-mono text-gray-500 text-sm">
@@ -90,7 +85,7 @@ function RouteComponent() {
                             >
                                 <div className="border-green-900/50 border-b bg-green-950/10 p-6">
                                     <div className="mb-3 flex items-start justify-between">
-                                        <span className="font-mono text-gray-700 text-xs uppercase tracking-widest">
+                                        <span className="font-mono text-gray-400 text-xs uppercase tracking-widest">
                                             {campaignId
                                                 .replace("_", " ")
                                                 .toUpperCase()}
@@ -104,7 +99,7 @@ function RouteComponent() {
                                     <h3 className="mb-2 font-black text-3xl text-white uppercase leading-none">
                                         {typedCampaign?.title}
                                     </h3>
-                                    <p className="font-mono text-gray-600/80 text-sm leading-relaxed">
+                                    <p className="font-mono text-gray-400 text-sm leading-relaxed">
                                         {typedCampaign?.description}
                                     </p>
                                 </div>

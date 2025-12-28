@@ -1,7 +1,6 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { AlertTriangle, CheckCircle2, XCircle } from "lucide-react";
 import { healthCheck } from "@/apis";
-import BackButton from "@/components/BackButton";
 
 export const Route = createFileRoute("/status")({
     component: RouteComponent,
@@ -83,11 +82,6 @@ function RouteComponent() {
                     <p className="mx-auto mb-8 max-w-xs text-sm text-zinc-400">
                         {config.desc}
                     </p>
-                </div>
-
-                {/* Footer Controls */}
-                <div className="mt-8 flex justify-center">
-                    <BackButton />
                 </div>
             </div>
         </div>

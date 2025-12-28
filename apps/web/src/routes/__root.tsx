@@ -9,6 +9,7 @@ import useTheme from "@/hooks/useTheme";
 import { Toaster } from "sonner";
 import { NotFoundComponent } from "@/components/NotFoundComponent";
 import { ErrorPage } from "@/components/ErrorPage";
+import { Navbar } from "@/components/NavBar";
 
 export const Route = createRootRouteWithContext()({
     component: RootComponent,
@@ -36,19 +37,20 @@ export const Route = createRootRouteWithContext()({
 function RootComponent() {
     const { theme } = useTheme();
     return (
-        <>
+        <div
+            className={`min-h-screen min-w-screen bg-zinc-950 font-mono text-green-500 transition-colors duration-300 ${
+                theme === "dark" ? "dark" : ""
+            } bg-background text-foreground`}
+        >
             <HeadContent />
-            <div
-                className={`min-h-screen min-w-screen bg-zinc-950 font-mono text-green-500 transition-colors duration-300 ${
-                    theme === "dark" ? "dark" : ""
-                } bg-background text-foreground`}
-            >
-                <Outlet />
+            <div className="mb-15">
+                <Navbar />
             </div>
+            <Outlet />
             <Toaster
                 position="bottom-right"
                 theme={theme as "dark" | "light" | "system"}
             />
-        </>
+        </div>
     );
 }

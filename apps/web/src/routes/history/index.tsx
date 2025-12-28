@@ -6,7 +6,6 @@ import {
     FileText,
     XCircle,
 } from "lucide-react";
-import BackButton from "@/components/BackButton";
 import useUser from "@/hooks/useUser";
 import type { IPostHistory } from "@/types";
 import { requireAuth } from "@/utils/requireAuth";
@@ -21,13 +20,12 @@ function RouteComponent() {
 
     return (
         <div className="min-h-screen bg-zinc-950 p-6 font-mono text-zinc-300 lg:p-12">
-            <div className="mx-auto max-w-4xl space-y-8">
+            <div className="mx-auto max-w-6xl space-y-8">
                 {/* --- HEADER --- */}
                 <div className="flex flex-col gap-4">
-                    <BackButton />
                     <div className="mt-4 flex flex-col items-end justify-between gap-4 border-zinc-800 border-b pb-6 md:flex-row">
                         <div>
-                            <h1 className="font-black text-4xl text-white uppercase tracking-tight">
+                            <h1 className="font-black text-4xl text-white uppercase tracking-tight md:text-5xl">
                                 Processed Logs
                             </h1>
                             <p className="mt-1 text-sm text-zinc-500">

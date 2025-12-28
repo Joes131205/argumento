@@ -1,5 +1,4 @@
 import { AlertTriangle, Lock, Play } from "lucide-react";
-import BackButton from "@/components/BackButton";
 import { content_types } from "@/utils/content_types";
 import type { ICampaignProgress, IUser } from "@/types";
 
@@ -41,8 +40,6 @@ export const DailySetup = ({
     return (
         <div className="relative flex min-h-screen flex-col overflow-x-hidden bg-zinc-950 font-mono text-green-500">
             <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col gap-2 p-6">
-                <BackButton />
-
                 {/* Header */}
                 <div className="mb-10 border-green-950 border-b pb-6">
                     <h1 className="font-black text-4xl text-white uppercase tracking-tighter md:text-5xl">

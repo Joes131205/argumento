@@ -18,7 +18,7 @@ export const Route = createFileRoute("/sign-in")({
         const user = await getMe();
         if (user) {
             throw redirect({
-                to: "/",
+                to: "/dashboard",
             });
         }
     },
@@ -65,7 +65,7 @@ function RouteComponent() {
                     const token = response.token;
                     localStorage.setItem("token", token);
                     toast.success("Access Granted.");
-                    navigate({ to: search.redirect || "/" });
+                    navigate({ to: search.redirect || "/dashboard" });
                     invalidateUser();
                 } else {
                     toast.error("Access Denied: Invalid credentials.");
