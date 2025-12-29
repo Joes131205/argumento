@@ -64,14 +64,6 @@ export function Navbar() {
                         <Link to="/" className={linkClass}>
                             Home
                         </Link>
-                        <a
-                            href="https://github.com"
-                            target="_blank"
-                            className={linkClass}
-                            rel="noreferrer noopener"
-                        >
-                            Source
-                        </a>
                     </div>
                 )}
 
