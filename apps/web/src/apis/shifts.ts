@@ -1,24 +1,30 @@
 import type { IPostVerdict } from "@/types";
-import { instance } from "@/utils/api";
+import { getApiErrorMessage, instance } from "@/utils/api";
 
 export const fetchPost = async (postLength: number) => {
     try {
         const res = await instance.post("/shifts", { postLength });
-        console.log(res);
+        if (!res.data.success) {
+            throw new Error(res.data.message || "Failed to fetch shifts");
+        }
         return res.data.data;
     } catch (error) {
-        console.log(error);
-        return "SERVER ERROR";
+        const message = getApiErrorMessage(error, "Failed to fetch shifts");
+        console.error(message, error);
+        throw new Error(message);
     }
 };
 
 export const completeShift = async (history: IPostVerdict[]) => {
     try {
         const res = await instance.put("/shifts/complete", { history });
-        console.log(res);
+        if (!res.data.success) {
+            throw new Error(res.data.message || "Failed to complete shift");
+        }
     } catch (error) {
-        console.log(error);
-        return "SERVER ERROR";
+        const message = getApiErrorMessage(error, "Failed to complete shift");
+        console.error(message, error);
+        throw new Error(message);
     }
 };
 
@@ -31,9 +37,13 @@ export const generateDailyShift = async (
             postLength,
             types,
         });
+        if (!res.data.success) {
+            throw new Error(res.data.message || "Failed to generate shift");
+        }
         return res.data.posts;
     } catch (error) {
-        console.log(error);
-        return "SERVER ERROR";
+        const message = getApiErrorMessage(error, "Failed to generate shift");
+        console.error(message, error);
+        throw new Error(message);
     }
 };

@@ -72,15 +72,13 @@ function RouteComponent() {
     });
 
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-zinc-950 p-6 font-mono text-zinc-300">
-            {/* Main Container */}
+        <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center bg-zinc-950 p-6 font-mono text-zinc-300">
             <motion.div
                 initial={{ y: 5, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.2 }}
                 className="w-full max-w-lg border-5 border-green-500 p-5"
             >
-                {/* Header Section */}
                 <div className="mb-8">
                     <h1 className="font-bold text-3xl text-white tracking-tight">
                         Create Account
@@ -90,7 +88,6 @@ function RouteComponent() {
                     </p>
                 </div>
 
-                {/* Form Section */}
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
@@ -99,7 +96,6 @@ function RouteComponent() {
                     }}
                     className="flex flex-col gap-5"
                 >
-                    {/* USERNAME */}
                     <form.Field name="username">
                         {(field) => (
                             <div className="flex flex-col gap-1.5">
@@ -127,7 +123,6 @@ function RouteComponent() {
                         )}
                     </form.Field>
 
-                    {/* PASSWORD */}
                     <form.Field name="password">
                         {(field) => (
                             <div className="flex flex-col gap-1.5">
@@ -220,7 +215,6 @@ function RouteComponent() {
                         )}
                     </form.Field>
 
-                    {/* ACTIONS */}
                     <div className="mt-4 space-y-4">
                         <form.Subscribe
                             selector={(state) => [

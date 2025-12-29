@@ -2,6 +2,7 @@ import { createFileRoute, Link, useLoaderData } from "@tanstack/react-router";
 import { CheckCircle, Circle, Lock } from "lucide-react";
 import { getCampaign } from "@/apis/campaign";
 import useUser from "@/hooks/useUser";
+import { getApiErrorMessage } from "@/utils/api";
 import { requireAuth } from "@/utils/requireAuth";
 import type { ICampaign, ICampaignLevel } from "@/types";
 
@@ -9,8 +10,16 @@ export const Route = createFileRoute("/campaign/")({
     beforeLoad: requireAuth,
     component: RouteComponent,
     loader: async () => {
-        const data = await getCampaign();
-        return data;
+        try {
+            const data = await getCampaign();
+            return data;
+        } catch (error) {
+            const message = getApiErrorMessage(
+                error,
+                "Failed to load campaign"
+            );
+            throw new Error(message);
+        }
     },
 });
 
@@ -19,7 +28,7 @@ function RouteComponent() {
     const { user } = useUser();
 
     return (
-        <div className="relative flex min-h-screen flex-col overflow-x-hidden bg-zinc-950 font-sans text-green-500">
+        <div className="relative flex min-h-[calc(100vh-4rem)] flex-col overflow-x-hidden bg-zinc-950 font-sans text-green-500">
             <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col gap-2 p-6">
                 <div className="mb-12 flex flex-col justify-between gap-4 border-green-900/50 border-b pb-6 md:flex-row md:items-end">
                     <div>
@@ -104,7 +113,6 @@ function RouteComponent() {
                                     </p>
                                 </div>
 
-                                {/* Level List */}
                                 <div className="flex-1 space-y-2 bg-zinc-900/20 p-4">
                                     {Object.entries(typedCampaign?.levels).map(
                                         ([levelId, level]: [

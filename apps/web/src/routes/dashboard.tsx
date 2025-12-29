@@ -10,6 +10,23 @@ import {
 import { useEffect, useState } from "react";
 import useUser from "@/hooks/useUser";
 import { requireAuth } from "@/utils/requireAuth";
+import { motion } from "motion/react";
+
+const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1,
+            delayChildren: 0.1,
+        },
+    },
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, y: -20 },
+    show: { opacity: 1, y: 0 },
+};
 
 export const Route = createFileRoute("/dashboard")({
     beforeLoad: requireAuth,
@@ -51,8 +68,12 @@ function HomeComponent() {
 
     return (
         <div className="min-h-screen max-w-10xl bg-zinc-950 p-6 font-mono text-zinc-300 lg:p-12">
-            <div className="mx-auto max-w-6xl space-y-8">
-                {/* --- HEADER SECTION --- */}
+            <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="show"
+                className="mx-auto max-w-6xl space-y-8"
+            >
                 <div className="flex flex-col items-start justify-between gap-4 border-green-500 border-b pb-6 md:flex-row md:items-end">
                     <div>
                         <div className="mb-2 flex items-center gap-2 text-green-600">
@@ -75,10 +96,11 @@ function HomeComponent() {
                     </div>
                 </div>
 
-                {/* --- MAIN STATS GRID --- */}
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-                    {/* 1. EXPERIENCE CARD */}
-                    <div className="flex flex-col justify-between border border-green-500 bg-zinc-950/50 p-6 transition-colors hover:border-green-700">
+                    <motion.div
+                        variants={itemVariants}
+                        className="flex flex-col justify-between border border-green-500 bg-zinc-950/50 p-6 transition-colors hover:border-green-700"
+                    >
                         <div className="mb-4 flex items-start justify-between">
                             <span className="font-bold text-xs text-zinc-500 uppercase tracking-wider">
                                 Total Exp
@@ -93,10 +115,12 @@ function HomeComponent() {
                                 XP Points Accumulated
                             </span>
                         </div>
-                    </div>
+                    </motion.div>
 
-                    {/* 2. STREAK CARD */}
-                    <div className="flex flex-col justify-between border border-green-500 bg-zinc-950/50 p-6 transition-colors hover:border-green-700">
+                    <motion.div
+                        variants={itemVariants}
+                        className="flex flex-col justify-between border border-green-500 bg-zinc-950/50 p-6 transition-colors hover:border-green-700"
+                    >
                         <div className="mb-4 flex items-start justify-between">
                             <span className="font-bold text-xs text-zinc-500 uppercase tracking-wider">
                                 Streak
@@ -121,10 +145,12 @@ function HomeComponent() {
                                 </span>
                             </div>
                         </div>
-                    </div>
+                    </motion.div>
 
-                    {/* 3. PERFORMANCE CARD */}
-                    <div className="flex flex-col justify-between border border-green-500 bg-zinc-950/50 p-6 transition-colors hover:border-green-700">
+                    <motion.div
+                        variants={itemVariants}
+                        className="flex flex-col justify-between border border-green-500 bg-zinc-950/50 p-6 transition-colors hover:border-green-700"
+                    >
                         <div className="mb-4 flex items-start justify-between">
                             <span className="font-bold text-xs text-zinc-500 uppercase tracking-wider">
                                 Performance
@@ -147,10 +173,10 @@ function HomeComponent() {
                                 </span>
                             </div>
                         </div>
-                    </div>
+                    </motion.div>
 
-                    {/* 4. ACTIVE ASSIGNMENT (CTA) */}
-                    <div
+                    <motion.div
+                        variants={itemVariants}
                         className={`flex flex-col justify-between border-l-4 p-6 transition-all ${
                             isShiftDone
                                 ? "border-zinc-700 border-l-zinc-500 bg-zinc-950/30"
@@ -199,9 +225,9 @@ function HomeComponent() {
                                 </Link>
                             </div>
                         )}
-                    </div>
+                    </motion.div>
                 </div>
-            </div>
+            </motion.div>
         </div>
     );
 }

@@ -7,6 +7,7 @@ import { completeShift, generateDailyShift } from "@/apis/shifts";
 import { DailySetup } from "@/components/DailySetup";
 import { GameState } from "@/components/GameState";
 import useUser from "@/hooks/useUser";
+import { getApiErrorMessage } from "@/utils/api";
 import { requireAuth } from "@/utils/requireAuth";
 import Manual from "@/components/Manual";
 import type { ICampaignProgress, IPost, IPostLog, IPostVerdict } from "@/types";
@@ -88,7 +89,6 @@ function RouteComponent() {
                 return;
             }
             const posts = await generateDailyShift(postAmount, selectedTopics);
-            if (posts === "SERVER ERROR") throw new Error("Server Error");
 
             const postData = posts?.data || posts;
             const newGame = { currPosts: postData, log: [] };
@@ -99,8 +99,11 @@ function RouteComponent() {
             setIndex(0);
             setIsPlayedBefore(true);
         } catch (error) {
-            console.log(error);
-            toast.error("Failed to generate shift");
+            const message = getApiErrorMessage(
+                error,
+                "Failed to generate shift"
+            );
+            toast.error(message);
         } finally {
             setIsSubmitting(false);
         }
@@ -135,10 +138,14 @@ function RouteComponent() {
                 is_correct: aiData.is_correct,
                 message: aiData.feedback_message,
             });
-        } catch {
+        } catch (error) {
+            const message = getApiErrorMessage(
+                error,
+                "AI Offline. Points awarded automatically."
+            );
             setVerdict({
                 is_correct: true,
-                message: "AI Offline. Points awarded automatically.",
+                message,
             });
         } finally {
             setIsAnalyzing(false);
@@ -177,8 +184,11 @@ function RouteComponent() {
             toast.success("Shift Complete!");
             router.navigate({ to: "/" });
         } catch (error) {
-            console.log(error);
-            toast.error("Failed to save progress");
+            const message = getApiErrorMessage(
+                error,
+                "Failed to save progress"
+            );
+            toast.error(message);
         } finally {
             setIsSaving(false);
         }
@@ -186,7 +196,7 @@ function RouteComponent() {
 
     if (isLoadingStorage)
         return (
-            <div className="flex h-screen items-center justify-center bg-black text-green-500">
+            <div className="flex min-h-[calc(100vh-4rem)] h-screen items-center justify-center bg-black text-green-500">
                 Loading...
             </div>
         );
@@ -207,7 +217,7 @@ function RouteComponent() {
 
     if (!currentPost) {
         return (
-            <div className="flex h-screen flex-col items-center justify-center gap-6 bg-zinc-950">
+            <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-6 bg-zinc-950">
                 <h2 className="font-black text-4xl uppercase">
                     Shift Complete
                 </h2>

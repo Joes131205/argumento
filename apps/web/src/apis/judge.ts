@@ -1,4 +1,4 @@
-import { instance } from "@/utils/api";
+import { getApiErrorMessage, instance } from "@/utils/api";
 
 export const judge = async (
     headline: string,
@@ -13,10 +13,13 @@ export const judge = async (
             slop_reasons,
             user_reason,
         });
-        console.log(res);
+        if (!res.data.success) {
+            throw new Error(res.data.message || "Failed to judge content");
+        }
         return res.data;
     } catch (error) {
-        console.log(error);
-        return "SERVER ERROR";
+        const message = getApiErrorMessage(error, "Failed to judge content");
+        console.error(message, error);
+        throw new Error(message);
     }
 };

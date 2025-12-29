@@ -1,4 +1,4 @@
-import { instance } from "@/utils/api";
+import { getApiErrorMessage, instance } from "@/utils/api";
 
 export const healthCheck = async () => {
     try {
@@ -8,7 +8,8 @@ export const healthCheck = async () => {
         }
         return "NOT OK";
     } catch (error) {
-        console.log(error);
-        return "SERVER ERROR";
+        const message = getApiErrorMessage(error, "Health check failed");
+        console.error(message, error);
+        throw new Error(message);
     }
 };

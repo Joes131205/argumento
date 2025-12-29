@@ -21,7 +21,6 @@ function RouteComponent() {
     return (
         <div className="min-h-screen bg-zinc-950 p-6 font-mono text-zinc-300 lg:p-12">
             <div className="mx-auto max-w-6xl space-y-8">
-                {/* --- HEADER --- */}
                 <div className="flex flex-col gap-4">
                     <div className="mt-4 flex flex-col items-end justify-between gap-4 border-zinc-800 border-b pb-6 md:flex-row">
                         <div>
@@ -35,7 +34,6 @@ function RouteComponent() {
                     </div>
                 </div>
 
-                {/* --- LOG LIST --- */}
                 <div className="space-y-3">
                     {user?.postsHistory?.length === 0 ? (
                         <div className="rounded-lg border-2 border-zinc-800 border-dashed bg-zinc-900/20 py-20 text-center">
@@ -50,7 +48,6 @@ function RouteComponent() {
                     ) : (
                         user?.postsHistory?.map(
                             (entry: IPostHistory, index: number) => {
-                                // Guard clause for missing post data
                                 if (!entry.post) return null;
 
                                 const isCorrect = entry.is_correct;
@@ -64,12 +61,10 @@ function RouteComponent() {
                                         className="group block"
                                     >
                                         <div className="relative flex flex-col gap-4 overflow-hidden border border-zinc-800 bg-zinc-900/40 p-4 transition-all hover:border-green-600/50 hover:bg-zinc-900 md:flex-row md:items-center md:p-5">
-                                            {/* Status Bar Indicator */}
                                             <div
                                                 className={`absolute top-0 bottom-0 left-0 w-1 ${isCorrect ? "bg-green-600" : "bg-red-600"}`}
                                             />
 
-                                            {/* Icon Status */}
                                             <div className="shrink-0">
                                                 {isCorrect ? (
                                                     <div className="rounded border border-green-900/50 bg-green-900/20 p-2 text-green-500">
@@ -84,7 +79,6 @@ function RouteComponent() {
                                                 )}
                                             </div>
 
-                                            {/* Content Info */}
                                             <div className="min-w-0 flex-1">
                                                 <div className="mb-1.5 flex items-center gap-3">
                                                     <span className="font-bold text-[10px] text-zinc-500 uppercase tracking-wider">
@@ -143,7 +137,6 @@ function RouteComponent() {
                     )}
                 </div>
 
-                {/* Footer Stats */}
                 <div className="flex justify-between border-zinc-800 border-t pt-6 text-xs text-zinc-500 uppercase tracking-widest">
                     <span>Total Logs: {user?.postsHistory?.length || 0}</span>
                 </div>

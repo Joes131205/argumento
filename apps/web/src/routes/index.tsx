@@ -12,14 +12,9 @@ export const Route = createFileRoute("/")({
 
 function RouteComponent() {
     return (
-        <div className="min-h-screen overflow-x-hidden bg-zinc-950 font-mono text-zinc-300 selection:bg-green-900 selection:text-green-400">
-            {/* --- HERO SECTION --- */}
+        <div className="min-h-[calc(100vh-4rem)] overflow-x-hidden bg-zinc-950 font-mono text-zinc-300 selection:bg-green-900 selection:text-green-400">
             <section className="relative border-zinc-800 border-b px-6 pt-32 pb-20 lg:pt-48 lg:pb-32">
-                {/* Grid Background */}
-                <div className="pointer-events-none absolute inset-0 bg-[length:40px_40px] bg-[linear-gradient(rgba(34,197,94,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(34,197,94,0.03)_1px,transparent_1px)]" />
-
                 <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2">
-                    {/* Left: Copy */}
                     <div className="space-y-8">
                         <h1 className="font-black text-5xl text-white uppercase leading-[0.9] tracking-tighter lg:text-7xl">
                             Increase Your
@@ -47,21 +42,17 @@ function RouteComponent() {
                         </div>
                     </div>
 
-                    {/* Right: Visual (Terminal Window) */}
                     <div className="space-y-4 p-6">
-                        {/* Status Bar */}
                         <div className="flex items-center justify-between text-xs">
                             <span className="text-zinc-500">POST #1</span>
                         </div>
 
-                        {/* Mock Post */}
                         <div className="space-y-2 border border-zinc-800 bg-zinc-900/30 p-4">
                             <div className="mb-4 h-2 w-20 rounded bg-zinc-800" />
                             <div className="h-4 w-3/4 rounded bg-white/10" />
                             <div className="h-4 w-1/2 rounded bg-white/10" />
                         </div>
 
-                        {/* Analysis Result */}
                         <div className="flex items-center gap-4 border border-red-900/30 bg-red-900/10 p-3">
                             <div className="rounded bg-red-500/20 p-2 text-red-500">
                                 <Shield size={20} />
@@ -79,7 +70,6 @@ function RouteComponent() {
                 </div>
             </section>
 
-            {/* --- FEATURES GRID --- */}
             <section className="bg-black px-6 py-24">
                 <div className="mx-auto max-w-7xl">
                     <div className="mb-16 text-center">
@@ -90,7 +80,6 @@ function RouteComponent() {
                     </div>
 
                     <div className="grid gap-8 md:grid-cols-3">
-                        {/* Feature 1 */}
                         <div className="group border border-zinc-800 bg-zinc-900/20 p-8 transition-colors hover:border-green-600">
                             <div className="mb-6 inline-flex border border-zinc-800 bg-zinc-900 p-3 text-green-500 transition-colors group-hover:bg-green-600 group-hover:text-white">
                                 <ShieldCheck size={32} />
@@ -105,7 +94,6 @@ function RouteComponent() {
                             </p>
                         </div>
 
-                        {/* Feature 2 */}
                         <div className="group border border-zinc-800 bg-zinc-900/20 p-8 transition-colors hover:border-green-600">
                             <div className="mb-6 inline-flex border border-zinc-800 bg-zinc-900 p-3 text-green-500 transition-colors group-hover:bg-green-600 group-hover:text-white">
                                 <BrainCircuit size={32} />
@@ -120,7 +108,6 @@ function RouteComponent() {
                             </p>
                         </div>
 
-                        {/* Feature 3 */}
                         <div className="group border border-zinc-800 bg-zinc-900/20 p-8 transition-colors hover:border-green-600">
                             <div className="mb-6 inline-flex border border-zinc-800 bg-zinc-900 p-3 text-green-500 transition-colors group-hover:bg-green-600 group-hover:text-white">
                                 <Target size={32} />

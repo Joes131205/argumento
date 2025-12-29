@@ -5,8 +5,8 @@
     "": {
       "name": "si-peduli",
       "devDependencies": {
-        "@biomejs/biome": "^2.2.0",
-        "turbo": "^2.6.3",
+        "@biomejs/biome": "^2.3.10",
+        "turbo": "^2.7.2",
       },
     },
     "apps/server": {

@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { completeCampaignLevel, getLevel } from "@/apis/campaign";
 import { GameState } from "@/components/GameState";
 import useUser from "@/hooks/useUser";
+import { getApiErrorMessage } from "@/utils/api";
 import { requireAuth } from "@/utils/requireAuth";
 import type { IPost } from "@/types";
 
@@ -17,9 +18,16 @@ export const Route = createFileRoute("/campaign/$level/$id")({
 
     component: RouteComponent,
     loader: async ({ params }) => {
-        const data = await getLevel(params.level, params.id);
-        console.log(data);
-        return data;
+        try {
+            const data = await getLevel(params.level, params.id);
+            return data;
+        } catch (error) {
+            const message = getApiErrorMessage(
+                error,
+                "Failed to load campaign level"
+            );
+            throw new Error(message);
+        }
     },
 });
 
@@ -82,15 +90,18 @@ function RouteComponent() {
             toast.success("Level Complete!");
             router.navigate({ to: "/campaign" });
         } catch (error) {
-            console.log(error);
-            toast.error("Failed to save progress.");
+            const message = getApiErrorMessage(
+                error,
+                "Failed to save progress"
+            );
+            toast.error(message);
         } finally {
             setIsSaving(false);
         }
     };
     if (!currentPost) {
         return (
-            <div className="flex h-screen flex-col items-center justify-center gap-8 bg-zinc-950 font-mono text-green-500">
+            <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-8 bg-zinc-950 font-mono text-green-500">
                 <div className="max-w-md border-2 border-green-500 bg-black p-10 text-center shadow-[0_0_50px_rgba(22,163,74,0.2)]">
                     <h2 className="mb-2 font-black text-4xl text-white uppercase">
                         Mission Complete
@@ -111,7 +122,7 @@ function RouteComponent() {
         );
     }
     return (
-        <div className="flex h-screen items-center justify-center gap-6 p-5">
+        <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center gap-6 p-5">
             <div className="flex h-full flex-1 flex-col items-center justify-center">
                 <GameState
                     currentPost={currentPost}

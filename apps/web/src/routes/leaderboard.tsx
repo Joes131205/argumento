@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AlertTriangle, Crown, Filter, Loader2, Medal } from "lucide-react";
+import { Crown, Filter, Loader2, Medal } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getLeaderboard } from "@/apis/leaderboard";
 import useUser from "@/hooks/useUser";
+import { getApiErrorMessage } from "@/utils/api";
 
 interface LeaderboardEntry {
     _id: string;
@@ -44,13 +45,13 @@ function RouteComponent() {
             setError(undefined);
             try {
                 const response = await getLeaderboard(type);
-                if (response === "SERVER ERROR")
-                    throw new Error("Server Error");
                 setData(response);
             } catch (error) {
-                setError(
-                    error instanceof Error ? error : new Error(String(error))
+                const message = getApiErrorMessage(
+                    error,
+                    "Failed to fetch leaderboard"
                 );
+                setError(new Error(message));
             } finally {
                 setIsLoading(false);
             }
@@ -78,7 +79,7 @@ function RouteComponent() {
 
     if (isLoading && !data) {
         return (
-            <div className="flex h-screen flex-col items-center justify-center gap-4 bg-zinc-950 font-mono text-green-500">
+            <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-4 bg-zinc-950 font-mono text-green-500">
                 <Loader2 className="animate-spin" size={40} />
                 <p className="animate-pulse text-sm uppercase tracking-widest">
                     Fetching Global Rankings...
@@ -87,19 +88,9 @@ function RouteComponent() {
         );
     }
 
-    if (error) {
-        return (
-            <div className="flex h-screen flex-col items-center justify-center gap-4 bg-zinc-950 font-mono text-red-500">
-                <AlertTriangle size={40} />
-                <p>Connection Failure: {error.message}</p>
-            </div>
-        );
-    }
-
     return (
-        <div className="min-h-screen bg-zinc-950 p-6 font-mono text-zinc-300 lg:p-12">
+        <div className="min-h-[calc(100vh-4rem)] bg-zinc-950 p-6 font-mono text-zinc-300 lg:p-12">
             <div className="mx-auto flex max-w-6xl flex-col gap-8">
-                {/* Header */}
                 <div className="flex flex-col gap-4">
                     <div className="mt-4 border-zinc-800 border-b pb-6">
                         <h1 className="font-black text-4xl text-white uppercase tracking-tight md:text-5xl">
@@ -108,7 +99,6 @@ function RouteComponent() {
                     </div>
                 </div>
 
-                {/* Filter / Sort Bar */}
                 <div className="flex flex-col gap-3">
                     <div className="flex items-center gap-2 font-bold text-xs text-zinc-500 uppercase tracking-wider">
                         <Filter size={14} />
@@ -133,16 +123,13 @@ function RouteComponent() {
                     </div>
                 </div>
 
-                {/* Data Table */}
                 <div className="w-full border border-zinc-800 bg-zinc-950/50">
-                    {/* Table Header */}
                     <div className="grid grid-cols-[60px_1fr_120px] gap-4 border-zinc-800 border-b bg-zinc-950 p-4 font-bold text-xs text-zinc-500 uppercase tracking-widest md:grid-cols-[80px_1fr_150px]">
                         <p className="text-center">Rank</p>
                         <p>Username</p>
                         <p className="text-right">Score Value</p>
                     </div>
 
-                    {/* Table Body */}
                     <div className="divide-y divide-zinc-900">
                         {data?.data?.map(
                             (entry: LeaderboardEntry, index: number) => {
@@ -157,12 +144,10 @@ function RouteComponent() {
                                         className={`grid grid-cols-[60px_1fr_120px] items-center gap-4 p-4 transition-all md:grid-cols-[80px_1fr_150px] ${getRowStyle(index, isCurrentUser)}
                                     `}
                                     >
-                                        {/* Rank Column */}
                                         <div className="flex items-center justify-center">
                                             {getRankIcon(index)}
                                         </div>
 
-                                        {/* Username Column */}
                                         <div className="flex items-center gap-3 overflow-hidden">
                                             <span
                                                 className={`truncate font-bold ${isCurrentUser ? "text-green-400" : "text-zinc-300"}`}
@@ -176,7 +161,6 @@ function RouteComponent() {
                                             )}
                                         </div>
 
-                                        {/* Score Column */}
                                         <div className="text-right">
                                             <span className="block font-bold font-mono text-lg text-white">
                                                 {entry[
@@ -195,7 +179,6 @@ function RouteComponent() {
                         )}
                     </div>
 
-                    {/* Empty State */}
                     {(!data?.data || data.data.length === 0) && (
                         <div className="border-zinc-800 border-t p-16 text-center">
                             <p className="text-sm text-zinc-600 uppercase tracking-widest">

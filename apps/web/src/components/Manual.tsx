@@ -10,9 +10,7 @@ const Manual = () => {
 
     return (
         <div>
-            {/* The Main Card Container */}
             <div className="relative flex h-[85vh] w-full max-w-4xl flex-col overflow-hidden rounded-lg border border-zinc-700 bg-zinc-900 shadow-[0_0_30px_rgba(0,255,100,0.1)]">
-                {/* --- HEADER --- */}
                 <div className="flex shrink-0 items-center justify-between border-zinc-700 border-b bg-zinc-950 p-4">
                     <div className="flex flex-col gap-3">
                         <p className="font-bold text-2xl text-white">
@@ -24,7 +22,6 @@ const Manual = () => {
                     </div>
                 </div>
 
-                {/* --- CONTENT AREA --- */}
                 <div className="scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent flex-1 overflow-y-auto p-6">
                     {isOpened ? (
                         <div>

@@ -1,6 +1,7 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { Calendar, FileText, Hash } from "lucide-react";
 import { getPost } from "@/apis/posts";
+import { getApiErrorMessage } from "@/utils/api";
 import { requireAuth } from "@/utils/requireAuth";
 
 export const Route = createFileRoute("/history/$id")({
@@ -8,8 +9,16 @@ export const Route = createFileRoute("/history/$id")({
 
     component: RouteComponent,
     loader: async ({ params }) => {
-        const data = await getPost(params.id);
-        return data;
+        try {
+            const data = await getPost(params.id);
+            return data;
+        } catch (error) {
+            const message = getApiErrorMessage(
+                error,
+                "Failed to load post history"
+            );
+            throw new Error(message);
+        }
     },
 });
 

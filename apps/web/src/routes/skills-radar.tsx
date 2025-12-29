@@ -49,9 +49,8 @@ function RouteComponent() {
     };
 
     return (
-        <div className="min-h-screen bg-zinc-950 p-6 font-mono text-zinc-300 lg:p-12">
+        <div className="min-h-[calc(100vh-4rem)] bg-zinc-950 p-6 font-mono text-zinc-300 lg:p-12">
             <div className="mx-auto max-w-6xl space-y-8">
-                {/* --- HEADER --- */}
                 <div className="flex flex-col gap-4">
                     <div className="mt-4 border-zinc-800 border-b pb-6">
                         <h1 className="font-black text-4xl text-white uppercase tracking-tight md:text-5xl">
@@ -64,7 +63,6 @@ function RouteComponent() {
                     </div>
                 </div>
 
-                {/* --- STATS GRID --- */}
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {user?.stats?.length ? (
                         user.stats.map((item) => {
@@ -82,19 +80,16 @@ function RouteComponent() {
                                         "group relative overflow-hidden border border-zinc-800 bg-zinc-900/50 p-6 transition-all hover:border-zinc-600"
                                     }
                                 >
-                                    {/* Status Bar on Left */}
                                     <div
                                         className={`absolute top-0 bottom-0 left-0 w-1 ${metrics.bg} opacity-50`}
                                     />
 
-                                    {/* Card Header */}
                                     <div className="mb-6 flex items-start justify-between">
                                         <div>
                                             <h3 className="font-bold text-white text-xl capitalize transition-colors group-hover:text-green-400">
                                                 {item.name}
                                             </h3>
                                         </div>
-                                        {/* Grade Badge */}
                                         <div
                                             className={`flex h-10 w-10 items-center justify-center border-2 font-black text-xl ${metrics.border} ${metrics.color} bg-black`}
                                         >
@@ -102,7 +97,6 @@ function RouteComponent() {
                                         </div>
                                     </div>
 
-                                    {/* Data Rows */}
                                     <div className="mb-6 space-y-4">
                                         <div className="flex items-center justify-between border-zinc-800 border-b pb-2 text-sm">
                                             <div className="flex items-center gap-2 text-zinc-500">
@@ -124,7 +118,6 @@ function RouteComponent() {
                                         </div>
                                     </div>
 
-                                    {/* Progress Meter */}
                                     <div>
                                         <div className="mb-2 flex items-end justify-between">
                                             <span
@@ -134,7 +127,6 @@ function RouteComponent() {
                                             </span>
                                         </div>
 
-                                        {/* Technical Progress Bar */}
                                         <div className="h-2 w-full border border-zinc-800 bg-black p-[1px]">
                                             <div
                                                 className={`h-full ${metrics.bg} transition-all duration-700 ease-out`}
@@ -148,7 +140,6 @@ function RouteComponent() {
                             );
                         })
                     ) : (
-                        // --- EMPTY STATE ---
                         <div className="col-span-full border-2 border-zinc-800 border-dashed bg-zinc-900/20 py-20 text-center">
                             <div className="mb-4 flex justify-center">
                                 <AlertTriangle

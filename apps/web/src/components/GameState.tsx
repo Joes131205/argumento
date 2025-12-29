@@ -36,11 +36,9 @@ export const GameState = ({
     };
 
     return (
-        <div className="flex min-h-screen flex-col items-center gap-4 p-3 lg:flex-row">
-            {/* LEFT: THE GAME CARD */}
+        <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center gap-4 p-3 lg:flex-row">
             <div className="flex w-full flex-[2] flex-col justify-center">
                 <div className="relative rounded border-2 border-green-500 bg-zinc-950 p-8 shadow-[0_0_20px_rgba(22,163,74,0.1)]">
-                    {/* Header */}
                     <div className="mb-6 flex items-end justify-between border-b border-b-green-900 pb-4">
                         <div className="flex flex-col">
                             <h2 className="font-bold text-green-500 text-xl uppercase">
@@ -56,7 +54,6 @@ export const GameState = ({
                         </span>
                     </div>
 
-                    {/* Content */}
                     <div className="mb-10">
                         <h3 className="mb-4 font-black text-2xl text-white leading-tight md:text-3xl">
                             {currentPost.headline}
@@ -66,7 +63,6 @@ export const GameState = ({
                         </p>
                     </div>
 
-                    {/* ACTION AREA */}
                     {isResult ? (
                         <div className="fade-in slide-in-from-bottom-2 animate-in border border-zinc-800 bg-zinc-900/80 p-6">
                             <h3

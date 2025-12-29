@@ -1,5 +1,4 @@
-import { instance } from "@/utils/api";
-import type { AxiosError } from "axios";
+import { getApiErrorMessage, instance } from "@/utils/api";
 import { toast } from "sonner";
 
 export const login = async (username: string, password: string) => {
@@ -13,12 +12,9 @@ export const login = async (username: string, password: string) => {
         }
         return data;
     } catch (error: unknown) {
-        const axiosError = error as AxiosError;
-        const message =
-            (axiosError.response?.data as { message?: string })?.message ||
-            "Login failed";
+        const message = getApiErrorMessage(error, "Login failed");
         toast.error(message);
-        throw error;
+        throw new Error(message);
     }
 };
 
@@ -28,14 +24,14 @@ export const register = async (username: string, password: string) => {
             username,
             password,
         });
+        if (!data.success) {
+            throw new Error(data.message || "Registration failed");
+        }
         return data;
     } catch (error) {
-        const axiosError = error as AxiosError;
-        const message =
-            (axiosError.response?.data as { message?: string })?.message ||
-            "Registration failed";
+        const message = getApiErrorMessage(error, "Registration failed");
         toast.error(message);
-        throw error;
+        throw new Error(message);
     }
 };
 
@@ -44,7 +40,8 @@ export const getMe = async () => {
         const { data } = await instance.get("/auth");
         return data.user || null;
     } catch (error) {
-        console.error("Failed to get user:", error);
+        const message = getApiErrorMessage(error, "Failed to get user");
+        console.error(message, error);
         return null;
     }
 };

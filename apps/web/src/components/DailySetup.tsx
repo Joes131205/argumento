@@ -23,7 +23,6 @@ export const DailySetup = ({
     onStart,
     isSubmitting,
 }: DailySetupProps) => {
-    // Helper to toggle topics
     const toggleTopic = (category: string, topic: string) => {
         setSelectedTopics((prev) => {
             const current = prev[category] || [];
@@ -38,9 +37,8 @@ export const DailySetup = ({
     };
 
     return (
-        <div className="relative flex min-h-screen flex-col overflow-x-hidden bg-zinc-950 font-mono text-green-500">
+        <div className="relative flex min-h-[calc(100vh-4rem)] flex-col overflow-x-hidden bg-zinc-950 font-mono text-green-500">
             <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col gap-2 p-6">
-                {/* Header */}
                 <div className="mb-10 border-green-950 border-b pb-6">
                     <h1 className="font-black text-4xl text-white uppercase tracking-tighter md:text-5xl">
                         Custom Simulation
@@ -51,7 +49,6 @@ export const DailySetup = ({
                     </p>
                 </div>
 
-                {/* Topics Grid */}
                 <div className="mb-24 grid grid-cols-1 gap-6 lg:grid-cols-2">
                     {content_types.map((category, i) => {
                         const isCompleted = user?.campaign_progress?.find(
@@ -60,7 +57,6 @@ export const DailySetup = ({
                                 item.isCompleted
                         );
 
-                        // LOCKED STATE
                         if (category.requirements && !isCompleted) {
                             return (
                                 <div
@@ -83,7 +79,6 @@ export const DailySetup = ({
                             );
                         }
 
-                        // UNLOCKED STATE
                         return (
                             <div
                                 key={i.toString()}
@@ -122,7 +117,6 @@ export const DailySetup = ({
                 </div>
             </div>
 
-            {/* Bottom Controls */}
             <div className="fixed right-0 bottom-0 left-0 z-50 border-green-600 border-t-2 bg-black p-4">
                 <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 md:flex-row">
                     <div className="flex items-center gap-2 text-[10px] text-green-800 uppercase tracking-widest md:flex">

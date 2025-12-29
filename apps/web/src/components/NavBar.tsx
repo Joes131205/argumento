@@ -21,14 +21,12 @@ export function Navbar() {
         navigate({ to: "/" });
     };
 
-    // Style for the links
     const linkClass =
         "flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-500 hover:text-green-500 transition-colors [&.active]:text-green-500 [&.active]:border-b-2 [&.active]:border-green-500 py-5";
 
     return (
         <nav className="fixed top-0 left-0 z-50 w-full border-zinc-800 border-b bg-zinc-950/90 backdrop-blur-md">
             <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-                {/* 1. BRAND LOGO */}
                 <Link
                     to="/dashboard"
                     className="group flex items-center gap-2 text-white"
@@ -38,7 +36,6 @@ export function Navbar() {
                     </span>
                 </Link>
 
-                {/* 2. NAVIGATION LINKS (Only if logged in) */}
                 {user ? (
                     <div className="hidden h-full items-center gap-8 md:flex">
                         <Link to="/dashboard" className={linkClass}>
@@ -63,7 +60,6 @@ export function Navbar() {
                         </Link>
                     </div>
                 ) : (
-                    // Public Links (if not logged in)
                     <div className="hidden h-full items-center gap-8 md:flex">
                         <Link to="/" className={linkClass}>
                             Home
@@ -72,14 +68,13 @@ export function Navbar() {
                             href="https://github.com"
                             target="_blank"
                             className={linkClass}
-                            rel="noopener"
+                            rel="noreferrer noopener"
                         >
                             Source
                         </a>
                     </div>
                 )}
 
-                {/* 3. USER ACTIONS */}
                 <div className="flex items-center gap-4">
                     {user ? (
                         <>
@@ -116,7 +111,6 @@ export function Navbar() {
                 </div>
             </div>
 
-            {/* Mobile Menu (Simplified for now - hidden on desktop) */}
             {user && (
                 <div className="flex justify-around overflow-x-auto border-zinc-900 border-t bg-black/50 py-2 md:hidden">
                     <Link
