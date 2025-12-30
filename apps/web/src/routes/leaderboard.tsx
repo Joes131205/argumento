@@ -3,7 +3,6 @@ import { Crown, Filter, Loader2, Medal } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getLeaderboard } from "@/apis/leaderboard";
 import useUser from "@/hooks/useUser";
-import { getApiErrorMessage } from "@/utils/api";
 
 interface LeaderboardEntry {
     _id: string;
@@ -37,21 +36,15 @@ function RouteComponent() {
     const [data, setData] = useState<LeaderboardData | undefined>(undefined);
     const [type, setType] = useState("totalExp");
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<Error | undefined>(undefined);
 
     useEffect(() => {
         const fetchLeaderboard = async () => {
             setIsLoading(true);
-            setError(undefined);
             try {
                 const response = await getLeaderboard(type);
                 setData(response);
             } catch (error) {
-                const message = getApiErrorMessage(
-                    error,
-                    "Failed to fetch leaderboard"
-                );
-                setError(new Error(message));
+                console.log(error);
             } finally {
                 setIsLoading(false);
             }

@@ -75,6 +75,7 @@ export interface IUser {
     _id: string;
     username: string;
     totalExp: number;
+    totalCoins: number;
 
     currentStreak: number;
     bestStreak: number;

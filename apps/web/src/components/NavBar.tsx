@@ -5,6 +5,7 @@ import {
     LogOut,
     Map as MapIcon,
     Radar,
+    ShoppingBag,
     Trophy,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -57,6 +58,10 @@ export function Navbar() {
                         <Link to="/leaderboard" className={linkClass}>
                             <Trophy size={14} />
                             Ranking
+                        </Link>
+                        <Link to="/shop" className={linkClass}>
+                            <ShoppingBag size={14} />
+                            Shop
                         </Link>
                     </div>
                 ) : (

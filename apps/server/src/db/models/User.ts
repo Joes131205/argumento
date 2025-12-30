@@ -9,6 +9,8 @@ export interface IUsers extends Document {
     username: string;
     password: string;
     totalExp: number;
+    totalCoins: number;
+
     currentStreak: number;
     bestStreak: number;
     lastPlayedDate: Date | null;
@@ -56,6 +58,7 @@ const UsersSchema: Schema = new Schema(
         username: { type: String, required: true, unique: true },
         password: { type: String, required: true },
         totalExp: { type: Number, default: 0 },
+        totalCoins: { type: Number, default: 0 },
 
         currentStreak: { type: Number, default: 0 },
         bestStreak: { type: Number, default: 0 },
@@ -76,6 +79,7 @@ const UsersSchema: Schema = new Schema(
                 },
             },
         ],
+
         stats: {
             type: [StatSchema],
         },

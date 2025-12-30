@@ -58,7 +58,7 @@ function RouteComponent() {
                         </h1>
                         <p className="mt-2 max-w-2xl text-sm text-zinc-500">
                             Analyze detection accuracy across different threat
-                            vectors. Identify weak points in your reasoning.
+                            sectors.
                         </p>
                     </div>
                 </div>

@@ -13,6 +13,7 @@ import { Route as StatusRouteImport } from './routes/status'
 import { Route as SkillsRadarRouteImport } from './routes/skills-radar'
 import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as SignInRouteImport } from './routes/sign-in'
+import { Route as ShopRouteImport } from './routes/shop'
 import { Route as LeaderboardRouteImport } from './routes/leaderboard'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
@@ -40,6 +41,11 @@ const SignUpRoute = SignUpRouteImport.update({
 const SignInRoute = SignInRouteImport.update({
   id: '/sign-in',
   path: '/sign-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShopRoute = ShopRouteImport.update({
+  id: '/shop',
+  path: '/shop',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LeaderboardRoute = LeaderboardRouteImport.update({
@@ -87,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/leaderboard': typeof LeaderboardRoute
+  '/shop': typeof ShopRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/skills-radar': typeof SkillsRadarRoute
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/leaderboard': typeof LeaderboardRoute
+  '/shop': typeof ShopRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/skills-radar': typeof SkillsRadarRoute
@@ -116,6 +124,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/leaderboard': typeof LeaderboardRoute
+  '/shop': typeof ShopRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/skills-radar': typeof SkillsRadarRoute
@@ -132,6 +141,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/leaderboard'
+    | '/shop'
     | '/sign-in'
     | '/sign-up'
     | '/skills-radar'
@@ -146,6 +156,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/leaderboard'
+    | '/shop'
     | '/sign-in'
     | '/sign-up'
     | '/skills-radar'
@@ -160,6 +171,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/leaderboard'
+    | '/shop'
     | '/sign-in'
     | '/sign-up'
     | '/skills-radar'
@@ -175,6 +187,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
   LeaderboardRoute: typeof LeaderboardRoute
+  ShopRoute: typeof ShopRoute
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
   SkillsRadarRoute: typeof SkillsRadarRoute
@@ -214,6 +227,13 @@ declare module '@tanstack/react-router' {
       path: '/sign-in'
       fullPath: '/sign-in'
       preLoaderRoute: typeof SignInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shop': {
+      id: '/shop'
+      path: '/shop'
+      fullPath: '/shop'
+      preLoaderRoute: typeof ShopRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/leaderboard': {
@@ -279,6 +299,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
   LeaderboardRoute: LeaderboardRoute,
+  ShopRoute: ShopRoute,
   SignInRoute: SignInRoute,
   SignUpRoute: SignUpRoute,
   SkillsRadarRoute: SkillsRadarRoute,

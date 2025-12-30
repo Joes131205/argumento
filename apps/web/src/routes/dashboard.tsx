@@ -3,6 +3,7 @@ import {
     Activity,
     BarChart3,
     CheckCircle,
+    Coins,
     Flame,
     Play,
     Shield,
@@ -82,7 +83,7 @@ function HomeComponent() {
                                 Logged in as
                             </span>
                         </div>
-                        <h1 className="font-bold text-4xl text-white uppercase tracking-tight">
+                        <h1 className="font-black text-4xl text-white uppercase tracking-tight md:text-5xl">
                             {user?.username}
                         </h1>
                     </div>
@@ -96,7 +97,7 @@ function HomeComponent() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
                     <motion.div
                         variants={itemVariants}
                         className="flex flex-col justify-between border border-green-500 bg-zinc-950/50 p-6 transition-colors hover:border-green-700"
@@ -113,6 +114,26 @@ function HomeComponent() {
                             </span>
                             <span className="text-xs text-zinc-600">
                                 XP Points Accumulated
+                            </span>
+                        </div>
+                    </motion.div>
+
+                    <motion.div
+                        variants={itemVariants}
+                        className="flex flex-col justify-between border border-green-500 bg-zinc-950/50 p-6 transition-colors hover:border-green-700"
+                    >
+                        <div className="mb-4 flex items-start justify-between">
+                            <span className="font-bold text-xs text-zinc-500 uppercase tracking-wider">
+                                Total Coins
+                            </span>
+                            <Coins size={18} className="text-green-600" />
+                        </div>
+                        <div>
+                            <span className="block font-bold text-3xl text-white">
+                                {user?.totalCoins?.toLocaleString() || 0}
+                            </span>
+                            <span className="text-xs text-zinc-600">
+                                Total Coins Accumulated
                             </span>
                         </div>
                     </motion.div>

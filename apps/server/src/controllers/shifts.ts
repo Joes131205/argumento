@@ -41,56 +41,59 @@ export const generateDailyShift = async (req: Request, res: Response) => {
                 message: "Unauthorized",
             });
         }
-
         const prompt = `
-            ROLE: You are an Educational Content Generator for a critical thinking training app.
+    ROLE: You are the 'Simulation Engine' for a cognitive defense game. Your goal is to generate social media posts that look identical to real-world content but contain hidden logical traps.
 
-            TASK: Generate ${postLength} social media posts.
+    TASK: Generate exactly ${postLength} items in a JSON Array.
 
-            // --- CONTEXT ---
-            // 1. THE DICTIONARY (Use this to understand what the fallacies MEAN)
-            REFERENCE_DB: 
-            ${JSON.stringify(content_types)}
+    // --- 1. KNOWLEDGE BASE ---
+    // Use these definitions to construct the logic of the "Slop" posts.
+    REFERENCE_DB: 
+    ${JSON.stringify(content_types)}
 
-            // 2. THE ASSIGNMENT (Only generate the types listed here)
-            INPUT_TARGETS: 
-            ${JSON.stringify(types)}
+    // --- 2. MISSION PARAMETERS ---
+    // Only generate "Slop" using these specific categories.
+    INPUT_TARGETS: 
+    ${JSON.stringify(types)}
 
-            // --- RULES ---
-            DISTRIBUTION:
-            1. **50/50 SPLIT**: Generate a mix of roughly 50% "Safe" and 50% "Slop".
-            2. **SAFE POSTS**: Ignore INPUT_TARGETS. Generate factual, neutral, undeniably true news (e.g. "City library hours", "Weather report").
-            3. **SLOP POSTS**: Generate realistic misinformation.
-            - **STRICT FILTERING**: You must ONLY use types found in the *non-empty* arrays within INPUT_TARGETS.
-            - If a category in INPUT_TARGETS is empty (e.g. "logical_fallacies": []), IGNORE IT.
+    // --- 3. GENERATION RULES ---
+    
+    DISTRIBUTION:
+    - 50% "Safe" (Valid Logic)
+    - 50% "Slop" (Fallacious Logic)
 
-            INSTRUCTIONS FOR "SLOP":
-            1. **SELECT**: Pick a target type from valid INPUT_TARGETS (e.g. "Ad Hominem").
-            2. **STUDY**: Look up that type in REFERENCE_DB. Analyze the official definition and example to understand the specific nuance.
-            3. **WRITE**: Create a *new* post that uses that exact same logical flaw, but on a fresh topic.
-            4. **TAG**: 
-            - "reasons": Must include the target type. You may add 1 extra relevant tag if applicable.
-            - "category": Map the input key to the Schema Key strictly:
-                * "Logical Fallacies" -> "logical_fallacies"
-                * "Cognitive Biases" -> "cognitive_biases"
-                * "Media Manipulation" -> "media_manipulation"
-                * "AI Hallucinations" -> "ai_hallucinations"
+    STYLE GUIDE (Apply to ALL posts):
+    - Tone: Twitter/X style, Reddit comments, or News Headlines.
+    - Format: Short, punchy, opinionated. Use 1-2 emojis occasionally. 
+    - Content: distinct topics per post (Politics, Tech, Health, Pop Culture, Economics).
+    - **CRITICAL**: Do not make "Safe" posts boring. They should be strong opinions backed by valid reasoning, or neutral reporting.
 
-            OUTPUT SCHEMA (JSON Array):
-            [
-            {
-                "headline": "string",
-                "content": "string",
-                "type": "string ('slop' or 'safe')",
-                "reasons": ["string"], 
-                "category": "string (fallacies, biases, media_manipulation, ai_hallucinations, or safe)",
-                "origin": "ai"
-            }
-            ]
-        `;
+    INSTRUCTIONS FOR "SLOP" (The Trap):
+    1. Select a specific flaw from INPUT_TARGETS (e.g., "Strawman").
+    2. Read its definition in REFERENCE_DB to understand the *mechanism* of the flaw.
+    3. Construct a post that *sounds* convincing but relies entirely on that flaw.
+    4. **Subtlety is key.** Do not make it obvious. Make it something a real person would argue in a comment section.
 
+    INSTRUCTIONS FOR "SAFE" (The Control):
+    1. Write a post that makes a claim.
+    2. Ensure the claim is supported by a direct premise or is a verifiable neutral fact.
+    3. It must NOT contain any logical fallacies from the DB.
+
+    // --- 4. OUTPUT FORMAT ---
+    Return ONLY a valid JSON Array. No markdown, no pre-text.
+    
+    Item Schema:
+    {
+        "headline": "A short, catchy title or username (e.g. 'TechGuru99' or 'Breaking News')",
+        "content": "The text of the post (max 280 chars)",
+        "type": "slop" | "safe",
+        "reasons": ["The specific key of the fallacy used (e.g. 'ad_hominem')"] (Empty array if Safe),
+        "category": "The parent key from REFERENCE_DB (e.g. 'logical_fallacies')" (Use 'safe' if Safe),
+        "origin": "ai"
+    }
+`;
         const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash-lite",
+            model: "gemini-2.5-flash",
             contents: prompt,
         });
 
@@ -202,9 +205,10 @@ export const completeShift = async (req: Request, res: Response) => {
 
         user.lastPlayedDate = new Date();
         user.totalExp += expEarned;
-        user.postsProcessed += history.length;
+        user.postsProcessed += sentData.length;
         user.postsCorrect += postCorrect;
-
+        user.totalCoins +=
+            postCorrect * 100 + (sentData.length - postCorrect) * 10;
         user.postsHistory.push(...sentData);
 
         await user.save();
