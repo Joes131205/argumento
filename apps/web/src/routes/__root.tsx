@@ -37,12 +37,7 @@ function RootComponent() {
     const routerState = useRouterState();
     return (
         <div
-            className={`
-                min-h-screen w-full font-mono transition-colors duration-300
-                bg-zinc-950 text-green-500
-                ${theme === "dark" ? "dark" : ""}
-                pt-16 
-            `}
+            className={`min-h-screen w-full bg-zinc-950 font-mono text-green-500 transition-colors duration-300 ${theme === "dark" ? "dark" : ""} pt-16`}
         >
             <HeadContent />
             <Navbar />

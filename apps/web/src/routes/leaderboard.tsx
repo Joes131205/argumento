@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Crown, Filter, Loader2, Medal } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getLeaderboard } from "@/apis/leaderboard";
@@ -132,7 +132,9 @@ function RouteComponent() {
                                 )?.label;
 
                                 return (
-                                    <div
+                                    <Link
+                                        to="/profile/$id"
+                                        params={{ id: entry?._id || "" }}
                                         key={entry._id || index}
                                         className={`grid grid-cols-[60px_1fr_120px] items-center gap-4 p-4 transition-all md:grid-cols-[80px_1fr_150px] ${getRowStyle(index, isCurrentUser)}
                                     `}
@@ -166,7 +168,7 @@ function RouteComponent() {
                                                 </span>
                                             )}
                                         </div>
-                                    </div>
+                                    </Link>
                                 );
                             }
                         )}

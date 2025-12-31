@@ -19,6 +19,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HistoryIndexRouteImport } from './routes/history/index'
 import { Route as CampaignIndexRouteImport } from './routes/campaign/index'
+import { Route as ProfileIdRouteImport } from './routes/profile/$id'
 import { Route as PlayDailyRouteImport } from './routes/play/daily'
 import { Route as HistoryIdRouteImport } from './routes/history/$id'
 import { Route as CampaignLevelIdRouteImport } from './routes/campaign/$level/$id'
@@ -73,6 +74,11 @@ const CampaignIndexRoute = CampaignIndexRouteImport.update({
   path: '/campaign/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileIdRoute = ProfileIdRouteImport.update({
+  id: '/profile/$id',
+  path: '/profile/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PlayDailyRoute = PlayDailyRouteImport.update({
   id: '/play/daily',
   path: '/play/daily',
@@ -100,6 +106,7 @@ export interface FileRoutesByFullPath {
   '/status': typeof StatusRoute
   '/history/$id': typeof HistoryIdRoute
   '/play/daily': typeof PlayDailyRoute
+  '/profile/$id': typeof ProfileIdRoute
   '/campaign': typeof CampaignIndexRoute
   '/history': typeof HistoryIndexRoute
   '/campaign/$level/$id': typeof CampaignLevelIdRoute
@@ -115,6 +122,7 @@ export interface FileRoutesByTo {
   '/status': typeof StatusRoute
   '/history/$id': typeof HistoryIdRoute
   '/play/daily': typeof PlayDailyRoute
+  '/profile/$id': typeof ProfileIdRoute
   '/campaign': typeof CampaignIndexRoute
   '/history': typeof HistoryIndexRoute
   '/campaign/$level/$id': typeof CampaignLevelIdRoute
@@ -131,6 +139,7 @@ export interface FileRoutesById {
   '/status': typeof StatusRoute
   '/history/$id': typeof HistoryIdRoute
   '/play/daily': typeof PlayDailyRoute
+  '/profile/$id': typeof ProfileIdRoute
   '/campaign/': typeof CampaignIndexRoute
   '/history/': typeof HistoryIndexRoute
   '/campaign/$level/$id': typeof CampaignLevelIdRoute
@@ -148,6 +157,7 @@ export interface FileRouteTypes {
     | '/status'
     | '/history/$id'
     | '/play/daily'
+    | '/profile/$id'
     | '/campaign'
     | '/history'
     | '/campaign/$level/$id'
@@ -163,6 +173,7 @@ export interface FileRouteTypes {
     | '/status'
     | '/history/$id'
     | '/play/daily'
+    | '/profile/$id'
     | '/campaign'
     | '/history'
     | '/campaign/$level/$id'
@@ -178,6 +189,7 @@ export interface FileRouteTypes {
     | '/status'
     | '/history/$id'
     | '/play/daily'
+    | '/profile/$id'
     | '/campaign/'
     | '/history/'
     | '/campaign/$level/$id'
@@ -194,6 +206,7 @@ export interface RootRouteChildren {
   StatusRoute: typeof StatusRoute
   HistoryIdRoute: typeof HistoryIdRoute
   PlayDailyRoute: typeof PlayDailyRoute
+  ProfileIdRoute: typeof ProfileIdRoute
   CampaignIndexRoute: typeof CampaignIndexRoute
   HistoryIndexRoute: typeof HistoryIndexRoute
   CampaignLevelIdRoute: typeof CampaignLevelIdRoute
@@ -271,6 +284,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CampaignIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile/$id': {
+      id: '/profile/$id'
+      path: '/profile/$id'
+      fullPath: '/profile/$id'
+      preLoaderRoute: typeof ProfileIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/play/daily': {
       id: '/play/daily'
       path: '/play/daily'
@@ -306,6 +326,7 @@ const rootRouteChildren: RootRouteChildren = {
   StatusRoute: StatusRoute,
   HistoryIdRoute: HistoryIdRoute,
   PlayDailyRoute: PlayDailyRoute,
+  ProfileIdRoute: ProfileIdRoute,
   CampaignIndexRoute: CampaignIndexRoute,
   HistoryIndexRoute: HistoryIndexRoute,
   CampaignLevelIdRoute: CampaignLevelIdRoute,
