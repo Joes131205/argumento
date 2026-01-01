@@ -53,6 +53,19 @@ export interface ICampaign {
 
 export type ICampaignMap = Record<string, ICampaign>;
 
+export interface ShopTheme {
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+    class: string;
+    hex: string;
+}
+
+export interface ShopConfig {
+    themes: ShopTheme[];
+}
+
 // User Model
 export interface IPostHistory {
     is_correct: boolean;
@@ -74,7 +87,9 @@ export interface IStat {
 export interface IUser {
     _id: string;
     username: string;
+    password: string;
     totalExp: number;
+    totalCoins: number;
 
     currentStreak: number;
     bestStreak: number;
@@ -83,10 +98,17 @@ export interface IUser {
     postsCorrect: number;
 
     postsHistory: IPostHistory[];
-
     stats: IStat[];
-
     campaign_progress: ICampaignProgress[];
+
+    activeTheme: string;
+    inventory: {
+        themes: string[];
+        consumables: {
+            itemId: string;
+            amount: number;
+        }[];
+    };
 
     createdAt: Date;
     updatedAt: Date;

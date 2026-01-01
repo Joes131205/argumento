@@ -21,6 +21,15 @@ export interface IUsers extends Document {
     stats: IStat[];
     campaign_progress: ICampaignProgress[];
 
+    activeTheme: string;
+    inventory: {
+        themes: string[];
+        consumables: {
+            itemId: string;
+            amount: number;
+        }[];
+    };
+
     createdAt: Date;
     updatedAt: Date;
 }
@@ -84,6 +93,22 @@ const UsersSchema: Schema = new Schema(
             type: [StatSchema],
         },
         campaign_progress: [CampaignProgressSchema],
+
+        activeTheme: {
+            type: String,
+            default: "theme_green",
+        },
+
+        inventory: {
+            themes: { type: [String], default: ["theme_green"] },
+
+            consumables: [
+                {
+                    itemId: String,
+                    amount: Number,
+                },
+            ],
+        },
     },
     {
         timestamps: true,

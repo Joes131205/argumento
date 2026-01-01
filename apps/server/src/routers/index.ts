@@ -6,6 +6,7 @@ import { leaderboardRouter } from "./leaderboard";
 import { campaignRouter } from "./campaign";
 import { postsRouter } from "./posts";
 import { userRouter } from "./user";
+import { shopsRouter } from "./shop";
 
 export const appRouter = express.Router();
 
@@ -20,5 +21,6 @@ appRouter.use("/leaderboard", leaderboardRouter);
 appRouter.use("/campaign", campaignRouter);
 appRouter.use("/posts", postsRouter);
 appRouter.use("/users", userRouter);
+appRouter.use("/shops", shopsRouter);
 
 export type AppRouter = typeof appRouter;

@@ -74,6 +74,7 @@ export interface IStat {
 export interface IUser {
     _id: string;
     username: string;
+    password: string;
     totalExp: number;
     totalCoins: number;
 
@@ -84,10 +85,17 @@ export interface IUser {
     postsCorrect: number;
 
     postsHistory: IPostHistory[];
-
     stats: IStat[];
-
     campaign_progress: ICampaignProgress[];
+
+    activeTheme: string;
+    inventory: {
+        themes: string[];
+        consumables: {
+            itemId: string;
+            amount: number;
+        }[];
+    };
 
     createdAt: Date;
     updatedAt: Date;
