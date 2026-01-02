@@ -102,18 +102,18 @@ function RouteComponent() {
     if (!currentPost) {
         return (
             <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-8 bg-zinc-950 font-mono text-green-500">
-                <div className="max-w-md border-2 border-green-500 bg-black p-10 text-center shadow-[0_0_50px_rgba(22,163,74,0.2)]">
+                <div className="max-w-md border-2 border-current bg-black p-10 text-center shadow-[0_0_50px_rgba(22,163,74,0.2)]">
                     <h2 className="mb-2 font-black text-4xl text-white uppercase">
                         Mission Complete
                     </h2>
-                    <p className="mb-8 text-green-700">
+                    <p className="mb-8 text-current">
                         Training module processed successfully.
                     </p>
                     <button
                         type="button"
                         onClick={handleCompleteLevel}
                         disabled={isSaving}
-                        className="w-full cursor-pointer bg-green-600 px-8 py-4 font-bold text-black uppercase tracking-widest hover:bg-green-500 disabled:opacity-50"
+                        className="w-full cursor-pointer bg-current/80 px-8 py-4 font-bold text-black uppercase tracking-widest hover:bg-current/90 disabled:opacity-50"
                     >
                         {isSaving ? "Uploading..." : "Confirm"}
                     </button>

@@ -68,22 +68,22 @@ function HomeComponent() {
     const isShiftDone = hasPlayedToday();
 
     return (
-        <div className="min-h-screen max-w-10xl bg-zinc-950 p-6 font-mono text-zinc-300 lg:p-12">
+        <div className="min-h-screen max-w-10xl p-6 font-mono text-zinc-300 lg:p-12">
             <motion.div
                 variants={containerVariants}
                 initial="hidden"
                 animate="show"
                 className="mx-auto max-w-6xl space-y-8"
             >
-                <div className="flex flex-col items-start justify-between gap-4 border-green-500 border-b pb-6 md:flex-row md:items-end">
+                <div className="flex flex-col items-start justify-between gap-4 border-b border-current pb-6 md:flex-row md:items-end">
                     <div>
-                        <div className="mb-2 flex items-center gap-2 text-green-600">
-                            <Shield size={20} />
-                            <span className="font-bold text-xs uppercase tracking-widest">
+                        <div className="mb-2 flex items-center gap-2">
+                            <Shield size={20} className="theme-accent" />
+                            <span className="font-bold text-xs uppercase tracking-widest theme-accent">
                                 Logged in as
                             </span>
                         </div>
-                        <h1 className="font-black text-4xl text-white uppercase tracking-tight md:text-5xl">
+                        <h1 className="font-black text-4xl uppercase tracking-tight text-white md:text-5xl">
                             {user?.username}
                         </h1>
                     </div>
@@ -100,13 +100,13 @@ function HomeComponent() {
                 <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
                     <motion.div
                         variants={itemVariants}
-                        className="flex flex-col justify-between border border-green-500 bg-zinc-950/50 p-6 transition-colors hover:border-green-700"
+                        className="flex flex-col justify-between border theme-accent-border bg-zinc-950/50 p-6 transition-colors"
                     >
                         <div className="mb-4 flex items-start justify-between">
                             <span className="font-bold text-xs text-zinc-500 uppercase tracking-wider">
                                 Total Exp
                             </span>
-                            <Activity size={18} className="text-green-600" />
+                            <Activity size={18} className="theme-accent" />
                         </div>
                         <div>
                             <span className="block font-bold text-3xl text-white">
@@ -120,13 +120,13 @@ function HomeComponent() {
 
                     <motion.div
                         variants={itemVariants}
-                        className="flex flex-col justify-between border border-green-500 bg-zinc-950/50 p-6 transition-colors hover:border-green-700"
+                        className="flex flex-col justify-between border theme-accent-border bg-zinc-950/50 p-6 transition-colors"
                     >
                         <div className="mb-4 flex items-start justify-between">
                             <span className="font-bold text-xs text-zinc-500 uppercase tracking-wider">
                                 Total Coins
                             </span>
-                            <Coins size={18} className="text-green-600" />
+                            <Coins size={18} className="theme-accent" />
                         </div>
                         <div>
                             <span className="block font-bold text-3xl text-white">
@@ -140,13 +140,13 @@ function HomeComponent() {
 
                     <motion.div
                         variants={itemVariants}
-                        className="flex flex-col justify-between border border-green-500 bg-zinc-950/50 p-6 transition-colors hover:border-green-700"
+                        className="flex flex-col justify-between border theme-accent-border bg-zinc-950/50 p-6 transition-color"
                     >
                         <div className="mb-4 flex items-start justify-between">
                             <span className="font-bold text-xs text-zinc-500 uppercase tracking-wider">
                                 Streak
                             </span>
-                            <Flame size={18} className="text-green-600" />
+                            <Flame size={18} className="theme-accent" />
                         </div>
                         <div className="flex gap-8">
                             <div>
@@ -170,13 +170,13 @@ function HomeComponent() {
 
                     <motion.div
                         variants={itemVariants}
-                        className="flex flex-col justify-between border border-green-500 bg-zinc-950/50 p-6 transition-colors hover:border-green-700"
+                        className="flex flex-col justify-between border theme-accent-border bg-zinc-950/50 p-6 transition-colors"
                     >
                         <div className="mb-4 flex items-start justify-between">
                             <span className="font-bold text-xs text-zinc-500 uppercase tracking-wider">
                                 Performance
                             </span>
-                            <BarChart3 size={18} className="text-green-600" />
+                            <BarChart3 size={18} className="theme-accent" />
                         </div>
                         <div className="flex items-end justify-between">
                             <div>
@@ -198,16 +198,16 @@ function HomeComponent() {
 
                     <motion.div
                         variants={itemVariants}
-                        className={`flex flex-col justify-between border-l-4 p-6 transition-all ${
+                        className={`flex flex-col justify-between border-l-4 border theme-accent-border p-6 transition-all ${
                             isShiftDone
                                 ? "border-zinc-700 border-l-zinc-500 bg-zinc-950/30"
-                                : "border-green-500 border-l-green-500 bg-green-950/10 hover:bg-green-950/20"
+                                : "theme-accent-bg/40 hover:theme-accent-bg/50"
                         }
                     `}
                     >
                         <div className="mb-4 flex items-start justify-between">
                             <span
-                                className={`font-bold text-xs uppercase tracking-wider ${isShiftDone ? "text-zinc-500" : "text-green-600"}`}
+                                className={`font-bold text-xs uppercase tracking-wider ${isShiftDone ? "text-zinc-500" : "theme-accent"}`}
                             >
                                 Daily Assignment
                             </span>
@@ -219,7 +219,7 @@ function HomeComponent() {
                             ) : (
                                 <Play
                                     size={18}
-                                    className="animate-pulse text-green-500"
+                                    className="animate-pulse theme-accent"
                                 />
                             )}
                         </div>
@@ -240,7 +240,7 @@ function HomeComponent() {
                                 </span>
                                 <Link
                                     to="/play/daily"
-                                    className="w-full bg-green-600 px-4 py-2 text-center font-bold text-black text-sm uppercase transition-colors hover:bg-green-500"
+                                    className="w-full theme-accent-solid px-4 py-2 text-center font-bold text-sm text-black uppercase transition-colors hover:opacity-90"
                                 >
                                     Initiate Shift
                                 </Link>

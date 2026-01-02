@@ -28,9 +28,9 @@ function RouteComponent() {
     const { user } = useUser();
 
     return (
-        <div className="relative flex min-h-[calc(100vh-4rem)] flex-col overflow-x-hidden bg-zinc-950 font-sans text-green-500">
+        <div className="relative flex min-h-[calc(100vh-4rem)] flex-col overflow-x-hidden font-sans theme-accent">
             <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col gap-2 p-6">
-                <div className="mb-12 flex flex-col justify-between gap-4 border-green-900/50 border-b pb-6 md:flex-row md:items-end">
+                <div className="mb-12 flex flex-col justify-between gap-4 theme-accent-border/50 border-b pb-6 md:flex-row md:items-end">
                     <div>
                         <h1 className="font-black text-4xl text-white uppercase tracking-tight md:text-5xl">
                             Campaign
@@ -90,9 +90,9 @@ function RouteComponent() {
                         return (
                             <div
                                 key={campaignId}
-                                className="group relative flex flex-col border-2 border-green-900 bg-black shadow-lg transition-colors hover:border-green-500"
+                                className="group relative flex flex-col border-2 theme-accent-border bg-black shadow-lg transition-colors hover:theme-accent-border"
                             >
-                                <div className="border-green-900/50 border-b bg-green-950/10 p-6">
+                                <div className="theme-accent-border/50 border-b theme-accent-bg/10 p-6">
                                     <div className="mb-3 flex items-start justify-between">
                                         <span className="font-mono text-gray-400 text-xs uppercase tracking-widest">
                                             {campaignId
@@ -100,7 +100,7 @@ function RouteComponent() {
                                                 .toUpperCase()}
                                         </span>
                                         {campaignProgress?.isCompleted && (
-                                            <span className="bg-green-500 px-2 py-1 font-black text-[10px] text-black uppercase tracking-wide">
+                                            <span className="theme-accent-solid px-2 py-1 font-black text-[10px] text-black uppercase tracking-wide">
                                                 Completed
                                             </span>
                                         )}
@@ -134,14 +134,14 @@ function RouteComponent() {
                                                     }}
                                                     className={`group/item flex cursor-pointer items-center justify-between border p-3 transition-all ${
                                                         isLevelCompleted
-                                                            ? "border-green-900/30 bg-green-900/5 text-green-700 hover:bg-green-900/10"
-                                                            : "border-zinc-800 bg-black text-green-400 hover:border-green-500 hover:bg-green-500/10"
+                                                            ? "theme-accent/30 theme-accent-bg/5 theme-accent/60 hover:theme-accent-bg/10 border-accent-foreground"
+                                                            : "border-zinc-800 bg-black theme-accent/40 hover:theme-accent-border hover:theme-accent-bg/10"
                                                     }
                                                 `}
                                                 >
                                                     <div className="flex items-center gap-4">
                                                         <span
-                                                            className={`font-bold font-mono text-xs ${isLevelCompleted ? "opacity-50" : "text-green-600"}`}
+                                                            className={`font-bold font-mono text-xs ${isLevelCompleted ? "opacity-50" : "theme-accent/80"}`}
                                                         >
                                                             {levelId
                                                                 .toUpperCase()
@@ -158,12 +158,12 @@ function RouteComponent() {
                                                     {isLevelCompleted ? (
                                                         <CheckCircle
                                                             size={16}
-                                                            className="text-green-600 opacity-50"
+                                                            className="theme-accent opacity-50"
                                                         />
                                                     ) : (
                                                         <Circle
                                                             size={16}
-                                                            className="text-zinc-700 transition-colors group-hover/item:text-green-500"
+                                                            className="text-zinc-700 transition-colors group-hover/item:theme-accent"
                                                         />
                                                     )}
                                                 </Link>

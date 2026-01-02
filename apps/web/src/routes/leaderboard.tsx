@@ -61,7 +61,7 @@ function RouteComponent() {
     };
 
     const getRowStyle = (index: number, isMe: boolean) => {
-        if (isMe) return "bg-green-900/20 border-l-4 border-l-green-500";
+        if (isMe) return "theme-accent-bg/20 border-l-4 theme-accent-border";
         if (index === 0)
             return "bg-yellow-900/10 border-l-2 border-l-yellow-600/50";
         if (index === 1) return "bg-zinc-900/30 border-l-2 border-l-zinc-700";
@@ -72,7 +72,7 @@ function RouteComponent() {
 
     if (isLoading && !data) {
         return (
-            <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-4 bg-zinc-950 font-mono text-green-500">
+            <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-4 font-mono theme-accent">
                 <Loader2 className="animate-spin" size={40} />
                 <p className="animate-pulse text-sm uppercase tracking-widest">
                     Fetching Global Rankings...
@@ -82,7 +82,7 @@ function RouteComponent() {
     }
 
     return (
-        <div className="min-h-[calc(100vh-4rem)] bg-zinc-950 p-6 font-mono text-zinc-300 lg:p-12">
+        <div className="min-h-[calc(100vh-4rem)] p-6 font-mono text-zinc-300 lg:p-12">
             <div className="mx-auto flex max-w-6xl flex-col gap-8">
                 <div className="flex flex-col gap-4">
                     <div className="mt-4 border-zinc-800 border-b pb-6">
@@ -105,8 +105,8 @@ function RouteComponent() {
                                 onClick={() => setType(t.key)}
                                 className={`cursor-pointer border px-4 py-2 font-bold text-xs uppercase tracking-wider transition-all ${
                                     type === t.key
-                                        ? "border-green-500 bg-green-600 text-black shadow-[0_0_15px_rgba(34,197,94,0.3)]"
-                                        : "border-zinc-800 bg-zinc-950 text-zinc-500 hover:border-green-500 hover:text-green-400"
+                                        ? "border-current theme-accent-solid text-black theme-glow"
+                                        : "border-zinc-800 bg-zinc-950 text-zinc-500 hover:border-current hover:theme-accent"
                                 }
                                 `}
                             >
@@ -145,12 +145,12 @@ function RouteComponent() {
 
                                         <div className="flex items-center gap-3 overflow-hidden">
                                             <span
-                                                className={`truncate font-bold ${isCurrentUser ? "text-green-400" : "text-zinc-300"}`}
+                                                className={`truncate font-bold ${isCurrentUser ? "theme-accent" : "text-zinc-300"}`}
                                             >
                                                 {entry.username}
                                             </span>
                                             {isCurrentUser && (
-                                                <span className="hidden rounded border border-green-700 bg-green-900/50 px-1.5 py-0.5 text-[10px] text-green-400 uppercase md:inline-block">
+                                                <span className="hidden rounded border theme-accent-border theme-accent-bg/50 px-1.5 py-0.5 text-[10px] theme-accent uppercase md:inline-block">
                                                     YOU
                                                 </span>
                                             )}

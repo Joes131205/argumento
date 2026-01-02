@@ -38,15 +38,15 @@ export const GameState = ({
     return (
         <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center gap-4 p-3 lg:flex-row">
             <div className="flex w-full flex-[2] flex-col justify-center">
-                <div className="relative rounded border-2 border-green-500 bg-zinc-950 p-8 shadow-[0_0_20px_rgba(22,163,74,0.1)]">
-                    <div className="mb-6 flex items-end justify-between border-b border-b-green-900 pb-4">
+                <div className="relative rounded border-2 theme-accent-border theme-glow bg-zinc-950 p-8">
+                    <div className="mb-6 flex items-end justify-between border-b border-b-current/20 pb-4">
                         <div className="flex flex-col">
-                            <h2 className="font-bold text-green-500 text-xl uppercase">
+                            <h2 className="font-bold theme-accent text-xl uppercase">
                                 Post #{currentIndex + 1}
                             </h2>
                             {headerInfo}
                         </div>
-                        <span className="rounded border border-green-900/30 bg-green-900/10 px-2 py-1 font-mono text-green-700 text-xs">
+                        <span className="rounded border theme-accent-border theme-accent-bg px-2 py-1 font-mono theme-accent text-xs">
                             ID:{" "}
                             {currentPost._id?.slice(-4) ||
                                 currentPost.id ||
@@ -66,7 +66,7 @@ export const GameState = ({
                     {isResult ? (
                         <div className="fade-in slide-in-from-bottom-2 animate-in border border-zinc-800 bg-zinc-900/80 p-6">
                             <h3
-                                className={`mb-2 font-black text-2xl uppercase ${verdict?.is_correct ? "text-green-500" : "text-red-500"}`}
+                                className={`mb-2 font-black text-2xl uppercase ${verdict?.is_correct ? "theme-accent" : "text-red-500"}`}
                             >
                                 {verdict?.is_correct ? "Verified!" : "Error!"}
                             </h3>
@@ -76,7 +76,7 @@ export const GameState = ({
                             <button
                                 type="button"
                                 onClick={handleNext}
-                                className="w-full cursor-pointer bg-green-600 py-4 font-bold text-black uppercase tracking-widest transition-all hover:bg-green-500"
+                                className="w-full cursor-pointer theme-accent-solid py-4 font-bold text-black uppercase tracking-widest transition-all hover:opacity-90"
                             >
                                 Get Next Post
                             </button>
@@ -89,7 +89,7 @@ export const GameState = ({
                                         type="button"
                                         onClick={onApprove}
                                         disabled={isAnalyzing}
-                                        className="flex-1 cursor-pointer border border-green-600 bg-green-900/20 py-4 font-bold text-green-500 uppercase tracking-widest transition-all hover:bg-green-600 hover:text-black"
+                                        className="flex-1 cursor-pointer border theme-accent-border theme-accent-bg/20 py-4 font-bold theme-accent uppercase tracking-widest transition-all hover:bg-current/20 hover:text-black"
                                     >
                                         Approve
                                     </button>

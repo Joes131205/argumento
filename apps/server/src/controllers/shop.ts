@@ -33,7 +33,47 @@ export const buyShopItem = async (req: Request, res: Response) => {
             (it) => it.id === itemId
         );
 
-        console.log(item);
+        if (!item) {
+            return res.status(404).json({
+                success: false,
+                message: "Item not found",
+            });
+        }
+
+        if (user.totalCoins < item.price) {
+            return res
+                .status(400)
+                .json({ success: false, message: "Insufficient coins" });
+        }
+
+        user.totalCoins -= item.price;
+        if (type === "themes") {
+            user.inventory[type as keyof typeof user.inventory].push(itemId);
+        } else {
+            if (
+                user.inventory[type as keyof typeof user.inventory].find(
+                    (it) => typeof it === "object" && it.itemId === itemId
+                )
+            ) {
+                const index = user.inventory[
+                    type as keyof typeof user.inventory
+                ].findIndex(
+                    (it) => typeof it === "object" && it.itemId === itemId
+                );
+                const item =
+                    user.inventory[type as keyof typeof user.inventory][index];
+                if (typeof item === "object") {
+                    item.amount++;
+                }
+            } else {
+                user.inventory[type as keyof typeof user.inventory].push({
+                    itemId,
+                    amount: 1,
+                });
+            }
+        }
+
+        await user.save();
 
         res.status(200).json({ success: true, message: "Success" });
     } catch (error) {

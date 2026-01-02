@@ -217,7 +217,7 @@ function RouteComponent() {
 
     if (!currentPost) {
         return (
-            <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-6 bg-zinc-950">
+            <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-6">
                 <h2 className="font-black text-4xl uppercase">
                     Shift Complete
                 </h2>
@@ -225,7 +225,7 @@ function RouteComponent() {
                     type="button"
                     onClick={handleEndShift}
                     disabled={isSaving}
-                    className="cursor-pointer bg-green-600 px-8 py-4 font-bold text-black uppercase tracking-widest hover:bg-green-500"
+                    className="cursor-pointer theme-accent-solid px-8 py-4 font-bold text-black uppercase tracking-widest hover:opacity-90"
                 >
                     {isSaving ? "Saving..." : "Clock Out"}
                 </button>

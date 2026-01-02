@@ -15,7 +15,7 @@ export const shop: ShopConfig = {
             name: "Void White",
             description: "Minimalist!",
             price: 100,
-            class: "text-zinc-100 border-zinc-100 selection:bg-white",
+            class: "text-zinc-100 border-zinc-100 selection:bg-black",
             hex: "#f4f4f5",
         },
         {

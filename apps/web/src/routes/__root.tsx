@@ -12,6 +12,9 @@ import { NotFoundComponent } from "@/components/NotFoundComponent";
 import { ErrorPage } from "@/components/ErrorPage";
 import { Navbar } from "@/components/NavBar";
 import { AnimatePresence, motion } from "motion/react";
+import useUser from "@/hooks/useUser";
+import { getThemeClasses, getThemeCssVariables } from "@/utils/themes";
+import { useEffect } from "react";
 
 export const Route = createRootRouteWithContext()({
     component: RootComponent,
@@ -33,12 +36,21 @@ export const Route = createRootRouteWithContext()({
 });
 
 function RootComponent() {
-    const { theme } = useTheme();
+    const { user } = useUser();
+    const currentThemeId = user?.activeTheme || "theme_green";
+    const themeClasses = getThemeClasses(currentThemeId);
+    const themeCssVariables = getThemeCssVariables(currentThemeId);
     const routerState = useRouterState();
+
+    // Apply theme CSS variables to document root
+    useEffect(() => {
+        Object.entries(themeCssVariables).forEach(([key, value]) => {
+            document.documentElement.style.setProperty(key, value);
+        });
+    }, [themeCssVariables]);
+
     return (
-        <div
-            className={`min-h-screen w-full bg-zinc-950 font-mono text-green-500 transition-colors duration-300 ${theme === "dark" ? "dark" : ""} pt-16`}
-        >
+        <div className="theme-root pt-16">
             <HeadContent />
             <Navbar />
             <AnimatePresence mode="wait">
@@ -56,10 +68,7 @@ function RootComponent() {
                     <Outlet />
                 </motion.div>
             </AnimatePresence>
-            <Toaster
-                position="bottom-right"
-                theme={theme as "dark" | "light" | "system"}
-            />
+            <Toaster position="bottom-right" theme="dark" />
         </div>
     );
 }

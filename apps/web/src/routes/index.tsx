@@ -12,14 +12,14 @@ export const Route = createFileRoute("/")({
 
 function RouteComponent() {
     return (
-        <div className="min-h-[calc(100vh-4rem)] overflow-x-hidden bg-zinc-950 font-mono text-zinc-300 selection:bg-green-900 selection:text-green-400">
+        <div className="min-h-[calc(100vh-4rem)] overflow-x-hidden font-mono text-zinc-300">
             <section className="relative border-zinc-800 border-b px-6 pt-32 pb-20 lg:pt-48 lg:pb-32">
                 <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2">
                     <div className="space-y-8">
                         <h1 className="font-black text-5xl text-white uppercase leading-[0.9] tracking-tighter lg:text-7xl">
                             Increase Your
                             <br />
-                            <span className="bg-gradient-to-r from-green-500 to-emerald-700 bg-clip-text text-transparent">
+                            <span className="theme-accent">
                                 Logical Thinking
                             </span>
                         </h1>
@@ -34,7 +34,7 @@ function RouteComponent() {
                         <div className="flex flex-col gap-4 sm:flex-row">
                             <Link
                                 to="/sign-up"
-                                className="inline-flex items-center justify-center gap-2 bg-green-600 px-8 py-4 font-bold text-black text-lg uppercase tracking-wide transition-all hover:translate-x-1 hover:bg-green-500"
+                                className="inline-flex items-center justify-center gap-2 theme-accent-solid px-8 py-4 font-bold text-black text-lg uppercase tracking-wide transition-all hover:translate-x-1 hover:opacity-90"
                             >
                                 Get Started
                                 <ArrowRight size={20} />
@@ -76,12 +76,12 @@ function RouteComponent() {
                         <h2 className="mb-4 font-black text-3xl text-white uppercase tracking-tight lg:text-4xl">
                             Training Modules
                         </h2>
-                        <div className="mx-auto h-1 w-20 bg-green-600" />
+                        <div className="mx-auto h-1 w-20 theme-accent-bg" />
                     </div>
 
                     <div className="grid gap-8 md:grid-cols-3">
-                        <div className="group border border-zinc-800 bg-zinc-900/20 p-8 transition-colors hover:border-green-600">
-                            <div className="mb-6 inline-flex border border-zinc-800 bg-zinc-900 p-3 text-green-500 transition-colors group-hover:bg-green-600 group-hover:text-white">
+                        <div className="group border border-zinc-800 bg-zinc-900/20 p-8 transition-colors hover:theme-accent-border">
+                            <div className="mb-6 inline-flex border border-zinc-800 bg-zinc-900 p-3 theme-accent transition-colors group-hover:bg-current/20 group-hover:text-white">
                                 <ShieldCheck size={32} />
                             </div>
                             <h3 className="mb-3 font-bold text-white text-xl uppercase">
@@ -94,8 +94,8 @@ function RouteComponent() {
                             </p>
                         </div>
 
-                        <div className="group border border-zinc-800 bg-zinc-900/20 p-8 transition-colors hover:border-green-600">
-                            <div className="mb-6 inline-flex border border-zinc-800 bg-zinc-900 p-3 text-green-500 transition-colors group-hover:bg-green-600 group-hover:text-white">
+                        <div className="group border border-zinc-800 bg-zinc-900/20 p-8 transition-colors hover:theme-accent-border">
+                            <div className="mb-6 inline-flex border border-zinc-800 bg-zinc-900 p-3 theme-accent transition-colors group-hover:bg-current/20 group-hover:text-white">
                                 <BrainCircuit size={32} />
                             </div>
                             <h3 className="mb-3 font-bold text-white text-xl uppercase">
@@ -108,8 +108,8 @@ function RouteComponent() {
                             </p>
                         </div>
 
-                        <div className="group border border-zinc-800 bg-zinc-900/20 p-8 transition-colors hover:border-green-600">
-                            <div className="mb-6 inline-flex border border-zinc-800 bg-zinc-900 p-3 text-green-500 transition-colors group-hover:bg-green-600 group-hover:text-white">
+                        <div className="group border border-zinc-800 bg-zinc-900/20 p-8 transition-colors hover:theme-accent-border">
+                            <div className="mb-6 inline-flex border border-zinc-800 bg-zinc-900 p-3 theme-accent transition-colors group-hover:bg-current/20 group-hover:text-white">
                                 <Target size={32} />
                             </div>
                             <h3 className="mb-3 font-bold text-white text-xl uppercase">

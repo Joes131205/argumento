@@ -23,7 +23,7 @@ export function Navbar() {
     };
 
     const linkClass =
-        "flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-500 hover:text-green-500 transition-colors [&.active]:text-green-500 [&.active]:border-b-2 [&.active]:border-green-500 py-5";
+        "flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-500 hover:theme-accent transition-colors [&.active]:theme-accent [&.active]:border-b-2 [&.active]:border-current py-5";
 
     return (
         <nav className="fixed top-0 left-0 z-50 w-full border-zinc-800 border-b bg-zinc-950/90 backdrop-blur-md">
@@ -99,7 +99,7 @@ export function Navbar() {
                             </Link>
                             <Link
                                 to="/sign-up"
-                                className="bg-green-600 px-4 py-2 font-bold text-black text-xs uppercase hover:bg-green-500"
+                                className="theme-accent-solid px-4 py-2 font-bold text-black text-xs uppercase hover:opacity-90"
                             >
                                 Sign Up
                             </Link>
@@ -112,25 +112,25 @@ export function Navbar() {
                 <div className="flex justify-around overflow-x-auto border-zinc-900 border-t bg-black/50 py-2 md:hidden">
                     <Link
                         to="/"
-                        className="p-3 text-zinc-500 [&.active]:text-green-500"
+                        className="p-3 text-zinc-500 [&.active]:theme-accent"
                     >
                         <LayoutDashboard size={20} />
                     </Link>
                     <Link
                         to="/campaign"
-                        className="p-3 text-zinc-500 [&.active]:text-green-500"
+                        className="p-3 text-zinc-500 [&.active]:theme-accent"
                     >
                         <MapIcon size={20} />
                     </Link>
                     <Link
                         to="/history"
-                        className="p-3 text-zinc-500 [&.active]:text-green-500"
+                        className="p-3 text-zinc-500 [&.active]:theme-accent"
                     >
                         <History size={20} />
                     </Link>
                     <Link
                         to="/skills-radar"
-                        className="p-3 text-zinc-500 [&.active]:text-green-500"
+                        className="p-3 text-zinc-500 [&.active]:theme-accent"
                     >
                         <Radar size={20} />
                     </Link>

@@ -60,14 +60,14 @@ function RouteComponent() {
                                         params={{ id: entry.post._id }}
                                         className="group block"
                                     >
-                                        <div className="relative flex flex-col gap-4 overflow-hidden border border-zinc-800 bg-zinc-900/40 p-4 transition-all hover:border-green-600/50 hover:bg-zinc-900 md:flex-row md:items-center md:p-5">
+                                        <div className="relative flex flex-col gap-4 overflow-hidden border border-zinc-800 bg-zinc-900/40 p-4 transition-all hover:border-current/50 hover:bg-zinc-900 md:flex-row md:items-center md:p-5">
                                             <div
                                                 className={`absolute top-0 bottom-0 left-0 w-1 ${isCorrect ? "bg-green-600" : "bg-red-600"}`}
                                             />
 
                                             <div className="shrink-0">
                                                 {isCorrect ? (
-                                                    <div className="rounded border border-green-900/50 bg-green-900/20 p-2 text-green-500">
+                                                    <div className="rounded border border-current/50 bg-green-900/20 p-2 text-green-500">
                                                         <CheckCircle2
                                                             size={20}
                                                         />
@@ -103,7 +103,7 @@ function RouteComponent() {
                                                     </span>
                                                 </div>
 
-                                                <h3 className="truncate pr-4 font-bold text-white transition-colors group-hover:text-green-400">
+                                                <h3 className="truncate pr-4 font-bold text-white transition-colors group-hover:text-current/90">
                                                     {entry.post.headline ||
                                                         "Corrupted Data Header"}
                                                 </h3>
@@ -125,7 +125,7 @@ function RouteComponent() {
                                                     </div>
                                                 </div>
                                                 <ChevronRight
-                                                    className="text-zinc-700 transition-colors group-hover:text-green-500"
+                                                    className="text-zinc-700 transition-colors group-hover:text-current/50"
                                                     size={20}
                                                 />
                                             </div>

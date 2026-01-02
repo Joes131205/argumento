@@ -1,8 +1,9 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { Check, ShoppingCart } from "lucide-react";
 import { toast } from "sonner";
-import { getShops } from "@/apis/shop";
+import { buyShopItem, getShops } from "@/apis/shop";
 import useUser from "@/hooks/useUser";
+import { equipTheme } from "@/apis/user";
 
 interface ShopItem {
     id: string;
@@ -22,9 +23,9 @@ export const Route = createFileRoute("/shop")({
 
 function RouteComponent() {
     const { themes } = useLoaderData({ from: "/shop" });
-    const { user } = useUser();
+    const { user, invalidateUser } = useUser();
 
-    const handleBuy = (item: ShopItem) => {
+    const handleBuy = async (type: string, item: ShopItem) => {
         if (!user) return;
         if (user.totalCoins < item.price) {
             toast.error("Insufficient Funds", {
@@ -32,17 +33,19 @@ function RouteComponent() {
             });
             return;
         }
+        await buyShopItem(type, item.id);
         toast.success(`Purchased ${item.name}`);
-        // TODO: Call buyShopItem(item.id)
+        await invalidateUser();
     };
 
-    const handleEquip = (item: ShopItem) => {
+    const handleEquip = async (item: ShopItem) => {
+        await equipTheme(item.id);
         toast.info(`System Updated: ${item.name}`);
-        // TODO: Call equipTheme(item.id)
+        await invalidateUser();
     };
 
     return (
-        <div className="min-h-[calc(100vh-4rem)] bg-zinc-950 p-6 font-mono text-zinc-300 lg:p-12">
+        <div className="min-h-[calc(100vh-4rem)] p-6 font-mono text-zinc-300 lg:p-12">
             <div className="mx-auto flex max-w-6xl flex-col gap-8">
                 <div className="mt-4 flex flex-col justify-between gap-4 border-zinc-800 border-b pb-6 md:flex-row md:items-end">
                     <div>
@@ -91,7 +94,7 @@ function RouteComponent() {
                                     item={item}
                                     isOwned={isOwned}
                                     isEquipped={isEquipped}
-                                    onBuy={() => handleBuy(item)}
+                                    onBuy={() => handleBuy("themes", item)}
                                     onEquip={() => handleEquip(item)}
                                 />
                             );
@@ -163,7 +166,7 @@ function ThemeShopCard({ item, isOwned, isEquipped, onBuy, onEquip }: any) {
                         className={`flex w-full items-center justify-center gap-2 py-3 font-bold text-xs uppercase tracking-widest transition-all ${
                             isEquipped
                                 ? "cursor-default bg-zinc-800 text-zinc-500 opacity-50"
-                                : "bg-zinc-800 text-white hover:bg-green-600 hover:text-black"
+                                : "bg-zinc-800 cursor-pointer text-white hover:bg-green-600 hover:text-black"
                         }
                         `}
                     >
@@ -179,7 +182,7 @@ function ThemeShopCard({ item, isOwned, isEquipped, onBuy, onEquip }: any) {
                     <button
                         type="button"
                         onClick={onBuy}
-                        className="flex w-full items-center justify-center gap-2 bg-white py-3 font-bold text-black text-xs uppercase tracking-widest transition-colors hover:bg-zinc-200"
+                        className="flex w-full cursor-pointer items-center justify-center gap-2 bg-green-500 py-3 font-bold text-black text-xs uppercase tracking-widest transition-colors hover:bg-green-500/60"
                     >
                         <ShoppingCart size={14} />
                         Purchase

@@ -37,9 +37,9 @@ export const DailySetup = ({
     };
 
     return (
-        <div className="relative flex min-h-[calc(100vh-4rem)] flex-col overflow-x-hidden bg-zinc-950 font-mono text-green-500">
+        <div className="relative flex min-h-[calc(100vh-4rem)] flex-col overflow-x-hidden font-mono theme-accent">
             <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col gap-2 p-6">
-                <div className="mb-10 border-green-950 border-b pb-6">
+                <div className="mb-10 theme-accent-border/30 border-b pb-6">
                     <h1 className="font-black text-4xl text-white uppercase tracking-tighter md:text-5xl">
                         Custom Simulation
                     </h1>
@@ -82,9 +82,9 @@ export const DailySetup = ({
                         return (
                             <div
                                 key={i.toString()}
-                                className="border border-green-900 bg-black/60 p-6 transition-all hover:border-green-500"
+                                className="border theme-accent-border/30 bg-black/60 p-6 transition-all hover:theme-accent-border"
                             >
-                                <h3 className="mb-6 border-green-900/50 border-b pb-4 font-bold text-green-100 text-xl uppercase tracking-wider">
+                                <h3 className="mb-6 theme-accent-border/50 border-b pb-4 font-bold theme-accent text-xl uppercase tracking-wider">
                                     {category.name}
                                 </h3>
                                 <div className="flex flex-wrap gap-2">
@@ -102,7 +102,7 @@ export const DailySetup = ({
                                                         t.name
                                                     )
                                                 }
-                                                className={`cursor-pointer border px-4 py-2 font-bold text-xs uppercase tracking-wider transition-all ${isSelected ? "border-green-500 bg-green-600 text-black" : "border-green-900 bg-black text-green-700 hover:border-green-500"}
+                                                className={`cursor-pointer border px-4 py-2 font-bold text-xs uppercase tracking-wider transition-all ${isSelected ? "theme-accent-solid theme-accent-border text-black" : "theme-accent-border/50 bg-black theme-accent hover:theme-accent-border"}
                                                 `}
                                             >
                                                 {isSelected ? "[X]" : "[ ]"}{" "}
@@ -117,9 +117,9 @@ export const DailySetup = ({
                 </div>
             </div>
 
-            <div className="fixed right-0 bottom-0 left-0 z-50 border-green-600 border-t-2 bg-black p-4">
+            <div className="fixed right-0 bottom-0 left-0 z-50 theme-accent-border border-t-2 bg-black p-4">
                 <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 md:flex-row">
-                    <div className="flex items-center gap-2 text-[10px] text-green-800 uppercase tracking-widest md:flex">
+                    <div className="flex items-center gap-2 text-[10px] theme-accent/60 uppercase tracking-widest md:flex">
                         <AlertTriangle size={14} />
                         <span>
                             AI Judge and Post Generation could be wrong.
@@ -127,8 +127,8 @@ export const DailySetup = ({
                     </div>
 
                     <div className="flex w-full items-center gap-4 md:w-auto">
-                        <div className="flex items-center border border-green-800 bg-zinc-900 px-4 py-2">
-                            <span className="mr-4 font-bold text-green-600 text-xs uppercase">
+                        <div className="flex items-center border theme-accent-border bg-zinc-900 px-4 py-2">
+                            <span className="mr-4 font-bold theme-accent text-xs uppercase">
                                 Post Amount:
                             </span>
                             <input
@@ -139,7 +139,7 @@ export const DailySetup = ({
                                 onChange={(e) =>
                                     setPostAmount(Number(e.target.value))
                                 }
-                                className="w-12 border-green-500 border-b bg-transparent text-center font-black text-white focus:outline-none"
+                                className="w-12 theme-accent-border bg-transparent text-center font-black text-white focus:outline-none"
                             />
                         </div>
 
@@ -147,7 +147,7 @@ export const DailySetup = ({
                             type="button"
                             onClick={onStart}
                             disabled={isSubmitting}
-                            className="flex cursor-pointer items-center gap-2 bg-green-600 px-8 py-3 font-black text-black text-lg uppercase transition-all hover:bg-green-500 disabled:opacity-50"
+                            className="flex cursor-pointer items-center gap-2 theme-accent-solid px-8 py-3 font-black text-black text-lg uppercase transition-all hover:opacity-90 disabled:opacity-50"
                         >
                             {isSubmitting ? (
                                 "Generating..."

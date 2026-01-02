@@ -52,6 +52,10 @@ body {
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
+    --accent-color: #22c55e;
+    --accent-light: #86efac;
+    --accent-dark: #16a34a;
+    --accent-muted: rgba(34, 197, 94, 0.25);
 }
 
 .dark {
@@ -132,5 +136,49 @@ body {
     }
     body {
         @apply bg-background text-foreground;
+    }
+}
+
+@layer components {
+    .theme-root {
+        @apply min-h-screen w-full font-mono transition-colors duration-500;
+        background: linear-gradient(
+            135deg,
+            color-mix(in srgb, var(--accent-color) 8%, rgb(9, 9, 11)) 0%,
+            rgb(9, 9, 11) 50%,
+            color-mix(in srgb, var(--accent-color) 5%, rgb(9, 9, 11)) 100%
+        );
+    }
+
+    .theme-accent {
+        color: var(--accent-color);
+    }
+
+    .theme-accent-border {
+        border-color: var(--accent-color);
+    }
+
+    .theme-accent-bg {
+        background-color: var(--accent-muted);
+    }
+
+    .theme-accent-solid {
+        background-color: var(--accent-color);
+    }
+
+    .theme-accent-light {
+        color: var(--accent-light);
+    }
+
+    .theme-accent-dark {
+        color: var(--accent-dark);
+    }
+
+    .theme-glow {
+        box-shadow: 0 0 20px var(--accent-muted);
+    }
+
+    .theme-glow-lg {
+        box-shadow: 0 0 40px var(--accent-muted);
     }
 }
