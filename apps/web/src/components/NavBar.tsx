@@ -23,7 +23,7 @@ export function Navbar() {
     };
 
     const linkClass =
-        "flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-500 hover:theme-accent transition-colors [&.active]:theme-accent [&.active]:border-b-2 [&.active]:border-current py-5";
+        "flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-500 hover:text-[var(--accent-light)] transition-colors [&.active]:text-[var(--accent-color)] [&.active]:border-b-2 [&.active]:border-[var(--accent-color)] py-5";
 
     return (
         <nav className="fixed top-0 left-0 z-50 w-full border-zinc-800 border-b bg-zinc-950/90 backdrop-blur-md">

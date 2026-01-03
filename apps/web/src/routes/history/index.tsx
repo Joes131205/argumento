@@ -19,7 +19,7 @@ function RouteComponent() {
     const { user } = useUser();
 
     return (
-        <div className="min-h-screen bg-zinc-950 p-6 font-mono text-zinc-300 lg:p-12">
+        <div className="min-h-screen theme-accent p-6 font-mono text-zinc-300 lg:p-12">
             <div className="mx-auto max-w-6xl space-y-8">
                 <div className="flex flex-col gap-4">
                     <div className="mt-4 flex flex-col items-end justify-between gap-4 border-zinc-800 border-b pb-6 md:flex-row">
@@ -103,7 +103,7 @@ function RouteComponent() {
                                                     </span>
                                                 </div>
 
-                                                <h3 className="truncate pr-4 font-bold text-white transition-colors group-hover:text-current/90">
+                                                <h3 className="truncate pr-4 font-bold text-white transition-colors group-hover:theme-accent">
                                                     {entry.post.headline ||
                                                         "Corrupted Data Header"}
                                                 </h3>

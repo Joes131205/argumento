@@ -89,7 +89,7 @@ export const GameState = ({
                                         type="button"
                                         onClick={onApprove}
                                         disabled={isAnalyzing}
-                                        className="flex-1 cursor-pointer border theme-accent-border theme-accent-bg/20 py-4 font-bold theme-accent uppercase tracking-widest transition-all hover:bg-current/20 hover:text-black"
+                                        className="flex-1 cursor-pointer border text-green-500 border-green-500 bg-green-500/20 py-4 font-bold theme-accent uppercase tracking-widest transition-all hover:bg-green-600 hover:text-black"
                                     >
                                         Approve
                                     </button>

@@ -40,7 +40,7 @@ function RouteComponent() {
                             </div>
 
                             <div className="mt-4 text-center">
-                                <h2 className="font-bold text-2xl text-white uppercase">
+                                <h2 className="font-bold text-2xl theme-accent uppercase">
                                     {user.username}
                                 </h2>
                                 <p className="mt-1 text-xs text-zinc-500 uppercase tracking-widest">
@@ -54,7 +54,7 @@ function RouteComponent() {
                                 <span className="flex items-center gap-2 text-sm text-zinc-400">
                                     <Award size={16} /> Total XP
                                 </span>
-                                <span className="font-bold text-white">
+                                <span className="font-bold theme-accent">
                                     {user.totalExp?.toLocaleString()}
                                 </span>
                             </div>
@@ -62,7 +62,7 @@ function RouteComponent() {
                                 <span className="flex items-center gap-2 text-sm text-zinc-400">
                                     <Calendar size={16} /> Joined at
                                 </span>
-                                <span className="font-bold text-white">
+                                <span className="font-bold theme-accent">
                                     {new Date(
                                         user.createdAt || Date.now()
                                     ).toLocaleDateString()}
@@ -72,7 +72,7 @@ function RouteComponent() {
                                 <span className="flex items-center gap-2 text-sm text-zinc-400">
                                     <Hash size={16} /> Shifts Done
                                 </span>
-                                <span className="font-bold text-white">
+                                <span className="font-bold theme-accent">
                                     {user.stats?.reduce(
                                         (acc: number, curr: any) =>
                                             acc + curr.total,
@@ -103,7 +103,7 @@ function RouteComponent() {
                                             {stat.name}
                                         </span>
                                         <div className="text-right">
-                                            <div className="font-bold text-green-500 text-xl">
+                                            <div className="font-bold theme-accent text-xl">
                                                 {stat.total > 0
                                                     ? Math.round(
                                                           (stat.correct /

@@ -28,7 +28,7 @@ const Manual = () => {
                             <button
                                 type="button"
                                 onClick={() => setIsOpened(false)}
-                                className="mb-6 flex cursor-pointer items-center gap-2 font-bold font-mono text-green-500 text-sm uppercase tracking-wide transition-colors hover:text-green-300"
+                                className="mb-6 flex cursor-pointer items-center gap-2 font-bold font-mono theme-accent text-sm uppercase tracking-wide transition-colors hover:text-[var(--accent-light)]"
                             >
                                 <ArrowLeft /> Return
                             </button>
@@ -57,7 +57,7 @@ const Manual = () => {
                                 {content_types.map((item, i) => (
                                     <div
                                         key={i.toString()}
-                                        className="rounded-lg border border-zinc-800 bg-zinc-950 p-4 transition-all duration-300 hover:border-green-500/50 hover:shadow-[0_0_15px_rgba(0,255,100,0.1)]"
+                                        className="rounded-lg border border-zinc-800 bg-zinc-950 p-4 transition-all duration-300 hover:border-[var(--accent-light)] hover:shadow-[0_0_15px_rgba(0,255,100,0.1)]"
                                     >
                                         <h3 className="mb-1 font-bold text-lg text-white">
                                             {item.name}
@@ -70,7 +70,7 @@ const Manual = () => {
                                                 <button
                                                     type="button"
                                                     key={type.name}
-                                                    className="group/btn relative cursor-pointer overflow-hidden border border-green-500 px-4 py-2 font-bold text-xs uppercase tracking-wider transition-all hover:border-green-500 hover:bg-green-500 hover:text-black"
+                                                    className="text-white group/btn relative cursor-pointer overflow-hidden border theme-accent-border px-4 py-2 font-bold text-xs uppercase tracking-wider transition-all hover:bg-[var(--accent-color)] hover:text-black"
                                                     onClick={() => {
                                                         setCurrTypeIndex(i);
                                                         setCurrTopicIndex(j);

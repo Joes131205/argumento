@@ -61,13 +61,36 @@ function RouteComponent() {
     };
 
     const getRowStyle = (index: number, isMe: boolean) => {
-        if (isMe) return "theme-accent-bg/20 border-l-4 theme-accent-border";
+        if (isMe) {
+            return {
+                backgroundColor: "var(--accent-muted)",
+                borderLeftWidth: "4px",
+                borderLeftColor: "var(--accent-color)",
+            };
+        }
         if (index === 0)
-            return "bg-yellow-900/10 border-l-2 border-l-yellow-600/50";
-        if (index === 1) return "bg-zinc-900/30 border-l-2 border-l-zinc-700";
+            return {
+                backgroundColor: "rgba(180, 83, 9, 0.1)",
+                borderLeftWidth: "2px",
+                borderLeftColor: "rgba(217, 119, 6, 0.5)",
+            };
+        if (index === 1)
+            return {
+                backgroundColor: "rgba(24, 24, 27, 0.3)",
+                borderLeftWidth: "2px",
+                borderLeftColor: "rgb(113, 113, 122)",
+            };
         if (index === 2)
-            return "bg-amber-900/10 border-l-2 border-l-amber-700/50";
-        return "bg-transparent border-l-2 border-l-transparent hover:bg-zinc-950";
+            return {
+                backgroundColor: "rgba(180, 83, 9, 0.1)",
+                borderLeftWidth: "2px",
+                borderLeftColor: "rgba(180, 83, 9, 0.5)",
+            };
+        return {
+            backgroundColor: "transparent",
+            borderLeftWidth: "2px",
+            borderLeftColor: "transparent",
+        };
     };
 
     if (isLoading && !data) {
@@ -136,8 +159,11 @@ function RouteComponent() {
                                         to="/profile/$id"
                                         params={{ id: entry?._id || "" }}
                                         key={entry._id || index}
-                                        className={`grid grid-cols-[60px_1fr_120px] items-center gap-4 p-4 transition-all md:grid-cols-[80px_1fr_150px] ${getRowStyle(index, isCurrentUser)}
-                                    `}
+                                        className={`grid grid-cols-[60px_1fr_120px] items-center gap-4 p-4 transition-all md:grid-cols-[80px_1fr_150px]`}
+                                        style={getRowStyle(
+                                            index,
+                                            isCurrentUser
+                                        )}
                                     >
                                         <div className="flex items-center justify-center">
                                             {getRankIcon(index)}
@@ -150,7 +176,7 @@ function RouteComponent() {
                                                 {entry.username}
                                             </span>
                                             {isCurrentUser && (
-                                                <span className="hidden rounded border theme-accent-border theme-accent-bg/50 px-1.5 py-0.5 text-[10px] theme-accent uppercase md:inline-block">
+                                                <span className="hidden rounded border theme-accent-border theme-accent-bg px-1.5 py-0.5 text-[10px] theme-accent uppercase md:inline-block">
                                                     YOU
                                                 </span>
                                             )}
