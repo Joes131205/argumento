@@ -86,7 +86,7 @@ function RouteComponent() {
 
                                     <div className="mb-6 flex items-start justify-between">
                                         <div>
-                                            <h3 className="font-bold text-white text-xl capitalize transition-colors group-hover:text-green-400">
+                                            <h3 className="font-bold text-white text-xl capitalize transition-colors group-hover:text-[var(--accent-dark)]">
                                                 {item.name}
                                             </h3>
                                         </div>

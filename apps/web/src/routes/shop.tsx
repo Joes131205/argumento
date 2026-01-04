@@ -72,10 +72,6 @@ function RouteComponent() {
                         </div>
                     </div>
                 </div>
-
-                <div>
-                    <h2>Not Implemented yet</h2>
-                </div>
                 <div>
                     <h2 className="mb-6 flex items-center gap-2 font-bold text-sm text-zinc-500 uppercase tracking-widest">
                         Visual Interface
@@ -111,13 +107,13 @@ function ThemeShopCard({ item, isOwned, isEquipped, onBuy, onEquip }: any) {
         <div
             className={`group relative flex flex-col gap-6 border bg-zinc-900/30 p-6 transition-all duration-300 ${
                 isEquipped
-                    ? "border-green-500 bg-green-950/10 shadow-[0_0_20px_rgba(34,197,94,0.05)]"
+                    ? "theme-accent-border bg-green-950/10 shadow-[0_0_20px_rgba(34,197,94,0.05)]"
                     : "border-zinc-800 hover:border-zinc-600 hover:bg-zinc-900/50"
             }
         `}
         >
             {isEquipped && (
-                <div className="absolute top-0 right-0 bg-green-600 px-2 py-1 font-bold text-[10px] text-black uppercase tracking-widest">
+                <div className="absolute top-0 right-0 theme-accent-solid px-2 py-1 font-bold text-[10px] text-black uppercase tracking-widest">
                     Active
                 </div>
             )}
@@ -148,7 +144,7 @@ function ThemeShopCard({ item, isOwned, isEquipped, onBuy, onEquip }: any) {
             </div>
 
             <div>
-                <h3 className="font-bold text-sm text-white uppercase tracking-wider transition-colors group-hover:text-green-400">
+                <h3 className="font-bold text-sm text-white uppercase tracking-wider transition-colors group-hover:text-[var(--accent-color)]">
                     {item.name}
                 </h3>
                 <p className="mt-1 text-xs text-zinc-500 leading-relaxed">
@@ -166,7 +162,7 @@ function ThemeShopCard({ item, isOwned, isEquipped, onBuy, onEquip }: any) {
                         className={`flex w-full items-center justify-center gap-2 py-3 font-bold text-xs uppercase tracking-widest transition-all ${
                             isEquipped
                                 ? "cursor-default bg-zinc-800 text-zinc-500 opacity-50"
-                                : "bg-zinc-800 cursor-pointer text-white hover:bg-green-600 hover:text-black"
+                                : "bg-zinc-800 cursor-pointer text-white hover:bg-[var(--accent-color)] hover:text-black"
                         }
                         `}
                     >
