@@ -102,7 +102,7 @@ export const DailySetup = ({
                                                         t.name
                                                     )
                                                 }
-                                                className={`cursor-pointer border px-4 py-2 font-bold text-xs uppercase tracking-wider transition-all ${isSelected ? "theme-accent-solid theme-accent-border text-black" : "theme-accent-border/50 bg-black theme-accent hover:theme-accent-border"}
+                                                className={`cursor-pointer border px-4 py-2 font-bold text-xs uppercase tracking-wider transition-all ${isSelected ? "theme-accent-solid theme-accent-border text-black" : "theme-accent-border bg-black theme-accent hover:theme-accent-border"}
                                                 `}
                                             >
                                                 {isSelected ? "[X]" : "[ ]"}{" "}

@@ -218,7 +218,7 @@ function RouteComponent() {
     if (!currentPost) {
         return (
             <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-6">
-                <h2 className="font-black text-4xl uppercase">
+                <h2 className="font-black text-4xl uppercase theme-accent">
                     Shift Complete
                 </h2>
                 <button

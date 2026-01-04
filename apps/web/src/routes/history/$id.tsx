@@ -29,11 +29,11 @@ function RouteComponent() {
             <div className="relative w-full max-w-3xl overflow-hidden rounded-xl border border-current/50 bg-black shadow-[0_0_40px_rgba(0,0,0,0.5)]">
                 <div className="p-8 md:p-12">
                     <div className="mb-8 flex flex-wrap gap-4 border-zinc-900 border-b pb-6 font-mono text-accent text-xs uppercase tracking-wider">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 theme-accent">
                             <FileText size={14} />
                             <span>Type: {data?.type || "Unknown"}</span>
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 theme-accent">
                             <Hash size={14} />
                             <span>ID: {data?._id || "N/A"}</span>
                         </div>
