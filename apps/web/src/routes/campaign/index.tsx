@@ -28,7 +28,7 @@ function RouteComponent() {
     const { user } = useUser();
 
     return (
-        <div className="relative flex min-h-[calc(100vh-4rem)] flex-col overflow-x-hidden font-sans theme-accent">
+        <div className="relative flex min-h-[calc(100vh-4rem)] flex-col overflow-x-hidden font-mono theme-accent">
             <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col gap-2 p-6">
                 <div className="mb-12 flex flex-col justify-between gap-4 theme-accent-border/50 border-b pb-6 md:flex-row md:items-end">
                     <div>

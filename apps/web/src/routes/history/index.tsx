@@ -21,19 +21,13 @@ function RouteComponent() {
     return (
         <div className="min-h-screen theme-accent p-6 font-mono text-zinc-300 lg:p-12">
             <div className="mx-auto max-w-6xl space-y-8">
-                <div className="flex flex-col gap-4">
-                    <div className="mt-4 flex flex-col items-end justify-between gap-4 border-zinc-800 border-b pb-6 md:flex-row">
-                        <div>
-                            <h1 className="font-black text-4xl text-white uppercase tracking-tight md:text-5xl">
-                                Processed Logs
-                            </h1>
-                            <p className="mt-1 text-sm text-zinc-500">
-                                Review past judgments and analysis data.
-                            </p>
-                        </div>
+                <div className="mb-12 flex flex-col justify-between gap-4 theme-accent-border/50 border-b pb-6 md:flex-row md:items-end">
+                    <div>
+                        <h1 className="font-black text-4xl text-white uppercase tracking-tight md:text-5xl">
+                            Processed Log
+                        </h1>
                     </div>
                 </div>
-
                 <div className="space-y-3">
                     {user?.postsHistory?.length === 0 ? (
                         <div className="rounded-lg border-2 border-zinc-800 border-dashed bg-zinc-900/20 py-20 text-center">
@@ -65,15 +59,15 @@ function RouteComponent() {
                                                 className={`absolute top-0 bottom-0 left-0 w-1 ${isCorrect ? "bg-green-600" : "bg-red-600"}`}
                                             />
 
-                                            <div className="shrink-0">
+                                            <div className="shrink-0 text-center">
                                                 {isCorrect ? (
-                                                    <div className="rounded border border-current/50 bg-green-900/20 p-2 text-green-500">
+                                                    <div className="items-center text-center flex justify-center rounded border border-current/50 bg-green-900/20 p-2 text-green-500">
                                                         <CheckCircle2
                                                             size={20}
                                                         />
                                                     </div>
                                                 ) : (
-                                                    <div className="rounded border border-red-900/50 bg-red-900/20 p-2 text-red-500">
+                                                    <div className="items-center text-center flex justify-center rounded border border-red-900/50 bg-red-900/20 p-2 text-red-500">
                                                         <XCircle size={20} />
                                                     </div>
                                                 )}

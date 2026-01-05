@@ -50,7 +50,7 @@ function RootComponent() {
     }, [themeCssVariables]);
 
     return (
-        <div className="theme-root pt-16">
+        <div className="theme-root pt-30 md:pt-16">
             <HeadContent />
             <Navbar />
             <AnimatePresence mode="wait">

@@ -101,7 +101,7 @@ function RouteComponent() {
     };
     if (!currentPost) {
         return (
-            <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-8 bg-zinc-950 font-mono text-green-500">
+            <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-8 bg-zinc-950 font-mono p-5">
                 <div className="max-w-md border-2 theme-accent-border bg-black p-10 text-center shadow-[0_0_50px_rgba(22,163,74,0.2)]">
                     <h2 className="mb-2 font-black text-4xl text-white uppercase">
                         Mission Complete
@@ -122,7 +122,7 @@ function RouteComponent() {
         );
     }
     return (
-        <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center gap-6 p-5">
+        <div className="h-full flex flex-col md:flex-row min-h-[calc(100vh-4rem)] items-stretch md:items-center md:justify-center gap-4 md:gap-6 p-5">
             <div className="flex h-full flex-1 flex-col items-center justify-center">
                 <GameState
                     currentPost={currentPost}

@@ -126,7 +126,7 @@ export const DailySetup = ({
                         </span>
                     </div>
 
-                    <div className="flex w-full items-center gap-4 md:w-auto">
+                    <div className="flex flex-col md:flex-row w-full items-center gap-4 md:w-auto">
                         <div className="flex items-center border theme-accent-border bg-zinc-900 px-4 py-2">
                             <span className="mr-4 font-bold theme-accent text-xs uppercase">
                                 Post Amount:

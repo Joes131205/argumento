@@ -32,7 +32,7 @@ export function Navbar() {
                     to="/dashboard"
                     className="group flex items-center gap-2 text-white"
                 >
-                    <span className="hidden font-bold font-mono text-lg uppercase tracking-tighter md:block">
+                    <span className="font-bold font-mono text-lg uppercase tracking-tighter md:block">
                         Argumento
                     </span>
                 </Link>
@@ -75,7 +75,7 @@ export function Navbar() {
                 <div className="flex items-center gap-4">
                     {user ? (
                         <>
-                            <div className="hidden flex-col items-end sm:flex">
+                            <div className="flex-col items-end sm:flex">
                                 <span className="font-bold text-white text-xs uppercase">
                                     {user.username}
                                 </span>
@@ -111,7 +111,7 @@ export function Navbar() {
             {user && (
                 <div className="flex justify-around overflow-x-auto border-zinc-900 border-t bg-black/50 py-2 md:hidden">
                     <Link
-                        to="/"
+                        to="/dashboard"
                         className="p-3 text-zinc-500 [&.active]:theme-accent"
                     >
                         <LayoutDashboard size={20} />
@@ -133,6 +133,18 @@ export function Navbar() {
                         className="p-3 text-zinc-500 [&.active]:theme-accent"
                     >
                         <Radar size={20} />
+                    </Link>
+                    <Link
+                        to="/leaderboard"
+                        className="p-3 text-zinc-500 [&.active]:theme-accent"
+                    >
+                        <Trophy size={20} />
+                    </Link>
+                    <Link
+                        to="/shop"
+                        className="p-3 text-zinc-500 [&.active]:theme-accent"
+                    >
+                        <ShoppingBag size={20} />
                     </Link>
                 </div>
             )}
