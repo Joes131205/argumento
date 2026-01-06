@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import useUser from "@/hooks/useUser";
 import { requireAuth } from "@/utils/requireAuth";
 import { motion } from "motion/react";
+import { refreshStreak } from "@/apis/user";
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -32,6 +33,9 @@ const itemVariants = {
 export const Route = createFileRoute("/dashboard")({
     beforeLoad: requireAuth,
     component: HomeComponent,
+    loader: async () => {
+        await refreshStreak();
+    },
 });
 
 function HomeComponent() {

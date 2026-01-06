@@ -1,5 +1,10 @@
 import { useForm } from "@tanstack/react-form";
-import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import {
+    createFileRoute,
+    Link,
+    redirect,
+    useNavigate,
+} from "@tanstack/react-router";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -22,6 +27,7 @@ export const Route = createFileRoute("/sign-up")({
 
 function RouteComponent() {
     const { invalidateUser } = useUser();
+    const navigate = useNavigate();
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmationPassword, setShowConfirmationPassword] =
@@ -60,6 +66,7 @@ function RouteComponent() {
                 if (response?.token) {
                     localStorage.setItem("token", response.token);
                     toast.success("Account created successfully.");
+                    await navigate({ to: "/dashboard" });
                     invalidateUser();
                 } else {
                     toast.error("Registration failed.");

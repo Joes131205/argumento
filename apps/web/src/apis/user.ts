@@ -40,3 +40,23 @@ export const equipTheme = async (itemId: string) => {
         throw new Error(message);
     }
 };
+
+export const refreshStreak = async () => {
+    try {
+        const res = await instance.put("/users/streak");
+        if (!res.data.success) {
+            throw new Error(res.data.message || "Failed to fetch shop");
+        }
+    } catch (error: unknown) {
+        const message = getApiErrorMessage(error, "Failed to fetch shop");
+        if (
+            error instanceof Object &&
+            "status" in error &&
+            error.status === 404
+        ) {
+            return null;
+        }
+        console.error(message, error);
+        throw new Error(message);
+    }
+};

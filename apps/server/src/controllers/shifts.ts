@@ -5,6 +5,7 @@ import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
 import { content_types } from "@/utils/content_types";
 import type { IPostLog } from "@/types";
+import { CORRECT_COINS, INCORRECT_COINS, XP } from "@/utils/game_config";
 
 dotenv.config();
 
@@ -144,7 +145,7 @@ export const completeShift = async (req: Request, res: Response) => {
         const postCorrect = history.filter(
             (item: IPostLog) => item.is_correct
         ).length;
-        const expEarned = postCorrect * 100;
+        const expEarned = postCorrect * XP;
 
         const sentData = await Promise.all(
             history.map(async (item: IPostLog) => {
@@ -208,7 +209,8 @@ export const completeShift = async (req: Request, res: Response) => {
         user.postsProcessed += sentData.length;
         user.postsCorrect += postCorrect;
         user.totalCoins +=
-            postCorrect * 100 + (sentData.length - postCorrect) * 10;
+            postCorrect * CORRECT_COINS +
+            (sentData.length - postCorrect) * INCORRECT_COINS;
         user.postsHistory.push(...sentData);
 
         await user.save();
