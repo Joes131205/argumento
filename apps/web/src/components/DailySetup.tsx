@@ -117,7 +117,7 @@ export const DailySetup = ({
                 </div>
             </div>
 
-            <div className="fixed right-0 bottom-0 left-0 z-50 theme-accent-border border-t-2 bg-black p-4">
+            <div className="md:fixed md:right-0 md:bottom-0 md:left-0 md:z-50 theme-accent-border border-t-2 bg-black p-4">
                 <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 md:flex-row">
                     <div className="flex items-center gap-2 text-[10px] theme-accent/60 uppercase tracking-widest md:flex">
                         <AlertTriangle size={14} />

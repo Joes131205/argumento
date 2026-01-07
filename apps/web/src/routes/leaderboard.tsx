@@ -159,7 +159,7 @@ function RouteComponent() {
                                         to="/profile/$id"
                                         params={{ id: entry?._id || "" }}
                                         key={entry._id || index}
-                                        className={`grid grid-cols-[60px_1fr_120px] items-center gap-4 p-4 transition-all md:grid-cols-[80px_1fr_150px]`}
+                                        className="grid grid-cols-[60px_1fr_120px] items-center gap-4 p-4 transition-all md:grid-cols-[80px_1fr_150px]"
                                         style={getRowStyle(
                                             index,
                                             isCurrentUser

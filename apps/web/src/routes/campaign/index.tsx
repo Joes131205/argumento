@@ -35,10 +35,6 @@ function RouteComponent() {
                         <h1 className="font-black text-4xl text-white uppercase tracking-tight md:text-5xl">
                             Campaign
                         </h1>
-                        <p className="mt-2 max-w-xl font-mono text-gray-500 text-sm">
-                            Get to know the system before you go on with only
-                            yourself.
-                        </p>
                     </div>
                 </div>
 

@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import z from "zod";
 import Posts from "@/db/models/Posts";
-
+import crypto from "crypto";
 declare global {
     namespace Express {
         interface Request {
@@ -45,7 +45,7 @@ export const register = async (req: Request, res: Response) => {
                 userId: user._id,
             },
             process.env.JWT_SECRET || "default_secret",
-            { expiresIn: "1h" }
+            { expiresIn: "30d" }
         );
 
         res.status(200).json({ success: true, message: "Success", token });
@@ -79,7 +79,7 @@ export const login = async (req: Request, res: Response) => {
                 userId: user._id,
             },
             process.env.JWT_SECRET || "default_secret",
-            { expiresIn: "1h" }
+            { expiresIn: "30d" }
         );
 
         res.status(200).json({ success: true, message: "Success", token });
@@ -130,6 +130,58 @@ export const getMe = async (req: Request, res: Response) => {
             success: true,
             user: safeUser,
         });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error,
+        });
+    }
+};
+
+export const generateResetToken = async (req: Request, res: Response) => {
+    try {
+        const userId = req.users;
+
+        if (!userId) {
+            return res.status(401).send({
+                success: false,
+                message: "Unauthorized",
+            });
+        }
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(401).send({
+                success: false,
+                message: "Unauthorized",
+            });
+        }
+
+        const token = crypto.randomBytes(32).toString("hex");
+        const expiryTime = new Date(Date.now() + 1000 * 60 * 60); // 1 hour
+
+        user.resetToken = token;
+        user.resetTokenGeneratedAt = new Date();
+        user.resetTokenExpiry = expiryTime;
+
+        await user.save();
+
+        res.status(200).json({ success: true, message: "Success" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error,
+        });
+    }
+};
+
+export const resetPassword = async (req: Request, res: Response) => {
+    try {
+        res.status(200).json({ success: true, message: "Success" });
     } catch (error) {
         console.error(error);
         res.status(500).json({

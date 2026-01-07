@@ -7,6 +7,7 @@ import mongoose, {
 export interface IUsers extends Document {
     _id: string;
     username: string;
+    // email: string;
     password: string;
     totalExp: number;
     totalCoins: number;
@@ -29,6 +30,14 @@ export interface IUsers extends Document {
             amount: number;
         }[];
     };
+
+    verifyToken: string | null;
+    verifyTokenGeneratedAt: Date | null;
+    verifyTokenExpiry: Date | null;
+
+    resetToken: string | null;
+    resetTokenGeneratedAt: Date | null;
+    resetTokenExpiry: Date | null;
 
     createdAt: Date;
     updatedAt: Date;
@@ -65,6 +74,7 @@ export interface IPostHistoryItem {
 const UsersSchema: Schema = new Schema(
     {
         username: { type: String, required: true, unique: true },
+        // email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
         totalExp: { type: Number, default: 0 },
         totalCoins: { type: Number, default: 0 },
@@ -108,6 +118,31 @@ const UsersSchema: Schema = new Schema(
                     amount: Number,
                 },
             ],
+        },
+
+        verifyToken: {
+            type: String,
+            default: null,
+        },
+        verifyTokenGeneratedAt: {
+            type: Date,
+            default: null,
+        },
+        verifyTokenExpiry: {
+            type: Date,
+            default: null,
+        },
+        resetToken: {
+            type: String,
+            default: null,
+        },
+        resetTokenGeneratedAt: {
+            type: Date,
+            default: null,
+        },
+        resetTokenExpiry: {
+            type: Date,
+            default: null,
         },
     },
     {
