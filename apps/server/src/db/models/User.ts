@@ -7,7 +7,7 @@ import mongoose, {
 export interface IUsers extends Document {
     _id: string;
     username: string;
-    // email: string;
+    email: string;
     password: string;
     totalExp: number;
     totalCoins: number;
@@ -74,7 +74,7 @@ export interface IPostHistoryItem {
 const UsersSchema: Schema = new Schema(
     {
         username: { type: String, required: true, unique: true },
-        // email: { type: String, required: true, unique: true },
+        email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
         totalExp: { type: Number, default: 0 },
         totalCoins: { type: Number, default: 0 },

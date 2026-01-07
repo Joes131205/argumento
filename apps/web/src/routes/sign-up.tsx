@@ -37,6 +37,7 @@ function RouteComponent() {
         defaultValues: {
             username: "",
             password: "",
+            email: "",
             confirmationPassword: "",
         },
         validators: {
@@ -50,6 +51,7 @@ function RouteComponent() {
                         .string()
                         .min(8, "Min 8 chars required")
                         .nonempty("Required"),
+                    email: z.email().nonempty("Required"),
                     confirmationPassword: z.string().nonempty("Required"),
                 })
                 .refine(
@@ -62,7 +64,11 @@ function RouteComponent() {
         },
         onSubmit: async ({ value }) => {
             try {
-                const response = await register(value.username, value.password);
+                const response = await register(
+                    value.username,
+                    value.password,
+                    value.email
+                );
                 if (response?.token) {
                     localStorage.setItem("token", response.token);
                     toast.success("Account created successfully.");
@@ -120,6 +126,32 @@ function RouteComponent() {
                                     }
                                     className="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-white outline-none transition-colors placeholder:text-zinc-700 focus:border-green-600"
                                     placeholder="Enter username"
+                                />
+                                {!field.state.meta.isValid && (
+                                    <p className="font-bold text-red-500 text-xs">
+                                        * {field.state.meta.errors[0]?.message}
+                                    </p>
+                                )}
+                            </div>
+                        )}
+                    </form.Field>
+                    <form.Field name="email">
+                        {(field) => (
+                            <div className="flex flex-col gap-1.5">
+                                <label
+                                    htmlFor={field.name}
+                                    className="font-bold text-xs text-zinc-500 uppercase"
+                                >
+                                    Email
+                                </label>
+                                <input
+                                    value={field.state.value}
+                                    type="email"
+                                    onChange={(e) =>
+                                        field.handleChange(e.target.value)
+                                    }
+                                    className="w-full border border-zinc-800 bg-zinc-900 px-4 py-3 text-white outline-none transition-colors placeholder:text-zinc-700 focus:border-green-600"
+                                    placeholder="Enter email"
                                 />
                                 {!field.state.meta.isValid && (
                                     <p className="font-bold text-red-500 text-xs">

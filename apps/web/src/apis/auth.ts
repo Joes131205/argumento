@@ -18,11 +18,16 @@ export const login = async (username: string, password: string) => {
     }
 };
 
-export const register = async (username: string, password: string) => {
+export const register = async (
+    username: string,
+    password: string,
+    email: string
+) => {
     try {
         const { data } = await instance.post("/auth/register", {
             username,
             password,
+            email,
         });
         if (!data.success) {
             throw new Error(data.message || "Registration failed");
