@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 import z from "zod";
 import Posts from "@/db/models/Posts";
 import crypto from "crypto";
+import { sendVerificationEmail } from "@/utils/mail";
 declare global {
     namespace Express {
         interface Request {
@@ -43,7 +44,7 @@ export const register = async (req: Request, res: Response) => {
             });
         }
 
-        const verifyToken = crypto.randomBytes(32).toString("hex");
+        const verifyToken = crypto.randomBytes(5).toString("hex");
         const expiryTime = new Date(Date.now() + 1000 * 60 * 60); // 1 hour
 
         const user = new User({
@@ -54,6 +55,8 @@ export const register = async (req: Request, res: Response) => {
             verifyTokenGeneratedAt: new Date(),
             verifyTokenExpiry: expiryTime,
         });
+
+        await sendVerificationEmail(email, verifyToken);
 
         await user.save();
 

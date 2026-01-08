@@ -17,8 +17,11 @@ import { Route as ShopRouteImport } from './routes/shop'
 import { Route as LeaderboardRouteImport } from './routes/leaderboard'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ResetPasswordIndexRouteImport } from './routes/reset-password/index'
 import { Route as HistoryIndexRouteImport } from './routes/history/index'
 import { Route as CampaignIndexRouteImport } from './routes/campaign/index'
+import { Route as VerifyIdRouteImport } from './routes/verify/$id'
+import { Route as ResetPasswordIdRouteImport } from './routes/reset-password/$id'
 import { Route as ProfileIdRouteImport } from './routes/profile/$id'
 import { Route as PlayDailyRouteImport } from './routes/play/daily'
 import { Route as HistoryIdRouteImport } from './routes/history/$id'
@@ -64,6 +67,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordIndexRoute = ResetPasswordIndexRouteImport.update({
+  id: '/reset-password/',
+  path: '/reset-password/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HistoryIndexRoute = HistoryIndexRouteImport.update({
   id: '/history/',
   path: '/history/',
@@ -72,6 +80,16 @@ const HistoryIndexRoute = HistoryIndexRouteImport.update({
 const CampaignIndexRoute = CampaignIndexRouteImport.update({
   id: '/campaign/',
   path: '/campaign/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyIdRoute = VerifyIdRouteImport.update({
+  id: '/verify/$id',
+  path: '/verify/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordIdRoute = ResetPasswordIdRouteImport.update({
+  id: '/reset-password/$id',
+  path: '/reset-password/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileIdRoute = ProfileIdRouteImport.update({
@@ -107,8 +125,11 @@ export interface FileRoutesByFullPath {
   '/history/$id': typeof HistoryIdRoute
   '/play/daily': typeof PlayDailyRoute
   '/profile/$id': typeof ProfileIdRoute
+  '/reset-password/$id': typeof ResetPasswordIdRoute
+  '/verify/$id': typeof VerifyIdRoute
   '/campaign': typeof CampaignIndexRoute
   '/history': typeof HistoryIndexRoute
+  '/reset-password': typeof ResetPasswordIndexRoute
   '/campaign/$level/$id': typeof CampaignLevelIdRoute
 }
 export interface FileRoutesByTo {
@@ -123,8 +144,11 @@ export interface FileRoutesByTo {
   '/history/$id': typeof HistoryIdRoute
   '/play/daily': typeof PlayDailyRoute
   '/profile/$id': typeof ProfileIdRoute
+  '/reset-password/$id': typeof ResetPasswordIdRoute
+  '/verify/$id': typeof VerifyIdRoute
   '/campaign': typeof CampaignIndexRoute
   '/history': typeof HistoryIndexRoute
+  '/reset-password': typeof ResetPasswordIndexRoute
   '/campaign/$level/$id': typeof CampaignLevelIdRoute
 }
 export interface FileRoutesById {
@@ -140,8 +164,11 @@ export interface FileRoutesById {
   '/history/$id': typeof HistoryIdRoute
   '/play/daily': typeof PlayDailyRoute
   '/profile/$id': typeof ProfileIdRoute
+  '/reset-password/$id': typeof ResetPasswordIdRoute
+  '/verify/$id': typeof VerifyIdRoute
   '/campaign/': typeof CampaignIndexRoute
   '/history/': typeof HistoryIndexRoute
+  '/reset-password/': typeof ResetPasswordIndexRoute
   '/campaign/$level/$id': typeof CampaignLevelIdRoute
 }
 export interface FileRouteTypes {
@@ -158,8 +185,11 @@ export interface FileRouteTypes {
     | '/history/$id'
     | '/play/daily'
     | '/profile/$id'
+    | '/reset-password/$id'
+    | '/verify/$id'
     | '/campaign'
     | '/history'
+    | '/reset-password'
     | '/campaign/$level/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -174,8 +204,11 @@ export interface FileRouteTypes {
     | '/history/$id'
     | '/play/daily'
     | '/profile/$id'
+    | '/reset-password/$id'
+    | '/verify/$id'
     | '/campaign'
     | '/history'
+    | '/reset-password'
     | '/campaign/$level/$id'
   id:
     | '__root__'
@@ -190,8 +223,11 @@ export interface FileRouteTypes {
     | '/history/$id'
     | '/play/daily'
     | '/profile/$id'
+    | '/reset-password/$id'
+    | '/verify/$id'
     | '/campaign/'
     | '/history/'
+    | '/reset-password/'
     | '/campaign/$level/$id'
   fileRoutesById: FileRoutesById
 }
@@ -207,8 +243,11 @@ export interface RootRouteChildren {
   HistoryIdRoute: typeof HistoryIdRoute
   PlayDailyRoute: typeof PlayDailyRoute
   ProfileIdRoute: typeof ProfileIdRoute
+  ResetPasswordIdRoute: typeof ResetPasswordIdRoute
+  VerifyIdRoute: typeof VerifyIdRoute
   CampaignIndexRoute: typeof CampaignIndexRoute
   HistoryIndexRoute: typeof HistoryIndexRoute
+  ResetPasswordIndexRoute: typeof ResetPasswordIndexRoute
   CampaignLevelIdRoute: typeof CampaignLevelIdRoute
 }
 
@@ -270,6 +309,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password/': {
+      id: '/reset-password/'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/history/': {
       id: '/history/'
       path: '/history'
@@ -282,6 +328,20 @@ declare module '@tanstack/react-router' {
       path: '/campaign'
       fullPath: '/campaign'
       preLoaderRoute: typeof CampaignIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify/$id': {
+      id: '/verify/$id'
+      path: '/verify/$id'
+      fullPath: '/verify/$id'
+      preLoaderRoute: typeof VerifyIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password/$id': {
+      id: '/reset-password/$id'
+      path: '/reset-password/$id'
+      fullPath: '/reset-password/$id'
+      preLoaderRoute: typeof ResetPasswordIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile/$id': {
@@ -327,8 +387,11 @@ const rootRouteChildren: RootRouteChildren = {
   HistoryIdRoute: HistoryIdRoute,
   PlayDailyRoute: PlayDailyRoute,
   ProfileIdRoute: ProfileIdRoute,
+  ResetPasswordIdRoute: ResetPasswordIdRoute,
+  VerifyIdRoute: VerifyIdRoute,
   CampaignIndexRoute: CampaignIndexRoute,
   HistoryIndexRoute: HistoryIndexRoute,
+  ResetPasswordIndexRoute: ResetPasswordIndexRoute,
   CampaignLevelIdRoute: CampaignLevelIdRoute,
 }
 export const routeTree = rootRouteImport
