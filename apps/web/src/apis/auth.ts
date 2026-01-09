@@ -50,3 +50,24 @@ export const getMe = async () => {
         return null;
     }
 };
+
+export const generateResetToken = async (email: string) => {
+    try {
+        await instance.post("/auth/reset", { email });
+    } catch (error) {
+        const message = getApiErrorMessage(error, "Failed to get user");
+        console.error(message, error);
+        return null;
+    }
+};
+
+export const resetPassword = async () => {
+    try {
+        const { data } = await instance.put("/auth/reset");
+        return data.user || null;
+    } catch (error) {
+        const message = getApiErrorMessage(error, "Failed to get user");
+        console.error(message, error);
+        return null;
+    }
+};

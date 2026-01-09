@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import z from "zod";
 import Posts from "@/db/models/Posts";
 import crypto from "crypto";
-import { sendVerificationEmail } from "@/utils/mail";
+import { sendResetPasswordEmail, sendVerificationEmail } from "@/utils/mail";
 declare global {
     namespace Express {
         interface Request {
@@ -162,24 +162,17 @@ export const getMe = async (req: Request, res: Response) => {
 
 export const generateResetToken = async (req: Request, res: Response) => {
     try {
-        const userId = req.users;
+        const { email } = req.body;
 
-        if (!userId) {
-            return res.status(401).send({
-                success: false,
-                message: "Unauthorized",
-            });
-        }
-
-        const user = await User.findById(userId);
+        const user = await User.findOne({ email });
         if (!user) {
-            return res.status(401).send({
-                success: false,
-                message: "Unauthorized",
+            return res.status(200).send({
+                success: true,
+                message: "Success",
             });
         }
 
-        const resetToken = crypto.randomBytes(32).toString("hex");
+        const resetToken = crypto.randomBytes(6).toString("hex");
         const expiryTime = new Date(Date.now() + 1000 * 60 * 60); // 1 hour
 
         user.resetToken = resetToken;
@@ -187,6 +180,8 @@ export const generateResetToken = async (req: Request, res: Response) => {
         user.resetTokenExpiry = expiryTime;
 
         await user.save();
+
+        await sendResetPasswordEmail(email, resetToken);
 
         res.status(200).json({ success: true, message: "Success" });
     } catch (error) {

@@ -1,9 +1,205 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
+import {
+    Lock,
+    CheckCircle2,
+    AlertCircle,
+    ArrowRight,
+    Loader2,
+    Terminal,
+} from "lucide-react";
+import { motion } from "motion/react";
 
-export const Route = createFileRoute('/reset-password/$id')({
-  component: RouteComponent,
-})
+export const Route = createFileRoute("/reset-password/$id")({
+    component: RouteComponent,
+});
 
 function RouteComponent() {
-  return <div>Hello "/reset-password/$id"!</div>
+    // 1. Grab the "Code" directly from the URL
+    const { id } = Route.useParams();
+
+    const [passwords, setPasswords] = useState({ new: "", confirm: "" });
+    const [status, setStatus] = useState<
+        "idle" | "loading" | "success" | "error"
+    >("idle");
+    const [errorMsg, setErrorMsg] = useState("");
+
+    const doPasswordsMatch =
+        passwords.new && passwords.new === passwords.confirm;
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!doPasswordsMatch) {
+            setErrorMsg("Passwords do not match");
+            return;
+        }
+
+        setStatus("loading");
+        setErrorMsg("");
+
+        try {
+            // TODO: Replace with your actual API Call
+            // await api.post('/auth/reset-password', { token: id, password: passwords.new });
+
+            await new Promise((r) => setTimeout(r, 2000)); // Fake delay
+            setStatus("success");
+        } catch (err) {
+            setStatus("error");
+            setErrorMsg("Token expired or invalid.");
+        }
+    };
+
+    return (
+        <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-zinc-950 p-6 font-mono text-zinc-300">
+            <div className="w-full max-w-md">
+                {status === "success" ? (
+                    // SUCCESS STATE
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="border border-green-900 bg-green-950/10 p-8 text-center"
+                    >
+                        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-green-500/10 text-green-500 border border-green-500/20 shadow-[0_0_20px_rgba(34,197,94,0.2)]">
+                            <CheckCircle2 size={32} />
+                        </div>
+                        <h2 className="text-xl font-bold text-white uppercase tracking-wider mb-2">
+                            Credentials Updated
+                        </h2>
+                        <p className="text-sm text-zinc-400 mb-8">
+                            Your access protocols have been rewritten. You may
+                            now log in with your new credentials.
+                        </p>
+                        <Link
+                            to="/sign-in"
+                            className="inline-flex w-full items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-black px-6 py-3 text-xs font-bold uppercase tracking-widest transition-all"
+                        >
+                            Proceed to Login <ArrowRight size={14} />
+                        </Link>
+                    </motion.div>
+                ) : (
+                    // FORM STATE
+                    <div className="border border-zinc-800 bg-zinc-900/30 p-8 relative overflow-hidden backdrop-blur-sm">
+                        {/* Header */}
+                        <div className="mb-8 border-b border-zinc-800 pb-6">
+                            <div className="flex items-center gap-3 text-white mb-2">
+                                <Terminal
+                                    size={24}
+                                    className="text-green-500"
+                                />
+                                <h1 className="text-xl font-black uppercase tracking-tight">
+                                    Override Protocols
+                                </h1>
+                            </div>
+                            <div className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-zinc-500 font-bold bg-zinc-950 p-2 border border-zinc-800/50 rounded-sm">
+                                <span>Key:</span>
+                                <span className="text-zinc-300 font-mono">
+                                    {id}
+                                </span>
+                            </div>
+                        </div>
+
+                        <form
+                            onSubmit={handleSubmit}
+                            className="flex flex-col gap-5"
+                        >
+                            {/* New Password */}
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+                                    New Password
+                                </label>
+                                <div className="relative">
+                                    <input
+                                        type="password"
+                                        required
+                                        className="w-full border border-zinc-800 bg-zinc-950 pl-10 pr-4 py-3 text-white placeholder:text-zinc-700 focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500/50 transition-all"
+                                        placeholder="••••••••"
+                                        value={passwords.new}
+                                        onChange={(e) =>
+                                            setPasswords({
+                                                ...passwords,
+                                                new: e.target.value,
+                                            })
+                                        }
+                                    />
+                                    <Lock
+                                        size={16}
+                                        className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Confirm Password */}
+                            <div className="space-y-2">
+                                <div className="flex justify-between items-center">
+                                    <label className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+                                        Confirm Password
+                                    </label>
+                                    {passwords.confirm && (
+                                        <span
+                                            className={`text-[10px] uppercase font-bold ${doPasswordsMatch ? "text-green-500" : "text-red-500"}`}
+                                        >
+                                            {doPasswordsMatch
+                                                ? "Match Verified"
+                                                : "Mismatch"}
+                                        </span>
+                                    )}
+                                </div>
+                                <div className="relative">
+                                    <input
+                                        type="password"
+                                        required
+                                        className={`w-full border bg-zinc-950 pl-10 pr-4 py-3 text-white placeholder:text-zinc-700 focus:outline-none transition-all
+                                        ${passwords.confirm && !doPasswordsMatch ? "border-red-900 focus:border-red-500" : "border-zinc-800 focus:border-green-500"}
+                                    `}
+                                        placeholder="••••••••"
+                                        value={passwords.confirm}
+                                        onChange={(e) =>
+                                            setPasswords({
+                                                ...passwords,
+                                                confirm: e.target.value,
+                                            })
+                                        }
+                                    />
+                                    <Lock
+                                        size={16}
+                                        className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Error Message */}
+                            {errorMsg && (
+                                <div className="flex items-center gap-2 bg-red-950/20 border border-red-900/50 p-3 text-red-400 text-xs">
+                                    <AlertCircle size={14} />
+                                    {errorMsg}
+                                </div>
+                            )}
+
+                            {/* Submit */}
+                            <button
+                                type="submit"
+                                disabled={
+                                    status === "loading" || !doPasswordsMatch
+                                }
+                                className="mt-2 flex w-full items-center justify-center gap-2 bg-white px-4 py-3 text-sm font-bold uppercase tracking-widest text-black transition-all hover:bg-zinc-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {status === "loading" ? (
+                                    <>
+                                        <Loader2
+                                            size={16}
+                                            className="animate-spin"
+                                        />
+                                        Updating...
+                                    </>
+                                ) : (
+                                    "Update Credentials"
+                                )}
+                            </button>
+                        </form>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
 }
