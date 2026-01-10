@@ -96,7 +96,10 @@ function RouteComponent() {
                             className="flex flex-col gap-5"
                         >
                             <div className="space-y-2">
-                                <label className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+                                <label
+                                    htmlFor="password"
+                                    className="text-xs font-bold uppercase tracking-wider text-zinc-500"
+                                >
                                     New Password
                                 </label>
                                 <div className="relative">
@@ -112,6 +115,7 @@ function RouteComponent() {
                                                 new: e.target.value,
                                             })
                                         }
+                                        id="password"
                                     />
                                     <Lock
                                         size={16}
@@ -122,7 +126,10 @@ function RouteComponent() {
 
                             <div className="space-y-2">
                                 <div className="flex justify-between items-center">
-                                    <label className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+                                    <label
+                                        htmlFor="confirmPassword"
+                                        className="text-xs font-bold uppercase tracking-wider text-zinc-500"
+                                    >
                                         Confirm Password
                                     </label>
                                     {passwords.confirm && (
@@ -150,6 +157,7 @@ function RouteComponent() {
                                                 confirm: e.target.value,
                                             })
                                         }
+                                        id="confirmPassword"
                                     />
                                     <Lock
                                         size={16}

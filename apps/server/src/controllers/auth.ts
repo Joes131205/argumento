@@ -244,6 +244,7 @@ export const generateResetToken = async (req: Request, res: Response) => {
 export const resetPassword = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
+        const { newPassword } = req.body;
         const user = await User.findOne({
             resetToken: id,
         });
@@ -265,11 +266,16 @@ export const resetPassword = async (req: Request, res: Response) => {
 
         const currTime = new Date();
 
-        if (user.verifyTokenExpiry && currTime > user.verifyTokenExpiry) {
+        if (user.resetTokenExpiry && currTime > user.verifyTokenExpiry) {
             return res
                 .status(401)
                 .send({ success: false, message: "Token expired" });
         }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        user.password = hashedPassword;
+
+        await user.save();
 
         res.status(200).json({ success: true, message: "Success" });
     } catch (error) {
