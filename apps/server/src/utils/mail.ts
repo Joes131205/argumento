@@ -11,26 +11,59 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-export const sendVerificationEmail = async (toEmail: string, code: string) => {
+export const sendVerificationEmail = async (toEmail: string, token: string) => {
+    const verifyLink = `${process.env.CORS_ORIGIN}/verify/${token}`;
+
     try {
         const info = await transporter.sendMail({
             from: '"Argumento Command" <yourpersonalemail@gmail.com>',
             to: toEmail,
-            subject: "Verify Identity",
+            subject: "Action Required: Verify Identity",
             html: `
-        <div style="font-family: monospace; background-color: #000; color: #0f0; padding: 20px; border: 1px solid #333;">
-            <p style="color: #ccc;">Hello! Please input the code below!</p>
-            <div style="font-size: 32px; font-weight: bold; letter-spacing: 5px; margin: 20px 0; border: 1px dashed #0f0; padding: 10px; width: fit-content;">
-                ${code}
-            </div>
-        </div>
-      `,
+            <!DOCTYPE html>
+            <html>
+            <body style="margin: 0; padding: 0; background-color: #000000; font-family: 'Courier New', Courier, monospace;">
+                <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px; border: 1px solid #333;">
+                    
+                    <p style="color: #cccccc; margin-bottom: 30px;">
+                        Identity verification required for user: <span style="color: #fff;">${toEmail}</span>.
+                        <br>Click the button below to verify.
+                    </p>
+
+                    <a href="${verifyLink}" style="
+                        display: inline-block;
+                        background-color: #22c55e;
+                        color: #000000;
+                        text-decoration: none;
+                        padding: 15px 30px;
+                        font-weight: bold;
+                        font-size: 16px;
+                        text-transform: uppercase;
+                        letter-spacing: 1px;
+                        border: 2px solid #22c55e;
+                    ">
+                        Verify
+                    </a>
+
+                    <div style="margin-top: 30px; border-top: 1px solid #333; padding-top: 20px;">
+                        <p style="color: #666666; font-size: 12px;">
+                            Or copy this link:
+                        </p>
+                        <a href="${verifyLink}" style="color: #4ade80; font-size: 12px; word-break: break-all;">
+                            ${verifyLink}
+                        </a>
+                    </div>
+
+                </div>
+            </body>
+            </html>
+            `,
         });
 
-        console.log("Transmission Sent: %s", info.messageId);
+        console.log("Link Sent: %s", info.messageId);
         return { success: true };
     } catch (error) {
-        console.error("Transmission Failed:", error);
+        console.error("Link Failed:", error);
         return { success: false, error };
     }
 };

@@ -160,6 +160,53 @@ export const getMe = async (req: Request, res: Response) => {
     }
 };
 
+export const verifyEmail = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const user = await User.findOne({
+            verifyToken: id,
+        });
+
+        if (!user) {
+            return res
+                .status(401)
+                .send({ success: false, message: "Unauthorized" });
+        }
+        if (
+            !user.verifyToken &&
+            !user.verifyTokenExpiry &&
+            !user.verifyTokenGeneratedAt
+        ) {
+            return res
+                .status(401)
+                .send({ success: false, message: "Unauthorized" });
+        }
+
+        const currTime = new Date();
+
+        if (user.verifyTokenExpiry && currTime > user.verifyTokenExpiry) {
+            return res
+                .status(401)
+                .send({ success: false, message: "Token expired" });
+        }
+
+        user.verifyToken = null;
+        user.verifyTokenExpiry = null;
+        user.verifyTokenGeneratedAt = null;
+        user.isVerified = true;
+
+        await user.save();
+        res.status(200).json({ success: true, message: "Success" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error,
+        });
+    }
+};
+
 export const generateResetToken = async (req: Request, res: Response) => {
     try {
         const { email } = req.body;
@@ -196,6 +243,34 @@ export const generateResetToken = async (req: Request, res: Response) => {
 
 export const resetPassword = async (req: Request, res: Response) => {
     try {
+        const { id } = req.params;
+        const user = await User.findOne({
+            resetToken: id,
+        });
+
+        if (!user) {
+            return res
+                .status(401)
+                .send({ success: false, message: "Unauthorized" });
+        }
+        if (
+            !user.resetToken &&
+            !user.resetTokenExpiry &&
+            !user.resetTokenGeneratedAt
+        ) {
+            return res
+                .status(401)
+                .send({ success: false, message: "Unauthorized" });
+        }
+
+        const currTime = new Date();
+
+        if (user.verifyTokenExpiry && currTime > user.verifyTokenExpiry) {
+            return res
+                .status(401)
+                .send({ success: false, message: "Token expired" });
+        }
+
         res.status(200).json({ success: true, message: "Success" });
     } catch (error) {
         console.error(error);

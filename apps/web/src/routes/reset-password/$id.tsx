@@ -15,7 +15,6 @@ export const Route = createFileRoute("/reset-password/$id")({
 });
 
 function RouteComponent() {
-    // 1. Grab the "Code" directly from the URL
     const { id } = Route.useParams();
 
     const [passwords, setPasswords] = useState({ new: "", confirm: "" });
@@ -39,10 +38,6 @@ function RouteComponent() {
         setErrorMsg("");
 
         try {
-            // TODO: Replace with your actual API Call
-            // await api.post('/auth/reset-password', { token: id, password: passwords.new });
-
-            await new Promise((r) => setTimeout(r, 2000)); // Fake delay
             setStatus("success");
         } catch (err) {
             setStatus("error");
@@ -54,7 +49,6 @@ function RouteComponent() {
         <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-zinc-950 p-6 font-mono text-zinc-300">
             <div className="w-full max-w-md">
                 {status === "success" ? (
-                    // SUCCESS STATE
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -78,9 +72,7 @@ function RouteComponent() {
                         </Link>
                     </motion.div>
                 ) : (
-                    // FORM STATE
                     <div className="border border-zinc-800 bg-zinc-900/30 p-8 relative overflow-hidden backdrop-blur-sm">
-                        {/* Header */}
                         <div className="mb-8 border-b border-zinc-800 pb-6">
                             <div className="flex items-center gap-3 text-white mb-2">
                                 <Terminal
@@ -103,7 +95,6 @@ function RouteComponent() {
                             onSubmit={handleSubmit}
                             className="flex flex-col gap-5"
                         >
-                            {/* New Password */}
                             <div className="space-y-2">
                                 <label className="text-xs font-bold uppercase tracking-wider text-zinc-500">
                                     New Password
@@ -129,7 +120,6 @@ function RouteComponent() {
                                 </div>
                             </div>
 
-                            {/* Confirm Password */}
                             <div className="space-y-2">
                                 <div className="flex justify-between items-center">
                                     <label className="text-xs font-bold uppercase tracking-wider text-zinc-500">
@@ -168,7 +158,6 @@ function RouteComponent() {
                                 </div>
                             </div>
 
-                            {/* Error Message */}
                             {errorMsg && (
                                 <div className="flex items-center gap-2 bg-red-950/20 border border-red-900/50 p-3 text-red-400 text-xs">
                                     <AlertCircle size={14} />
@@ -176,7 +165,6 @@ function RouteComponent() {
                                 </div>
                             )}
 
-                            {/* Submit */}
                             <button
                                 type="submit"
                                 disabled={
