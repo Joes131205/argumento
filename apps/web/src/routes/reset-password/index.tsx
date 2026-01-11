@@ -36,7 +36,7 @@ function RouteComponent() {
             <div className="w-full max-w-md">
                 <Link
                     to="/sign-in"
-                    className="mb-6 flex items-center text-xs font-bold uppercase tracking-widest text-zinc-500 hover:text-white transition-colors"
+                    className="mb-6 flex items-center text-xs font-bold uppercase tracking-widest text-zinc-500 hover:text-[var(--accent-color)] transition-colors"
                 >
                     <ChevronLeft size={14} className="mr-1" />
                     Return to Login
@@ -54,7 +54,7 @@ function RouteComponent() {
                                 <CheckCircle2 size={32} />
                             </div>
                             <h2 className="mb-2 text-xl font-bold text-white uppercase tracking-wider">
-                                Transmission Sent
+                                Email Sent
                             </h2>
                             <p className="text-sm text-zinc-400 mb-6">
                                 If an account exists for{" "}
@@ -66,7 +66,7 @@ function RouteComponent() {
                             <button
                                 type="button"
                                 onClick={() => setStatus("idle")}
-                                className="cursor-pointer text-xs uppercase tracking-widest text-zinc-500 hover:text-green-400 underline decoration-zinc-800 underline-offset-4"
+                                className="cursor-pointer transition-all text-xs uppercase tracking-widest text-zinc-500 hover:text-green-400 underline decoration-zinc-800 underline-offset-4"
                             >
                                 Try a different email
                             </button>
@@ -85,7 +85,7 @@ function RouteComponent() {
                                 </h1>
                                 <p className="mt-2 text-sm text-zinc-500">
                                     Enter your registered email. We will send
-                                    you a recovery key.
+                                    you a reset email
                                 </p>
                             </div>
 
@@ -110,7 +110,7 @@ function RouteComponent() {
                             <button
                                 type="submit"
                                 disabled={status === "loading" || !email}
-                                className="group relative flex w-full items-center justify-center gap-2 overflow-hidden theme-accent-solid px-4 py-3 text-sm font-bold uppercase tracking-widest text-black transition-all hover:bg-[var(--accent-light)] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                                className="cursor-pointer inline-flex w-full items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-black px-6 py-3 text-xs font-bold uppercase tracking-widest transition-all disabled:cursor-not-allowed"
                             >
                                 {status === "loading" ? (
                                     <>
@@ -122,7 +122,7 @@ function RouteComponent() {
                                     </>
                                 ) : (
                                     <>
-                                        Send Recovery Key
+                                        Send Email
                                         <ArrowRight
                                             size={16}
                                             className="transition-transform group-hover:translate-x-1"

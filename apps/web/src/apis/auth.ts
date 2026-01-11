@@ -71,10 +71,9 @@ export const generateResetToken = async (email: string) => {
     }
 };
 
-export const resetPassword = async () => {
+export const resetPassword = async (id: string, newPassword: string) => {
     try {
-        const { data } = await instance.put("/auth/reset");
-        return data.user || null;
+        await instance.put(`/auth/reset/${id}`, { newPassword });
     } catch (error) {
         const message = getApiErrorMessage(error, "Failed to get user");
         console.error(message, error);

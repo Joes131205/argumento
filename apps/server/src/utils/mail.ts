@@ -16,9 +16,9 @@ export const sendVerificationEmail = async (toEmail: string, token: string) => {
 
     try {
         const info = await transporter.sendMail({
-            from: '"Argumento Command" <yourpersonalemail@gmail.com>',
+            from: "Argumento",
             to: toEmail,
-            subject: "Action Required: Verify Identity",
+            subject: "Verify Email",
             html: `
             <!DOCTYPE html>
             <html>
@@ -69,49 +69,61 @@ export const sendVerificationEmail = async (toEmail: string, token: string) => {
 };
 
 export const sendResetPasswordEmail = async (toEmail: string, code: string) => {
+    const resetLink = `${process.env.CORS_ORIGIN}/reset-password/${code}`;
+
     try {
         const info = await transporter.sendMail({
-            from: '"Argumento Security" <yourpersonalemail@gmail.com>',
+            from: '"Argumento" <yourpersonalemail@gmail.com>',
             to: toEmail,
-            subject: "ALERT: Password Reset Request",
+            subject: "Security Alert: Password Reset Request",
             html: `
             <!DOCTYPE html>
             <html>
             <body style="margin: 0; padding: 0; background-color: #000000; font-family: 'Courier New', Courier, monospace;">
-                <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px;">
-                    
-                    <div style="border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 30px;">
-                        <h1 style="color: #ef4444; margin: 0; font-size: 24px; letter-spacing: 2px;">
-                            // SECURITY_ALERT
-                        </h1>
-                    </div>
+                <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px; border: 1px solid #333;">
 
-                    <div style="color: #e4e4e7;">
+                    <h2 style="color: #22c55e; margin-top: 0; letter-spacing: 2px; border-bottom: 1px solid #333; padding-bottom: 20px;">
+                        // ACCESS_RECOVERY
+                    </h2>
+
+                    <div style="color: #e4e4e7; margin: 30px 0;">
                         <p style="margin-bottom: 20px;">
-                            A request was received to override the credentials for user: <span style="color: #fff; font-weight: bold;">${toEmail}</span>.
+                            A protocol override (password reset) was initiated for user: <span style="color: #fff; font-weight: bold;">${toEmail}</span>.
                         </p>
-                        
-                        <p style="margin-bottom: 10px; font-size: 12px; color: #71717a; text-transform: uppercase;">
-                            Use the following override key:
+                        <p style="margin-bottom: 30px; font-size: 14px; color: #a1a1aa;">
+                            If you authorized this action, execute the command below to rewrite your credentials.
                         </p>
 
-                        <div style="background-color: #18181b; border: 1px solid #ef4444; border-left: 4px solid #ef4444; padding: 20px; margin: 30px 0; text-align: center;">
-                            <span style="font-size: 32px; font-weight: bold; color: #fff; letter-spacing: 8px;">
-                                ${code}
-                            </span>
+                        <a href="${resetLink}" style="
+                            display: inline-block;
+                            background-color: #22c55e;
+                            color: #000000;
+                            text-decoration: none;
+                            padding: 15px 30px;
+                            font-weight: bold;
+                            font-size: 16px;
+                            text-transform: uppercase;
+                            letter-spacing: 1px;
+                            border: 2px solid #22c55e;
+                        ">
+                            > RESET_PASSWORD
+                        </a>
+
+                        <div style="margin-top: 30px; background: #111; padding: 15px; border-radius: 4px;">
+                            <p style="color: #666666; font-size: 10px; margin-top: 0; text-transform: uppercase;">
+                                Manual Override Link:
+                            </p>
+                            <a href="${resetLink}" style="color: #4ade80; font-size: 12px; word-break: break-all; text-decoration: none;">
+                                ${resetLink}
+                            </a>
                         </div>
-
-                        <p style="color: #a1a1aa; font-size: 14px; line-height: 1.5;">
-                            This key will expire in 1 hour.
-                        </p>
                     </div>
 
-                    <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; font-size: 10px; color: #52525b;">
-                        <p>
-                            WARN: If you did not initiate this command, your account identity may be compromised. 
-                            <br>Igore this message to maintain current security protocols.
+                    <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; font-size: 11px; color: #52525b;">
+                        <p style="margin: 0;">
+                            <strong>WARNING:</strong> If you did not request this change, ignore this transmission. Your account remains secure.
                         </p>
-                        <p>ARGUMENTO SYSTEM v1.0</p>
+                        <p style="margin-top: 10px;">ARGUMENTO SYSTEM // AUTH_NODE_01</p>
                     </div>
 
                 </div>

@@ -16,6 +16,6 @@ authRouter.post("/register", register);
 authRouter.get("/", authMiddleware, getMe);
 authRouter.put("/verify/:id", verifyEmail);
 authRouter.post("/reset", generateResetToken);
-authRouter.put("/reset", resetPassword);
+authRouter.put("/reset/:id", resetPassword);
 
 export type AuthRouter = typeof authRouter;

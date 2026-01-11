@@ -7,8 +7,11 @@ import {
     ArrowRight,
     Loader2,
     Terminal,
+    EyeOff,
+    Eye,
 } from "lucide-react";
 import { motion } from "motion/react";
+import { resetPassword } from "@/apis/auth";
 
 export const Route = createFileRoute("/reset-password/$id")({
     component: RouteComponent,
@@ -22,6 +25,9 @@ function RouteComponent() {
         "idle" | "loading" | "success" | "error"
     >("idle");
     const [errorMsg, setErrorMsg] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmationPassword, setShowConfirmationPassword] =
+        useState(false);
 
     const doPasswordsMatch =
         passwords.new && passwords.new === passwords.confirm;
@@ -36,6 +42,8 @@ function RouteComponent() {
 
         setStatus("loading");
         setErrorMsg("");
+
+        await resetPassword(id, passwords.new);
 
         try {
             setStatus("success");
@@ -61,8 +69,8 @@ function RouteComponent() {
                             Credentials Updated
                         </h2>
                         <p className="text-sm text-zinc-400 mb-8">
-                            Your access protocols have been rewritten. You may
-                            now log in with your new credentials.
+                            Your password has been reset, you may log in with
+                            your new credentials
                         </p>
                         <Link
                             to="/sign-in"
@@ -80,7 +88,7 @@ function RouteComponent() {
                                     className="text-green-500"
                                 />
                                 <h1 className="text-xl font-black uppercase tracking-tight">
-                                    Override Protocols
+                                    Reset Password
                                 </h1>
                             </div>
                             <div className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-zinc-500 font-bold bg-zinc-950 p-2 border border-zinc-800/50 rounded-sm">
@@ -104,7 +112,9 @@ function RouteComponent() {
                                 </label>
                                 <div className="relative">
                                     <input
-                                        type="password"
+                                        type={
+                                            showPassword ? "text" : "password"
+                                        }
                                         required
                                         className="w-full border border-zinc-800 bg-zinc-950 pl-10 pr-4 py-3 text-white placeholder:text-zinc-700 focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500/50 transition-all"
                                         placeholder="••••••••"
@@ -121,6 +131,19 @@ function RouteComponent() {
                                         size={16}
                                         className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600"
                                     />
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            setShowPassword(!showPassword)
+                                        }
+                                        className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-zinc-500 transition-colors hover:text-white"
+                                    >
+                                        {showPassword ? (
+                                            <EyeOff size={16} />
+                                        ) : (
+                                            <Eye size={16} />
+                                        )}
+                                    </button>
                                 </div>
                             </div>
 
@@ -144,7 +167,11 @@ function RouteComponent() {
                                 </div>
                                 <div className="relative">
                                     <input
-                                        type="password"
+                                        type={
+                                            showConfirmationPassword
+                                                ? "text"
+                                                : "password"
+                                        }
                                         required
                                         className={`w-full border bg-zinc-950 pl-10 pr-4 py-3 text-white placeholder:text-zinc-700 focus:outline-none transition-all
                                         ${passwords.confirm && !doPasswordsMatch ? "border-red-900 focus:border-red-500" : "border-zinc-800 focus:border-green-500"}
@@ -163,6 +190,21 @@ function RouteComponent() {
                                         size={16}
                                         className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600"
                                     />
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            setShowConfirmationPassword(
+                                                !showConfirmationPassword
+                                            )
+                                        }
+                                        className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-zinc-500 transition-colors hover:text-white"
+                                    >
+                                        {showConfirmationPassword ? (
+                                            <EyeOff size={16} />
+                                        ) : (
+                                            <Eye size={16} />
+                                        )}
+                                    </button>
                                 </div>
                             </div>
 
@@ -178,7 +220,7 @@ function RouteComponent() {
                                 disabled={
                                     status === "loading" || !doPasswordsMatch
                                 }
-                                className="mt-2 flex w-full items-center justify-center gap-2 bg-white px-4 py-3 text-sm font-bold uppercase tracking-widest text-black transition-all hover:bg-zinc-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="cursor-pointer inline-flex w-full items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-black px-6 py-3 text-xs font-bold uppercase tracking-widest transition-all"
                             >
                                 {status === "loading" ? (
                                     <>

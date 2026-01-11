@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
     Activity,
+    AlertTriangle,
     BarChart3,
     CheckCircle,
+    CheckCircle2,
     Coins,
     Flame,
     Play,
@@ -80,7 +82,7 @@ function HomeComponent() {
                 className="mx-auto max-w-6xl space-y-8"
             >
                 <div className="flex flex-col items-start justify-between gap-4 border-b border-current pb-6 md:flex-row md:items-end">
-                    <div>
+                    <div className="space-y-2">
                         <div className="mb-2 flex items-center gap-2">
                             <Shield size={20} className="theme-accent" />
                             <span className="font-bold text-xs uppercase tracking-widest theme-accent">
@@ -90,6 +92,24 @@ function HomeComponent() {
                         <h1 className="font-black text-4xl uppercase tracking-tight text-white md:text-5xl">
                             {user?.username}
                         </h1>
+
+                        {user?.isVerified ? (
+                            <div className="inline-flex items-center gap-2 border border-green-500/30 bg-green-500/10 px-3 py-1.5 text-green-500">
+                                <CheckCircle2 size={14} />
+                                <span className="text-[10px] font-bold uppercase tracking-widest">
+                                    Identity Verified
+                                </span>
+                            </div>
+                        ) : (
+                            <div className="flex items-center gap-3">
+                                <div className="inline-flex items-center gap-2 border border-yellow-500/30 bg-yellow-500/10 px-3 py-1.5 text-yellow-500">
+                                    <AlertTriangle size={14} />
+                                    <span className="text-[10px] font-bold uppercase tracking-widest">
+                                        Unverified
+                                    </span>
+                                </div>
+                            </div>
+                        )}
                     </div>
                     <div className="hidden text-right md:block">
                         <p className="text-xs text-zinc-600 uppercase tracking-widest">

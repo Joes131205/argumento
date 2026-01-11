@@ -75,6 +75,7 @@ export interface IUser {
     _id: string;
     username: string;
     password: string;
+    isVerified: boolean;
     totalExp: number;
     totalCoins: number;
 
@@ -96,6 +97,14 @@ export interface IUser {
             amount: number;
         }[];
     };
+
+    verifyToken: string | null;
+    verifyTokenGeneratedAt: Date | null;
+    verifyTokenExpiry: Date | null;
+
+    resetToken: string | null;
+    resetTokenGeneratedAt: Date | null;
+    resetTokenExpiry: Date | null;
 
     createdAt: Date;
     updatedAt: Date;

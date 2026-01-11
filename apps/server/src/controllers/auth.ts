@@ -266,14 +266,18 @@ export const resetPassword = async (req: Request, res: Response) => {
 
         const currTime = new Date();
 
-        if (user.resetTokenExpiry && currTime > user.verifyTokenExpiry) {
+        if (user.resetTokenExpiry && currTime > user.resetTokenExpiry) {
             return res
                 .status(401)
                 .send({ success: false, message: "Token expired" });
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
         user.password = hashedPassword;
+        user.resetToken = null;
+        user.resetTokenExpiry = null;
+        user.resetTokenGeneratedAt = null;
 
         await user.save();
 
