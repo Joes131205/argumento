@@ -1,9 +1,11 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
-import { Check, ShoppingCart } from "lucide-react";
+import { Check, Loader2, Lock, MailWarning, ShoppingCart } from "lucide-react";
 import { toast } from "sonner";
 import { buyShopItem, getShops } from "@/apis/shop";
 import useUser from "@/hooks/useUser";
 import { equipTheme } from "@/apis/user";
+import { sendVerifyEmail } from "@/apis/auth";
+import { useState } from "react";
 
 interface ShopItem {
     id: string;
@@ -24,6 +26,61 @@ export const Route = createFileRoute("/shop")({
 function RouteComponent() {
     const { themes } = useLoaderData({ from: "/shop" });
     const { user, invalidateUser } = useUser();
+    const [isResending, setIsResending] = useState(false);
+
+    if (!user?.isVerified) {
+        const handleResend = async () => {
+            setIsResending(true);
+            try {
+                await sendVerifyEmail(user?.email || "");
+                toast.success("Email Sent", {
+                    description: "Check your inbox for the verify link.",
+                });
+            } catch (err) {
+                toast.error("Transmission Error", {
+                    description: "Please wait 60 seconds before retrying.",
+                });
+            } finally {
+                setIsResending(false);
+            }
+        };
+
+        return (
+            <div className="col-span-full flex min-h-[60vh] flex-col items-center justify-center rounded-sm border border-dashed border-zinc-800 bg-zinc-950/50 p-8 text-center">
+                <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-red-500/5 text-red-500 border border-red-500/20 shadow-[0_0_30px_rgba(239,68,68,0.1)]">
+                    <Lock size={32} />
+                </div>
+
+                <h2 className="mb-3 text-2xl font-black uppercase tracking-tight text-white">
+                    Restricted Area
+                </h2>
+
+                <p className="mb-8 max-w-md text-sm text-zinc-500 leading-relaxed">
+                    You have to be verified to access this feature!
+                </p>
+
+                <div className="flex flex-col sm:flex-row items-center gap-4">
+                    <button
+                        type="button"
+                        onClick={handleResend}
+                        disabled={isResending}
+                        className="cursor-pointer flex min-w-[180px] items-center justify-center gap-2 border border-zinc-700 bg-zinc-900 px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-all hover:bg-zinc-800 hover:border-zinc-500 disabled:opacity-50"
+                    >
+                        {isResending ? (
+                            <>
+                                <Loader2 size={14} className="animate-spin" />{" "}
+                                <p>Sending...</p>
+                            </>
+                        ) : (
+                            <>
+                                <MailWarning size={14} /> <p>Resend Link</p>
+                            </>
+                        )}
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     const handleBuy = async (type: string, item: ShopItem) => {
         if (!user) return;

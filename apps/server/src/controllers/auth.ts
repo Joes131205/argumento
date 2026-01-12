@@ -160,6 +160,63 @@ export const getMe = async (req: Request, res: Response) => {
     }
 };
 
+export const sendVerifyEmail = async (req: Request, res: Response) => {
+    try {
+        const { email } = req.body;
+
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "Not Found",
+            });
+        }
+
+        if (user.isVerified) {
+            return res.status(400).json({
+                success: false,
+                message: "User is already verified.",
+            });
+        }
+
+        const cooldown = 60;
+        const lastGenerated = user.verifyTokenGeneratedAt
+            ? new Date(user.verifyTokenGeneratedAt).getTime()
+            : 0;
+        const now = Date.now();
+
+        if (now - lastGenerated < cooldown * 1000) {
+            const waitTime = Math.ceil(
+                (cooldown * 1000 - (now - lastGenerated)) / 1000
+            );
+            return res.status(429).json({
+                success: false,
+                message: `Please wait ${waitTime}s before requesting another email.`,
+            });
+        }
+
+        const verifyToken = crypto.randomBytes(5).toString("hex");
+        const expiryTime = new Date(Date.now() + 1000 * 60 * 60); // 1 hour
+
+        user.verifyToken = verifyToken;
+        user.verifyTokenGeneratedAt = new Date();
+        user.verifyTokenExpiry = expiryTime;
+
+        await user.save();
+        await sendVerificationEmail(user.email, verifyToken);
+
+        res.status(200).json({ success: true, message: "Success" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error,
+        });
+    }
+};
+
 export const verifyEmail = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;

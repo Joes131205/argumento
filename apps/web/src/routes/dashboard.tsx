@@ -15,6 +15,7 @@ import useUser from "@/hooks/useUser";
 import { requireAuth } from "@/utils/requireAuth";
 import { motion } from "motion/react";
 import { refreshStreak } from "@/apis/user";
+import { sendVerifyEmail } from "@/apis/auth";
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -97,7 +98,7 @@ function HomeComponent() {
                             <div className="inline-flex items-center gap-2 border border-green-500/30 bg-green-500/10 px-3 py-1.5 text-green-500">
                                 <CheckCircle2 size={14} />
                                 <span className="text-[10px] font-bold uppercase tracking-widest">
-                                    Identity Verified
+                                    Verified
                                 </span>
                             </div>
                         ) : (
@@ -108,6 +109,17 @@ function HomeComponent() {
                                         Unverified
                                     </span>
                                 </div>
+                                <button
+                                    type="button"
+                                    onClick={async () => {
+                                        if (user?.email) {
+                                            await sendVerifyEmail(user.email);
+                                        }
+                                    }}
+                                    className="theme-accent-solid px-4 py-2 text-center font-bold text-sm text-black uppercase transition-colors hover:opacity-90"
+                                >
+                                    Resend Verification Email
+                                </button>
                             </div>
                         )}
                     </div>

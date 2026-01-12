@@ -15,7 +15,6 @@ import { AnimatePresence, motion } from "motion/react";
 import useUser from "@/hooks/useUser";
 import { getThemeClasses, getThemeCssVariables } from "@/utils/themes";
 import { useEffect } from "react";
-import { refreshStreak } from "@/apis/user";
 
 export const Route = createRootRouteWithContext()({
     component: RootComponent,

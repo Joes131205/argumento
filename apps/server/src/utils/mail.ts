@@ -19,14 +19,14 @@ export const sendVerificationEmail = async (toEmail: string, token: string) => {
             from: "Argumento",
             to: toEmail,
             subject: "Verify Email",
-            html: `
+            html: `            
             <!DOCTYPE html>
             <html>
             <body style="margin: 0; padding: 0; background-color: #000000; font-family: 'Courier New', Courier, monospace;">
                 <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px; border: 1px solid #333;">
-                    
+                    <h1 style="color: #fff;">Welcome to Argumento!</h1>
                     <p style="color: #cccccc; margin-bottom: 30px;">
-                        Identity verification required for user: <span style="color: #fff;">${toEmail}</span>.
+                        Before that, we need to verify your indentity (Email: <span style="color: #fff;">${toEmail}</span>).
                         <br>Click the button below to verify.
                     </p>
 
@@ -47,7 +47,7 @@ export const sendVerificationEmail = async (toEmail: string, token: string) => {
 
                     <div style="margin-top: 30px; border-top: 1px solid #333; padding-top: 20px;">
                         <p style="color: #666666; font-size: 12px;">
-                            Or copy this link:
+                            Or copy and paste this link:
                         </p>
                         <a href="${verifyLink}" style="color: #4ade80; font-size: 12px; word-break: break-all;">
                             ${verifyLink}
@@ -56,8 +56,7 @@ export const sendVerificationEmail = async (toEmail: string, token: string) => {
 
                 </div>
             </body>
-            </html>
-            `,
+            </html>`,
         });
 
         console.log("Link Sent: %s", info.messageId);
@@ -82,16 +81,12 @@ export const sendResetPasswordEmail = async (toEmail: string, code: string) => {
             <body style="margin: 0; padding: 0; background-color: #000000; font-family: 'Courier New', Courier, monospace;">
                 <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px; border: 1px solid #333;">
 
-                    <h2 style="color: #22c55e; margin-top: 0; letter-spacing: 2px; border-bottom: 1px solid #333; padding-bottom: 20px;">
-                        // ACCESS_RECOVERY
-                    </h2>
-
                     <div style="color: #e4e4e7; margin: 30px 0;">
                         <p style="margin-bottom: 20px;">
-                            A protocol override (password reset) was initiated for user: <span style="color: #fff; font-weight: bold;">${toEmail}</span>.
+                            A password reset was initiated for user: <span style="color: #fff; font-weight: bold;">${toEmail}</span>.
                         </p>
                         <p style="margin-bottom: 30px; font-size: 14px; color: #a1a1aa;">
-                            If you authorized this action, execute the command below to rewrite your credentials.
+                            If you authorized this action, click the button below to begin password reset.
                         </p>
 
                         <a href="${resetLink}" style="
@@ -106,12 +101,12 @@ export const sendResetPasswordEmail = async (toEmail: string, code: string) => {
                             letter-spacing: 1px;
                             border: 2px solid #22c55e;
                         ">
-                            > RESET_PASSWORD
+                            RESET PASSWORD
                         </a>
 
                         <div style="margin-top: 30px; background: #111; padding: 15px; border-radius: 4px;">
                             <p style="color: #666666; font-size: 10px; margin-top: 0; text-transform: uppercase;">
-                                Manual Override Link:
+                                Or copy and paste this link
                             </p>
                             <a href="${resetLink}" style="color: #4ade80; font-size: 12px; word-break: break-all; text-decoration: none;">
                                 ${resetLink}
@@ -121,9 +116,8 @@ export const sendResetPasswordEmail = async (toEmail: string, code: string) => {
 
                     <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; font-size: 11px; color: #52525b;">
                         <p style="margin: 0;">
-                            <strong>WARNING:</strong> If you did not request this change, ignore this transmission. Your account remains secure.
+                            <strong>WARNING:</strong> If you did not request this, ignore this email.
                         </p>
-                        <p style="margin-top: 10px;">ARGUMENTO SYSTEM // AUTH_NODE_01</p>
                     </div>
 
                 </div>

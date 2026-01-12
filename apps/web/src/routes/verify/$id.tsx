@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ShieldCheck, ArrowRight, ShieldAlert, Terminal } from "lucide-react";
 import { motion } from "motion/react";
 import { verifyEmail } from "@/apis/auth";
+import useUser from "@/hooks/useUser";
+import { useEffect } from "react";
 
 export const Route = createFileRoute("/verify/$id")({
     component: RouteComponent,
@@ -17,6 +19,13 @@ export const Route = createFileRoute("/verify/$id")({
 });
 
 function RouteComponent() {
+    const { invalidateUser } = useUser();
+    useEffect(() => {
+        const invalidate = async () => {
+            await invalidateUser();
+        };
+        invalidate();
+    }, [invalidateUser]);
     return (
         <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-zinc-950 p-6 font-mono text-zinc-300">
             <motion.div
@@ -41,7 +50,7 @@ function RouteComponent() {
                         to="/sign-in"
                         className="cursor-pointer group relative flex w-full items-center justify-center gap-2 overflow-hidden bg-green-600 px-4 py-3 text-sm font-bold uppercase tracking-widest text-black transition-all hover:bg-green-500"
                     >
-                        Sign In
+                        Go Back
                         <ArrowRight
                             size={16}
                             className="transition-transform group-hover:translate-x-1"

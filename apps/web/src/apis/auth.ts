@@ -61,6 +61,16 @@ export const verifyEmail = async (id: string) => {
     }
 };
 
+export const sendVerifyEmail = async (email: string) => {
+    try {
+        await instance.post("/auth/verify/", { email });
+    } catch (error) {
+        const message = getApiErrorMessage(error, "Failed to get user");
+        console.error(message, error);
+        return null;
+    }
+};
+
 export const generateResetToken = async (email: string) => {
     try {
         await instance.post("/auth/reset", { email });
