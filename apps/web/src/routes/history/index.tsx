@@ -21,7 +21,7 @@ function RouteComponent() {
     return (
         <div className="min-h-screen theme-accent p-6 font-mono text-zinc-300 lg:p-12">
             <div className="mx-auto max-w-6xl space-y-8">
-                <div className="mb-12 flex flex-col justify-between gap-4 theme-accent-border/50 border-b pb-6 md:flex-row md:items-end">
+                <div className="mb-12 flex flex-col justify-between gap-4 border-gray-800 border-b pb-6 md:flex-row md:items-end">
                     <div>
                         <h1 className="font-black text-4xl text-white uppercase tracking-tight md:text-5xl">
                             Processed Log

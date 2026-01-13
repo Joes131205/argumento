@@ -8,7 +8,7 @@ export interface Theme {
     cssVariables: Record<string, string>;
 }
 
-const themes: Theme[] = [
+export const themes: Theme[] = [
     {
         id: "theme_green",
         name: "Terminal Green",

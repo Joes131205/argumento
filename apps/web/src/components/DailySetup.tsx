@@ -39,7 +39,7 @@ export const DailySetup = ({
     return (
         <div className="relative flex min-h-[calc(100vh-4rem)] flex-col overflow-x-hidden font-mono theme-accent">
             <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col gap-2 p-6">
-                <div className="mb-10 theme-accent-border/30 border-b pb-6">
+                <div className="mb-10 border-gray-800 border-b pb-6">
                     <h1 className="font-black text-4xl text-white uppercase tracking-tighter md:text-5xl">
                         Custom Simulation
                     </h1>

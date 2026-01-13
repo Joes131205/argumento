@@ -104,7 +104,7 @@ function RouteComponent() {
     return (
         <div className="min-h-[calc(100vh-4rem)] p-6 font-mono text-zinc-300 lg:p-12">
             <div className="mx-auto flex max-w-6xl flex-col gap-8">
-                <div className="mt-4 flex flex-col justify-between gap-4 border-zinc-800 border-b pb-6 md:flex-row md:items-end">
+                <div className="mt-4 flex flex-col justify-between gap-4 border-gray-800 border-b pb-6 md:flex-row md:items-end">
                     <div>
                         <h1 className="font-black text-4xl text-white uppercase tracking-tight md:text-5xl">
                             Shop

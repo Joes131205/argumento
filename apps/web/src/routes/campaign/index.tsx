@@ -30,7 +30,7 @@ function RouteComponent() {
     return (
         <div className="relative flex min-h-[calc(100vh-4rem)] flex-col overflow-x-hidden font-mono theme-accent">
             <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col gap-2 p-6">
-                <div className="mb-12 flex flex-col justify-between gap-4 theme-accent-border/50 border-b pb-6 md:flex-row md:items-end">
+                <div className="mb-12 flex flex-col justify-between gap-4 border-gray-800 border-b pb-6 md:flex-row md:items-end">
                     <div>
                         <h1 className="font-black text-4xl text-white uppercase tracking-tight md:text-5xl">
                             Campaign
