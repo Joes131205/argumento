@@ -348,3 +348,20 @@ export const resetPassword = async (req: Request, res: Response) => {
         });
     }
 };
+
+export const deleteAccount = async (req: Request, res: Response) => {
+    try {
+        const userId = req.users;
+
+        await User.findByIdAndDelete(userId);
+
+        res.status(200).json({ success: true, message: "Success" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error,
+        });
+    }
+};

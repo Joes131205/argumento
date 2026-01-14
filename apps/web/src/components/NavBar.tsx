@@ -162,7 +162,7 @@ export function Navbar() {
                                 </Link>
                                 <Link
                                     to="/sign-up"
-                                    className="bg-white text-black px-4 py-2 text-xs font-bold uppercase hover:bg-zinc-200"
+                                    className="theme-accent-solid text-black px-4 py-2 text-xs font-bold uppercase hover:bg-[var(--accent-dark)] transition-colors"
                                 >
                                     Sign Up
                                 </Link>

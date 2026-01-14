@@ -90,3 +90,13 @@ export const resetPassword = async (id: string, newPassword: string) => {
         return null;
     }
 };
+
+export const deleteAccount = async () => {
+    try {
+        await instance.delete("/auth");
+    } catch (error) {
+        const message = getApiErrorMessage(error, "Failed to get user");
+        console.error(message, error);
+        return null;
+    }
+};

@@ -21,7 +21,6 @@ declare global {
     }
 }
 
-// AI generate the content
 export const generateDailyShift = async (req: Request, res: Response) => {
     try {
         const { postLength, types } = req.body;
@@ -216,6 +215,104 @@ export const completeShift = async (req: Request, res: Response) => {
         await user.save();
 
         res.status(200).json({ success: true, message: "Success", data: user });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error,
+        });
+    }
+};
+
+export const generatePracticeShifts = async (req: Request, res: Response) => {
+    try {
+        const { postLength, types } = req.body;
+        const userId = req.users;
+
+        if (!userId) {
+            return res.status(401).send({
+                success: false,
+                message: "Unauthorized",
+            });
+        }
+
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(401).send({
+                success: false,
+                message: "Unauthorized",
+            });
+        }
+        const prompt = `
+    ROLE: You are the 'Simulation Engine' for a cognitive defense game. Your goal is to generate social media posts that look identical to real-world content but contain hidden logical traps.
+
+    TASK: Generate exactly ${postLength} items in a JSON Array.
+
+    // --- 1. KNOWLEDGE BASE ---
+    // Use these definitions to construct the logic of the "Slop" posts.
+    REFERENCE_DB: 
+    ${JSON.stringify(content_types)}
+
+    // --- 2. MISSION PARAMETERS ---
+    // Only generate "Slop" using these specific categories.
+    INPUT_TARGETS: 
+    ${JSON.stringify(types)}
+
+    // --- 3. GENERATION RULES ---
+    
+    DISTRIBUTION:
+    - 50% "Safe" (Valid Logic)
+    - 50% "Slop" (Fallacious Logic)
+
+    STYLE GUIDE (Apply to ALL posts):
+    - Tone: Twitter/X style, Reddit comments, or News Headlines.
+    - Format: Short, punchy, opinionated. Use 1-2 emojis occasionally. 
+    - Content: distinct topics per post (Politics, Tech, Health, Pop Culture, Economics).
+    - **CRITICAL**: Do not make "Safe" posts boring. They should be strong opinions backed by valid reasoning, or neutral reporting.
+
+    INSTRUCTIONS FOR "SLOP" (The Trap):
+    1. Select a specific flaw from INPUT_TARGETS (e.g., "Strawman").
+    2. Read its definition in REFERENCE_DB to understand the *mechanism* of the flaw.
+    3. Construct a post that *sounds* convincing but relies entirely on that flaw.
+    4. **Subtlety is key.** Do not make it obvious. Make it something a real person would argue in a comment section.
+
+    INSTRUCTIONS FOR "SAFE" (The Control):
+    1. Write a post that makes a claim.
+    2. Ensure the claim is supported by a direct premise or is a verifiable neutral fact.
+    3. It must NOT contain any logical fallacies from the DB.
+
+    // --- 4. OUTPUT FORMAT ---
+    Return ONLY a valid JSON Array. No markdown, no pre-text.
+    
+    Item Schema:
+    {
+        "headline": "A short, catchy title or username (e.g. 'TechGuru99' or 'Breaking News')",
+        "content": "The text of the post (max 280 chars)",
+        "type": "slop" | "safe",
+        "reasons": ["The specific key of the fallacy used (e.g. 'ad_hominem')"] (Empty array if Safe),
+        "category": "The parent key from REFERENCE_DB (e.g. 'logical_fallacies')" (Use 'safe' if Safe),
+        "origin": "ai"
+    }
+`;
+
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: prompt,
+        });
+
+        const parsed = JSON.parse(
+            response?.candidates?.[0]?.content?.parts?.[0]?.text
+                ?.replace("```json\n", "")
+                .replace("\n```", "") || ""
+        );
+
+        res.status(200).json({
+            success: true,
+            message: "Success",
+            posts: parsed,
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({

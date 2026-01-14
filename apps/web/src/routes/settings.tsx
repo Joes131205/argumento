@@ -12,13 +12,13 @@ import {
     Laptop,
     ArrowRight,
     Loader2,
+    X,
 } from "lucide-react";
 import useUser from "@/hooks/useUser";
 import { themes } from "@/utils/themes"; // Import your themeso get Theme Names
 import { useState } from "react";
 import { toast } from "sonner";
-import { sendVerifyEmail } from "@/apis/auth";
-// import { logout } from "@/apis/auth"; // You'll need this later
+import { deleteAccount, sendVerifyEmail } from "@/apis/auth";
 
 export const Route = createFileRoute("/settings")({
     component: RouteComponent,
@@ -28,15 +28,24 @@ function RouteComponent() {
     const { user, logOut, invalidateUser } = useUser();
     const navigate = useNavigate();
 
+    const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+
     const handleLogout = async () => {
         await logOut();
         await invalidateUser();
-        toast.info("Session Terminated.");
+        toast.info("Logged Out.");
+        navigate({ to: "/" });
+    };
+
+    const handleDelete = async () => {
+        await deleteAccount();
+        await invalidateUser();
+        toast.info("Account Deleted.");
         navigate({ to: "/" });
     };
 
     return (
-        <div className="min-h-[calc(100vh-4rem)] p-6 font-mono text-zinc-300 lg:p-12 bg-zinc-950">
+        <div className="min-h-[calc(100vh-4rem)] p-6 font-mono text-zinc-300 lg:p-12">
             <div className="mx-auto max-w-5xl flex flex-col gap-8">
                 <div className="mt-4 border-zinc-800 border-b pb-6">
                     <h1 className="font-black text-4xl text-white uppercase tracking-tight md:text-5xl">
@@ -139,11 +148,60 @@ function RouteComponent() {
                                     <span>Log Out</span>
                                     <LogOut size={14} />
                                 </button>
+                                <button
+                                    type="button"
+                                    className="cursor-pointer w-full flex items-center justify-between p-4 border border-red-900/30 bg-red-950/5 hover:bg-red-900/20 text-red-500 transition-all text-xs font-bold uppercase"
+                                    onClick={() => setDeleteConfirmation(true)}
+                                >
+                                    <span>Delete Account</span>
+                                    <X size={14} />
+                                </button>
                             </div>
                         </section>
                     </div>
                 </div>
             </div>
+            {deleteConfirmation && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
+                    <div className="w-full max-w-md border-2 border-red-500 bg-zinc-900 p-6">
+                        <div className="mb-4 flex items-center gap-3">
+                            <div className="flex h-12 w-12 items-center justify-center border border-red-500 bg-red-500/10 text-red-500">
+                                <Trash2 size={20} />
+                            </div>
+                            <div>
+                                <h2 className="font-bold text-lg text-white uppercase">
+                                    Delete Account
+                                </h2>
+                                <p className="text-xs text-zinc-500">
+                                    This action is irreversible
+                                </p>
+                            </div>
+                        </div>
+
+                        <p className="mb-6 text-sm text-zinc-400">
+                            All your data, progress, and purchases will be
+                            permanently deleted.
+                        </p>
+
+                        <div className="flex gap-3">
+                            <button
+                                type="button"
+                                onClick={() => setDeleteConfirmation(false)}
+                                className="cursor-pointer flex-1 border border-zinc-700 bg-zinc-800 px-4 py-3 text-xs font-bold uppercase text-white transition-all hover:bg-zinc-700"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleDelete}
+                                className="cursor-pointer flex-1 border border-red-500 bg-red-500/10 px-4 py-3 text-xs font-bold uppercase text-red-500 transition-all hover:bg-red-500 hover:text-white"
+                            >
+                                Delete Forever
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

@@ -1,4 +1,5 @@
 import {
+    deleteAccount,
     generateResetToken,
     getMe,
     login,
@@ -19,5 +20,6 @@ authRouter.post("/verify", sendVerifyEmail);
 authRouter.put("/verify/:id", verifyEmail);
 authRouter.post("/reset", generateResetToken);
 authRouter.put("/reset/:id", resetPassword);
+authRouter.delete("/", authMiddleware, deleteAccount);
 
 export type AuthRouter = typeof authRouter;
