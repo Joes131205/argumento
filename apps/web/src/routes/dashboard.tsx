@@ -254,6 +254,29 @@ function HomeComponent() {
                             </div>
                         )}
                     </motion.div>
+                    <motion.div
+                        variants={itemVariants}
+                        className="flex flex-col justify-between border border-l-4 bg-blue-950/20 p-6 transition-all border-blue-700"
+                    >
+                        <div className="mb-4 flex items-start justify-between">
+                            <span className="font-bold text-xs text-blue-400 uppercase tracking-wider">
+                                Practice Mode
+                            </span>
+                            <Shield size={18} className="text-blue-400" />
+                        </div>
+
+                        <div className="flex flex-col gap-3">
+                            <span className="text-sm text-blue-300">
+                                Train without pressure.
+                            </span>
+                            <Link
+                                to="/play/practice"
+                                className="w-full border border-blue-500 bg-blue-500/10 px-4 py-2 text-center font-bold text-sm text-blue-400 uppercase transition-colors hover:bg-blue-500 hover:text-white"
+                            >
+                                Start Practice
+                            </Link>
+                        </div>
+                    </motion.div>
                 </div>
             </motion.div>
         </div>

@@ -1,35 +1,17 @@
-import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
-import { getMe } from "@/apis/auth";
 import { judge } from "@/apis/judge";
-import { completeShift, generateDailyShift } from "@/apis/shifts";
+import { generatePracticeShift } from "@/apis/shifts";
 import { GameSetup } from "@/components/GameSetup";
 import { GameState } from "@/components/GameState";
-import useUser from "@/hooks/useUser";
-import { getApiErrorMessage } from "@/utils/api";
-import { requireAuth } from "@/utils/requireAuth";
 import Manual from "@/components/Manual";
+import useUser from "@/hooks/useUser";
 import type { ICampaignProgress, IPost, IPostLog, IPostVerdict } from "@/types";
+import { getApiErrorMessage } from "@/utils/api";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
-export const Route = createFileRoute("/play/daily")({
-    beforeLoad: requireAuth,
-
+export const Route = createFileRoute("/play/practice")({
     component: RouteComponent,
-
-    loader: async () => {
-        const user = await getMe();
-        const last = new Date(user.lastPlayedDate);
-        const today = new Date();
-        if (
-            last.getDate() === today.getDate() &&
-            last.getMonth() === today.getMonth() &&
-            last.getFullYear() === today.getFullYear()
-        ) {
-            toast.info("You already played for today!");
-            throw redirect({ to: "/dashboard" });
-        }
-    },
 });
 
 function RouteComponent() {
@@ -80,15 +62,10 @@ function RouteComponent() {
     const generateShift = async () => {
         setIsSubmitting(true);
         try {
-            const isCompleted = user?.campaign_progress?.find(
-                (item: ICampaignProgress) =>
-                    item?.campaign_id === "campaign_1" && item.isCompleted
+            const posts = await generatePracticeShift(
+                postAmount,
+                selectedTopics
             );
-            if (!isCompleted) {
-                toast.error("Complete campaign_1 first!");
-                return;
-            }
-            const posts = await generateDailyShift(postAmount, selectedTopics);
 
             const postData = posts?.data || posts;
             const newGame = { currPosts: postData, log: [] };
@@ -175,23 +152,9 @@ function RouteComponent() {
     };
 
     const handleEndShift = async () => {
-        setIsSaving(true);
-        try {
-            console.log(logs);
-            await completeShift(logs);
-            await invalidateUser();
-            localStorage.removeItem("shift_data");
-            toast.success("Shift Complete!");
-            router.navigate({ to: "/dashboard" });
-        } catch (error) {
-            const message = getApiErrorMessage(
-                error,
-                "Failed to save progress"
-            );
-            toast.error(message);
-        } finally {
-            setIsSaving(false);
-        }
+        toast.success("Practice Complete!");
+        localStorage.removeItem("shift_data");
+        router.navigate({ to: "/dashboard" });
     };
 
     if (isLoadingStorage)
@@ -211,7 +174,7 @@ function RouteComponent() {
                 setPostAmount={setPostAmount}
                 onStart={generateShift}
                 isSubmitting={isSubmitting}
-                mode={"daily"}
+                mode={"practice"}
             />
         );
     }

@@ -2,7 +2,7 @@ import { AlertTriangle, Lock, Play } from "lucide-react";
 import { content_types } from "@/utils/content_types";
 import type { ICampaignProgress, IUser } from "@/types";
 
-interface DailySetupProps {
+interface GameSetupProps {
     user: IUser | null;
     selectedTopics: Record<string, string[]>;
     setSelectedTopics: React.Dispatch<
@@ -12,9 +12,10 @@ interface DailySetupProps {
     setPostAmount: (n: number) => void;
     onStart: () => void;
     isSubmitting: boolean;
+    mode: string;
 }
 
-export const DailySetup = ({
+export const GameSetup = ({
     user,
     selectedTopics,
     setSelectedTopics,
@@ -22,7 +23,8 @@ export const DailySetup = ({
     setPostAmount,
     onStart,
     isSubmitting,
-}: DailySetupProps) => {
+    mode,
+}: GameSetupProps) => {
     const toggleTopic = (category: string, topic: string) => {
         setSelectedTopics((prev) => {
             const current = prev[category] || [];
@@ -40,49 +42,64 @@ export const DailySetup = ({
         <div className="relative flex min-h-[calc(100vh-4rem)] flex-col overflow-x-hidden font-mono theme-accent">
             <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col gap-2 p-6">
                 <div className="mb-10 border-gray-800 border-b pb-6">
-                    <h1 className="font-black text-4xl text-white uppercase tracking-tighter md:text-5xl">
-                        Custom Simulation
-                    </h1>
+                    <div className="flex items-center gap-3 mb-4">
+                        <h1 className="font-black text-4xl text-white uppercase tracking-tighter md:text-5xl">
+                            {mode === "practice"
+                                ? "Practice Mode"
+                                : "Custom Simulation"}
+                        </h1>
+                        {mode === "practice" && (
+                            <div className="px-3 py-1 border border-blue-500/50 bg-blue-500/10 rounded-sm">
+                                <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest">
+                                    No Stats Tracked
+                                </span>
+                            </div>
+                        )}
+                    </div>
                     <p className="mt-4 max-w-2xl text-gray-600">
-                        Select specific protocols to test your detection
-                        ability.
+                        {mode === "practice"
+                            ? "Perfect your detection skills with no pressure. Your progress won't be recorded."
+                            : "Select specific protocols to test your detection ability."}
                     </p>
                 </div>
 
                 <div className="mb-24 grid grid-cols-1 gap-6 lg:grid-cols-2">
                     {content_types.map((category, i) => {
-                        const isCompleted = user?.campaign_progress?.find(
-                            (item: ICampaignProgress) =>
-                                item?.campaign_id === category?.requirements &&
-                                item.isCompleted
-                        );
-
-                        if (category.requirements && !isCompleted) {
-                            return (
-                                <div
-                                    key={i.toString()}
-                                    className="flex flex-col items-center justify-center gap-4 border-2 border-zinc-800 border-dashed bg-zinc-900/30 p-8 text-center opacity-60 grayscale"
-                                >
-                                    <div className="rounded-full border border-zinc-800 bg-black p-4">
-                                        <Lock size={32} />
-                                    </div>
-                                    <div>
-                                        <h3 className="font-bold text-xl text-zinc-500 uppercase tracking-widest">
-                                            {category.name}
-                                        </h3>
-                                        <p className="mt-2 border border-red-900/50 bg-red-900/20 px-2 py-1 font-mono text-red-400 text-xs">
-                                            LOCKED: Complete{" "}
-                                            {category.requirements}
-                                        </p>
-                                    </div>
-                                </div>
+                        if (mode === "daily") {
+                            const isCompleted = user?.campaign_progress?.find(
+                                (item: ICampaignProgress) =>
+                                    item?.campaign_id ===
+                                        category?.requirements &&
+                                    item.isCompleted
                             );
+
+                            if (category.requirements && !isCompleted) {
+                                return (
+                                    <div
+                                        key={i.toString()}
+                                        className="flex flex-col items-center justify-center gap-4 border-2 border-zinc-800 border-dashed bg-zinc-900/30 p-8 text-center opacity-60 grayscale"
+                                    >
+                                        <div className="rounded-full border border-zinc-800 bg-black p-4">
+                                            <Lock size={32} />
+                                        </div>
+                                        <div>
+                                            <h3 className="font-bold text-xl text-zinc-500 uppercase tracking-widest">
+                                                {category.name}
+                                            </h3>
+                                            <p className="mt-2 border border-red-900/50 bg-red-900/20 px-2 py-1 font-mono text-red-400 text-xs">
+                                                LOCKED: Complete{" "}
+                                                {category.requirements}
+                                            </p>
+                                        </div>
+                                    </div>
+                                );
+                            }
                         }
 
                         return (
                             <div
                                 key={i.toString()}
-                                className="border theme-accent-border/30 bg-black/60 p-6 transition-all hover:theme-accent-border"
+                                className="border theme-accent-border bg-black/60 p-6 transition-all hover:theme-accent-border"
                             >
                                 <h3 className="mb-6 theme-accent-border/50 border-b pb-4 font-bold theme-accent text-xl uppercase tracking-wider">
                                     {category.name}

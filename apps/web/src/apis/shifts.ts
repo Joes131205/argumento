@@ -47,3 +47,28 @@ export const generateDailyShift = async (
         throw new Error(message);
     }
 };
+
+export const generatePracticeShift = async (
+    postLength: number,
+    types: Record<string, string[]>
+) => {
+    try {
+        const res = await instance.post("/shifts/practice", {
+            postLength,
+            types,
+        });
+        if (!res.data.success) {
+            throw new Error(
+                res.data.message || "Failed to generate practice shift"
+            );
+        }
+        return res.data.posts;
+    } catch (error) {
+        const message = getApiErrorMessage(
+            error,
+            "Failed to generate practice shift"
+        );
+        console.error(message, error);
+        throw new Error(message);
+    }
+};

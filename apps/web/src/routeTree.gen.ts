@@ -24,6 +24,7 @@ import { Route as CampaignIndexRouteImport } from './routes/campaign/index'
 import { Route as VerifyIdRouteImport } from './routes/verify/$id'
 import { Route as ResetPasswordIdRouteImport } from './routes/reset-password/$id'
 import { Route as ProfileIdRouteImport } from './routes/profile/$id'
+import { Route as PlayPracticeRouteImport } from './routes/play/practice'
 import { Route as PlayDailyRouteImport } from './routes/play/daily'
 import { Route as HistoryIdRouteImport } from './routes/history/$id'
 import { Route as CampaignLevelIdRouteImport } from './routes/campaign/$level/$id'
@@ -103,6 +104,11 @@ const ProfileIdRoute = ProfileIdRouteImport.update({
   path: '/profile/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlayPracticeRoute = PlayPracticeRouteImport.update({
+  id: '/play/practice',
+  path: '/play/practice',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PlayDailyRoute = PlayDailyRouteImport.update({
   id: '/play/daily',
   path: '/play/daily',
@@ -131,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/status': typeof StatusRoute
   '/history/$id': typeof HistoryIdRoute
   '/play/daily': typeof PlayDailyRoute
+  '/play/practice': typeof PlayPracticeRoute
   '/profile/$id': typeof ProfileIdRoute
   '/reset-password/$id': typeof ResetPasswordIdRoute
   '/verify/$id': typeof VerifyIdRoute
@@ -151,6 +158,7 @@ export interface FileRoutesByTo {
   '/status': typeof StatusRoute
   '/history/$id': typeof HistoryIdRoute
   '/play/daily': typeof PlayDailyRoute
+  '/play/practice': typeof PlayPracticeRoute
   '/profile/$id': typeof ProfileIdRoute
   '/reset-password/$id': typeof ResetPasswordIdRoute
   '/verify/$id': typeof VerifyIdRoute
@@ -172,6 +180,7 @@ export interface FileRoutesById {
   '/status': typeof StatusRoute
   '/history/$id': typeof HistoryIdRoute
   '/play/daily': typeof PlayDailyRoute
+  '/play/practice': typeof PlayPracticeRoute
   '/profile/$id': typeof ProfileIdRoute
   '/reset-password/$id': typeof ResetPasswordIdRoute
   '/verify/$id': typeof VerifyIdRoute
@@ -194,6 +203,7 @@ export interface FileRouteTypes {
     | '/status'
     | '/history/$id'
     | '/play/daily'
+    | '/play/practice'
     | '/profile/$id'
     | '/reset-password/$id'
     | '/verify/$id'
@@ -214,6 +224,7 @@ export interface FileRouteTypes {
     | '/status'
     | '/history/$id'
     | '/play/daily'
+    | '/play/practice'
     | '/profile/$id'
     | '/reset-password/$id'
     | '/verify/$id'
@@ -234,6 +245,7 @@ export interface FileRouteTypes {
     | '/status'
     | '/history/$id'
     | '/play/daily'
+    | '/play/practice'
     | '/profile/$id'
     | '/reset-password/$id'
     | '/verify/$id'
@@ -255,6 +267,7 @@ export interface RootRouteChildren {
   StatusRoute: typeof StatusRoute
   HistoryIdRoute: typeof HistoryIdRoute
   PlayDailyRoute: typeof PlayDailyRoute
+  PlayPracticeRoute: typeof PlayPracticeRoute
   ProfileIdRoute: typeof ProfileIdRoute
   ResetPasswordIdRoute: typeof ResetPasswordIdRoute
   VerifyIdRoute: typeof VerifyIdRoute
@@ -371,6 +384,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/play/practice': {
+      id: '/play/practice'
+      path: '/play/practice'
+      fullPath: '/play/practice'
+      preLoaderRoute: typeof PlayPracticeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/play/daily': {
       id: '/play/daily'
       path: '/play/daily'
@@ -407,6 +427,7 @@ const rootRouteChildren: RootRouteChildren = {
   StatusRoute: StatusRoute,
   HistoryIdRoute: HistoryIdRoute,
   PlayDailyRoute: PlayDailyRoute,
+  PlayPracticeRoute: PlayPracticeRoute,
   ProfileIdRoute: ProfileIdRoute,
   ResetPasswordIdRoute: ResetPasswordIdRoute,
   VerifyIdRoute: VerifyIdRoute,
