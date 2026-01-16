@@ -16,6 +16,7 @@ import { Route as SignInRouteImport } from './routes/sign-in'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as LeaderboardRouteImport } from './routes/leaderboard'
+import { Route as FeedbackRouteImport } from './routes/feedback'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ResetPasswordIndexRouteImport } from './routes/reset-password/index'
@@ -62,6 +63,11 @@ const SettingsRoute = SettingsRouteImport.update({
 const LeaderboardRoute = LeaderboardRouteImport.update({
   id: '/leaderboard',
   path: '/leaderboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeedbackRoute = FeedbackRouteImport.update({
+  id: '/feedback',
+  path: '/feedback',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -128,6 +134,7 @@ const CampaignLevelIdRoute = CampaignLevelIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/feedback': typeof FeedbackRoute
   '/leaderboard': typeof LeaderboardRoute
   '/settings': typeof SettingsRoute
   '/shop': typeof ShopRoute
@@ -149,6 +156,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/feedback': typeof FeedbackRoute
   '/leaderboard': typeof LeaderboardRoute
   '/settings': typeof SettingsRoute
   '/shop': typeof ShopRoute
@@ -171,6 +179,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/feedback': typeof FeedbackRoute
   '/leaderboard': typeof LeaderboardRoute
   '/settings': typeof SettingsRoute
   '/shop': typeof ShopRoute
@@ -194,6 +203,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
+    | '/feedback'
     | '/leaderboard'
     | '/settings'
     | '/shop'
@@ -215,6 +225,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/dashboard'
+    | '/feedback'
     | '/leaderboard'
     | '/settings'
     | '/shop'
@@ -236,6 +247,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/dashboard'
+    | '/feedback'
     | '/leaderboard'
     | '/settings'
     | '/shop'
@@ -258,6 +270,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
+  FeedbackRoute: typeof FeedbackRoute
   LeaderboardRoute: typeof LeaderboardRoute
   SettingsRoute: typeof SettingsRoute
   ShopRoute: typeof ShopRoute
@@ -326,6 +339,13 @@ declare module '@tanstack/react-router' {
       path: '/leaderboard'
       fullPath: '/leaderboard'
       preLoaderRoute: typeof LeaderboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/feedback': {
+      id: '/feedback'
+      path: '/feedback'
+      fullPath: '/feedback'
+      preLoaderRoute: typeof FeedbackRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -418,6 +438,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
+  FeedbackRoute: FeedbackRoute,
   LeaderboardRoute: LeaderboardRoute,
   SettingsRoute: SettingsRoute,
   ShopRoute: ShopRoute,
