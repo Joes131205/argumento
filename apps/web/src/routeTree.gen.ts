@@ -16,11 +16,11 @@ import { Route as SignInRouteImport } from './routes/sign-in'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as LeaderboardRouteImport } from './routes/leaderboard'
-import { Route as FeedbackRouteImport } from './routes/feedback'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ResetPasswordIndexRouteImport } from './routes/reset-password/index'
 import { Route as HistoryIndexRouteImport } from './routes/history/index'
+import { Route as FeedbacksIndexRouteImport } from './routes/feedbacks/index'
 import { Route as CampaignIndexRouteImport } from './routes/campaign/index'
 import { Route as VerifyIdRouteImport } from './routes/verify/$id'
 import { Route as ResetPasswordIdRouteImport } from './routes/reset-password/$id'
@@ -28,6 +28,7 @@ import { Route as ProfileIdRouteImport } from './routes/profile/$id'
 import { Route as PlayPracticeRouteImport } from './routes/play/practice'
 import { Route as PlayDailyRouteImport } from './routes/play/daily'
 import { Route as HistoryIdRouteImport } from './routes/history/$id'
+import { Route as FeedbacksAnalyticsRouteImport } from './routes/feedbacks/analytics'
 import { Route as CampaignLevelIdRouteImport } from './routes/campaign/$level/$id'
 
 const StatusRoute = StatusRouteImport.update({
@@ -65,11 +66,6 @@ const LeaderboardRoute = LeaderboardRouteImport.update({
   path: '/leaderboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const FeedbackRoute = FeedbackRouteImport.update({
-  id: '/feedback',
-  path: '/feedback',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -88,6 +84,11 @@ const ResetPasswordIndexRoute = ResetPasswordIndexRouteImport.update({
 const HistoryIndexRoute = HistoryIndexRouteImport.update({
   id: '/history/',
   path: '/history/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeedbacksIndexRoute = FeedbacksIndexRouteImport.update({
+  id: '/feedbacks/',
+  path: '/feedbacks/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CampaignIndexRoute = CampaignIndexRouteImport.update({
@@ -125,6 +126,11 @@ const HistoryIdRoute = HistoryIdRouteImport.update({
   path: '/history/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FeedbacksAnalyticsRoute = FeedbacksAnalyticsRouteImport.update({
+  id: '/feedbacks/analytics',
+  path: '/feedbacks/analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CampaignLevelIdRoute = CampaignLevelIdRouteImport.update({
   id: '/campaign/$level/$id',
   path: '/campaign/$level/$id',
@@ -134,7 +140,6 @@ const CampaignLevelIdRoute = CampaignLevelIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
-  '/feedback': typeof FeedbackRoute
   '/leaderboard': typeof LeaderboardRoute
   '/settings': typeof SettingsRoute
   '/shop': typeof ShopRoute
@@ -142,6 +147,7 @@ export interface FileRoutesByFullPath {
   '/sign-up': typeof SignUpRoute
   '/skills-radar': typeof SkillsRadarRoute
   '/status': typeof StatusRoute
+  '/feedbacks/analytics': typeof FeedbacksAnalyticsRoute
   '/history/$id': typeof HistoryIdRoute
   '/play/daily': typeof PlayDailyRoute
   '/play/practice': typeof PlayPracticeRoute
@@ -149,6 +155,7 @@ export interface FileRoutesByFullPath {
   '/reset-password/$id': typeof ResetPasswordIdRoute
   '/verify/$id': typeof VerifyIdRoute
   '/campaign': typeof CampaignIndexRoute
+  '/feedbacks': typeof FeedbacksIndexRoute
   '/history': typeof HistoryIndexRoute
   '/reset-password': typeof ResetPasswordIndexRoute
   '/campaign/$level/$id': typeof CampaignLevelIdRoute
@@ -156,7 +163,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
-  '/feedback': typeof FeedbackRoute
   '/leaderboard': typeof LeaderboardRoute
   '/settings': typeof SettingsRoute
   '/shop': typeof ShopRoute
@@ -164,6 +170,7 @@ export interface FileRoutesByTo {
   '/sign-up': typeof SignUpRoute
   '/skills-radar': typeof SkillsRadarRoute
   '/status': typeof StatusRoute
+  '/feedbacks/analytics': typeof FeedbacksAnalyticsRoute
   '/history/$id': typeof HistoryIdRoute
   '/play/daily': typeof PlayDailyRoute
   '/play/practice': typeof PlayPracticeRoute
@@ -171,6 +178,7 @@ export interface FileRoutesByTo {
   '/reset-password/$id': typeof ResetPasswordIdRoute
   '/verify/$id': typeof VerifyIdRoute
   '/campaign': typeof CampaignIndexRoute
+  '/feedbacks': typeof FeedbacksIndexRoute
   '/history': typeof HistoryIndexRoute
   '/reset-password': typeof ResetPasswordIndexRoute
   '/campaign/$level/$id': typeof CampaignLevelIdRoute
@@ -179,7 +187,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
-  '/feedback': typeof FeedbackRoute
   '/leaderboard': typeof LeaderboardRoute
   '/settings': typeof SettingsRoute
   '/shop': typeof ShopRoute
@@ -187,6 +194,7 @@ export interface FileRoutesById {
   '/sign-up': typeof SignUpRoute
   '/skills-radar': typeof SkillsRadarRoute
   '/status': typeof StatusRoute
+  '/feedbacks/analytics': typeof FeedbacksAnalyticsRoute
   '/history/$id': typeof HistoryIdRoute
   '/play/daily': typeof PlayDailyRoute
   '/play/practice': typeof PlayPracticeRoute
@@ -194,6 +202,7 @@ export interface FileRoutesById {
   '/reset-password/$id': typeof ResetPasswordIdRoute
   '/verify/$id': typeof VerifyIdRoute
   '/campaign/': typeof CampaignIndexRoute
+  '/feedbacks/': typeof FeedbacksIndexRoute
   '/history/': typeof HistoryIndexRoute
   '/reset-password/': typeof ResetPasswordIndexRoute
   '/campaign/$level/$id': typeof CampaignLevelIdRoute
@@ -203,7 +212,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
-    | '/feedback'
     | '/leaderboard'
     | '/settings'
     | '/shop'
@@ -211,6 +219,7 @@ export interface FileRouteTypes {
     | '/sign-up'
     | '/skills-radar'
     | '/status'
+    | '/feedbacks/analytics'
     | '/history/$id'
     | '/play/daily'
     | '/play/practice'
@@ -218,6 +227,7 @@ export interface FileRouteTypes {
     | '/reset-password/$id'
     | '/verify/$id'
     | '/campaign'
+    | '/feedbacks'
     | '/history'
     | '/reset-password'
     | '/campaign/$level/$id'
@@ -225,7 +235,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/dashboard'
-    | '/feedback'
     | '/leaderboard'
     | '/settings'
     | '/shop'
@@ -233,6 +242,7 @@ export interface FileRouteTypes {
     | '/sign-up'
     | '/skills-radar'
     | '/status'
+    | '/feedbacks/analytics'
     | '/history/$id'
     | '/play/daily'
     | '/play/practice'
@@ -240,6 +250,7 @@ export interface FileRouteTypes {
     | '/reset-password/$id'
     | '/verify/$id'
     | '/campaign'
+    | '/feedbacks'
     | '/history'
     | '/reset-password'
     | '/campaign/$level/$id'
@@ -247,7 +258,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/dashboard'
-    | '/feedback'
     | '/leaderboard'
     | '/settings'
     | '/shop'
@@ -255,6 +265,7 @@ export interface FileRouteTypes {
     | '/sign-up'
     | '/skills-radar'
     | '/status'
+    | '/feedbacks/analytics'
     | '/history/$id'
     | '/play/daily'
     | '/play/practice'
@@ -262,6 +273,7 @@ export interface FileRouteTypes {
     | '/reset-password/$id'
     | '/verify/$id'
     | '/campaign/'
+    | '/feedbacks/'
     | '/history/'
     | '/reset-password/'
     | '/campaign/$level/$id'
@@ -270,7 +282,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
-  FeedbackRoute: typeof FeedbackRoute
   LeaderboardRoute: typeof LeaderboardRoute
   SettingsRoute: typeof SettingsRoute
   ShopRoute: typeof ShopRoute
@@ -278,6 +289,7 @@ export interface RootRouteChildren {
   SignUpRoute: typeof SignUpRoute
   SkillsRadarRoute: typeof SkillsRadarRoute
   StatusRoute: typeof StatusRoute
+  FeedbacksAnalyticsRoute: typeof FeedbacksAnalyticsRoute
   HistoryIdRoute: typeof HistoryIdRoute
   PlayDailyRoute: typeof PlayDailyRoute
   PlayPracticeRoute: typeof PlayPracticeRoute
@@ -285,6 +297,7 @@ export interface RootRouteChildren {
   ResetPasswordIdRoute: typeof ResetPasswordIdRoute
   VerifyIdRoute: typeof VerifyIdRoute
   CampaignIndexRoute: typeof CampaignIndexRoute
+  FeedbacksIndexRoute: typeof FeedbacksIndexRoute
   HistoryIndexRoute: typeof HistoryIndexRoute
   ResetPasswordIndexRoute: typeof ResetPasswordIndexRoute
   CampaignLevelIdRoute: typeof CampaignLevelIdRoute
@@ -341,13 +354,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LeaderboardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/feedback': {
-      id: '/feedback'
-      path: '/feedback'
-      fullPath: '/feedback'
-      preLoaderRoute: typeof FeedbackRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -374,6 +380,13 @@ declare module '@tanstack/react-router' {
       path: '/history'
       fullPath: '/history'
       preLoaderRoute: typeof HistoryIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/feedbacks/': {
+      id: '/feedbacks/'
+      path: '/feedbacks'
+      fullPath: '/feedbacks'
+      preLoaderRoute: typeof FeedbacksIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/campaign/': {
@@ -425,6 +438,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HistoryIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/feedbacks/analytics': {
+      id: '/feedbacks/analytics'
+      path: '/feedbacks/analytics'
+      fullPath: '/feedbacks/analytics'
+      preLoaderRoute: typeof FeedbacksAnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/campaign/$level/$id': {
       id: '/campaign/$level/$id'
       path: '/campaign/$level/$id'
@@ -438,7 +458,6 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
-  FeedbackRoute: FeedbackRoute,
   LeaderboardRoute: LeaderboardRoute,
   SettingsRoute: SettingsRoute,
   ShopRoute: ShopRoute,
@@ -446,6 +465,7 @@ const rootRouteChildren: RootRouteChildren = {
   SignUpRoute: SignUpRoute,
   SkillsRadarRoute: SkillsRadarRoute,
   StatusRoute: StatusRoute,
+  FeedbacksAnalyticsRoute: FeedbacksAnalyticsRoute,
   HistoryIdRoute: HistoryIdRoute,
   PlayDailyRoute: PlayDailyRoute,
   PlayPracticeRoute: PlayPracticeRoute,
@@ -453,6 +473,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordIdRoute: ResetPasswordIdRoute,
   VerifyIdRoute: VerifyIdRoute,
   CampaignIndexRoute: CampaignIndexRoute,
+  FeedbacksIndexRoute: FeedbacksIndexRoute,
   HistoryIndexRoute: HistoryIndexRoute,
   ResetPasswordIndexRoute: ResetPasswordIndexRoute,
   CampaignLevelIdRoute: CampaignLevelIdRoute,

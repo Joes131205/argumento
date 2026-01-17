@@ -259,25 +259,6 @@ export function Navbar() {
                     </motion.div>
                 )}
             </AnimatePresence>
-
-            {user && (
-                <div className="md:hidden fixed bottom-0 left-0 w-full bg-zinc-950/90 backdrop-blur-lg border-t border-zinc-800 z-40 pb-safe">
-                    <div className="flex justify-around items-center h-16">
-                        {primaryLinks.map((link) => (
-                            <Link
-                                key={link.to}
-                                to={link.to}
-                                className="flex flex-col items-center justify-center w-full h-full text-zinc-600 [&.active]:text-green-500 [&.active]:bg-green-500/5 transition-all"
-                            >
-                                <link.icon size={20} className="mb-1" />
-                                <span className="text-[9px] font-bold uppercase tracking-wider">
-                                    {link.label}
-                                </span>
-                            </Link>
-                        ))}
-                    </div>
-                </div>
-            )}
         </>
     );
 }
