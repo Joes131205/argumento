@@ -48,7 +48,7 @@ export const buyShopItem = async (req: Request, res: Response) => {
 
         user.totalCoins -= item.price;
         if (type === "themes") {
-            user.inventory[type as keyof typeof user.inventory].push(itemId);
+            user.inventory.themes.push(itemId);
         } else {
             if (
                 user.inventory[type as keyof typeof user.inventory].find(
