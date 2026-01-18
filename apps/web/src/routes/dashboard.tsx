@@ -79,7 +79,7 @@ function HomeComponent() {
                 animate="show"
                 className="mx-auto max-w-6xl space-y-8"
             >
-                <div className="flex flex-col items-start justify-between gap-4 border-gray-800 border-b pb-6 md:flex-row md:items-end">
+                <div className="flex flex-col items-start justify-between gap-4 border-gray-400 border-b pb-6 md:flex-row md:items-end">
                     <div className="space-y-2">
                         <div className="mb-2 flex items-center gap-2">
                             <Shield size={20} className="theme-accent" />
