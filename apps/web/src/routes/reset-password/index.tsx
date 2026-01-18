@@ -1,13 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
 import {
-    KeyRound,
     ArrowRight,
     CheckCircle2,
-    Loader2,
     ChevronLeft,
+    KeyRound,
+    Loader2,
 } from "lucide-react";
 import { motion } from "motion/react";
+import { useState } from "react";
 import { generateResetToken } from "@/apis/auth";
 
 export const Route = createFileRoute("/reset-password/")({
@@ -17,7 +17,7 @@ export const Route = createFileRoute("/reset-password/")({
 function RouteComponent() {
     const [email, setEmail] = useState("");
     const [status, setStatus] = useState<"idle" | "loading" | "success">(
-        "idle"
+        "idle",
     );
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -36,7 +36,7 @@ function RouteComponent() {
             <div className="w-full max-w-md">
                 <Link
                     to="/sign-in"
-                    className="mb-6 flex items-center text-xs font-bold uppercase tracking-widest text-zinc-500 hover:text-[var(--accent-color)] transition-colors"
+                    className="mb-6 flex items-center font-bold text-xs text-zinc-500 uppercase tracking-widest transition-colors hover:text-[var(--accent-color)]"
                 >
                     <ChevronLeft size={14} className="mr-1" />
                     Return to Login
@@ -48,17 +48,17 @@ function RouteComponent() {
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="text-center py-4"
+                            className="py-4 text-center"
                         >
-                            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-900/20 text-green-500 border border-green-500/30">
+                            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full border border-green-500/30 bg-green-900/20 text-green-500">
                                 <CheckCircle2 size={32} />
                             </div>
-                            <h2 className="mb-2 text-xl font-bold text-white uppercase tracking-wider">
+                            <h2 className="mb-2 font-bold text-white text-xl uppercase tracking-wider">
                                 Email Sent
                             </h2>
-                            <p className="text-sm text-zinc-400 mb-6">
+                            <p className="mb-6 text-sm text-zinc-400">
                                 If an account exists for{" "}
-                                <span className="text-white font-bold">
+                                <span className="font-bold text-white">
                                     {email}
                                 </span>
                                 , we have sent a reset link. Check your inbox.
@@ -66,7 +66,7 @@ function RouteComponent() {
                             <button
                                 type="button"
                                 onClick={() => setStatus("idle")}
-                                className="cursor-pointer transition-all text-xs uppercase tracking-widest text-zinc-500 hover:text-green-400 underline decoration-zinc-800 underline-offset-4"
+                                className="cursor-pointer text-xs text-zinc-500 uppercase tracking-widest underline decoration-zinc-800 underline-offset-4 transition-all hover:text-green-400"
                             >
                                 Try a different email
                             </button>
@@ -80,7 +80,7 @@ function RouteComponent() {
                                 <div className="mb-4 inline-flex items-center justify-center rounded border border-zinc-800 bg-zinc-900 p-3 text-zinc-400 sm:mb-6">
                                     <KeyRound size={24} />
                                 </div>
-                                <h1 className="text-2xl font-black uppercase tracking-tight text-white">
+                                <h1 className="font-black text-2xl text-white uppercase tracking-tight">
                                     Reset Access
                                 </h1>
                                 <p className="mt-2 text-sm text-zinc-500">
@@ -92,7 +92,7 @@ function RouteComponent() {
                             <div className="space-y-2">
                                 <label
                                     htmlFor="email"
-                                    className="text-xs font-bold uppercase tracking-wider text-zinc-500"
+                                    className="font-bold text-xs text-zinc-500 uppercase tracking-wider"
                                 >
                                     Email Address
                                 </label>
@@ -103,14 +103,14 @@ function RouteComponent() {
                                     placeholder="e.g johndoe@gmail.com"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full border border-zinc-800 bg-zinc-950 px-4 py-3 text-white placeholder:text-zinc-700 focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500/50 transition-all"
+                                    className="w-full border border-zinc-800 bg-zinc-950 px-4 py-3 text-white transition-all placeholder:text-zinc-700 focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500/50"
                                 />
                             </div>
 
                             <button
                                 type="submit"
                                 disabled={status === "loading" || !email}
-                                className="cursor-pointer inline-flex w-full items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-black px-6 py-3 text-xs font-bold uppercase tracking-widest transition-all disabled:cursor-not-allowed"
+                                className="inline-flex w-full cursor-pointer items-center justify-center gap-2 bg-green-600 px-6 py-3 font-bold text-black text-xs uppercase tracking-widest transition-all hover:bg-green-500 disabled:cursor-not-allowed"
                             >
                                 {status === "loading" ? (
                                     <>

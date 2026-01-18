@@ -195,7 +195,7 @@ function RouteComponent() {
                             )}
                         </form.Subscribe>
 
-                        <div className="text-center flex flex-col gap-2">
+                        <div className="flex flex-col gap-2 text-center">
                             <Link
                                 to="/sign-up"
                                 className="text-sm text-zinc-500 underline-offset-4 transition-colors hover:text-green-500 hover:underline"

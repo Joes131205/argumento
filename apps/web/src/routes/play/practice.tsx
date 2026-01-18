@@ -1,14 +1,14 @@
+import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { judge } from "@/apis/judge";
 import { generatePracticeShift } from "@/apis/shifts";
 import { GameSetup } from "@/components/GameSetup";
 import { GameState } from "@/components/GameState";
 import Manual from "@/components/Manual";
 import useUser from "@/hooks/useUser";
-import type { ICampaignProgress, IPost, IPostLog, IPostVerdict } from "@/types";
+import type { IPost, IPostLog, IPostVerdict } from "@/types";
 import { getApiErrorMessage } from "@/utils/api";
-import { createFileRoute, useRouter } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
 
 export const Route = createFileRoute("/play/practice")({
     component: RouteComponent,
@@ -16,7 +16,7 @@ export const Route = createFileRoute("/play/practice")({
 
 function RouteComponent() {
     const router = useRouter();
-    const { invalidateUser, user } = useUser();
+    const { user } = useUser();
 
     const [isPlayedBefore, setIsPlayedBefore] = useState<boolean>(false);
     const [data, setData] = useState<{
@@ -44,7 +44,6 @@ function RouteComponent() {
         message: string;
     } | null>(null);
     const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
-    const [isSaving, setIsSaving] = useState<boolean>(false);
 
     useEffect(() => {
         const storage = localStorage.getItem("shift_data");
@@ -64,7 +63,7 @@ function RouteComponent() {
         try {
             const posts = await generatePracticeShift(
                 postAmount,
-                selectedTopics
+                selectedTopics,
             );
 
             const postData = posts?.data || posts;
@@ -78,7 +77,7 @@ function RouteComponent() {
         } catch (error) {
             const message = getApiErrorMessage(
                 error,
-                "Failed to generate shift"
+                "Failed to generate shift",
             );
             toast.error(message);
         } finally {
@@ -108,7 +107,7 @@ function RouteComponent() {
                 Array.isArray(currentPost.slop_reason)
                     ? currentPost.slop_reason
                     : [currentPost.slop_reason || ""],
-                reason
+                reason,
             );
             const aiData = response.data || response;
             setVerdict({
@@ -118,7 +117,7 @@ function RouteComponent() {
         } catch (error) {
             const message = getApiErrorMessage(
                 error,
-                "AI Offline. Points awarded automatically."
+                "AI Offline. Points awarded automatically.",
             );
             setVerdict({
                 is_correct: true,
@@ -143,7 +142,7 @@ function RouteComponent() {
             setLogs(newLogs);
             localStorage.setItem(
                 "shift_data",
-                JSON.stringify({ ...data, log: newLogs })
+                JSON.stringify({ ...data, log: newLogs }),
             );
         }
         setIsResult(false);
@@ -159,7 +158,7 @@ function RouteComponent() {
 
     if (isLoadingStorage)
         return (
-            <div className="flex min-h-[calc(100vh-4rem)] h-screen items-center justify-center bg-black text-green-500">
+            <div className="flex h-screen min-h-[calc(100vh-4rem)] items-center justify-center bg-black text-green-500">
                 Loading...
             </div>
         );
@@ -182,16 +181,15 @@ function RouteComponent() {
     if (!currentPost) {
         return (
             <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-6">
-                <h2 className="font-black text-4xl uppercase theme-accent">
+                <h2 className="theme-accent font-black text-4xl uppercase">
                     Shift Complete
                 </h2>
                 <button
                     type="button"
                     onClick={handleEndShift}
-                    disabled={isSaving}
-                    className="cursor-pointer theme-accent-solid px-8 py-4 font-bold text-black uppercase tracking-widest hover:opacity-90"
+                    className="theme-accent-solid cursor-pointer px-8 py-4 font-bold text-black uppercase tracking-widest hover:opacity-90"
                 >
-                    {isSaving ? "Saving..." : "Clock Out"}
+                    Clock Out
                 </button>
             </div>
         );

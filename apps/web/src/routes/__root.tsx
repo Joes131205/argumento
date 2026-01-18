@@ -5,15 +5,13 @@ import {
     useRouterState,
 } from "@tanstack/react-router";
 import "../index.css";
-
-import useTheme from "@/hooks/useTheme";
 import { Toaster } from "sonner";
 import { NotFoundComponent } from "@/components/NotFoundComponent";
 import { ErrorPage } from "@/components/ErrorPage";
 import { Navbar } from "@/components/NavBar";
 import { AnimatePresence, motion } from "motion/react";
 import useUser from "@/hooks/useUser";
-import { getThemeClasses, getThemeCssVariables } from "@/utils/themes";
+import { getThemeCssVariables } from "@/utils/themes";
 import { useEffect } from "react";
 
 export const Route = createRootRouteWithContext()({
@@ -38,11 +36,9 @@ export const Route = createRootRouteWithContext()({
 function RootComponent() {
     const { user } = useUser();
     const currentThemeId = user?.activeTheme || "theme_green";
-    const themeClasses = getThemeClasses(currentThemeId);
     const themeCssVariables = getThemeCssVariables(currentThemeId);
     const routerState = useRouterState();
 
-    // Apply theme CSS variables to document root
     useEffect(() => {
         Object.entries(themeCssVariables).forEach(([key, value]) => {
             document.documentElement.style.setProperty(key, value);

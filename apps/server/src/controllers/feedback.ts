@@ -48,7 +48,7 @@ export const submitFeedback = async (req: Request, res: Response) => {
     }
 };
 
-export const getFeedbackAnalytics = async (req: Request, res: Response) => {
+export const getFeedbackAnalytics = async (_req: Request, res: Response) => {
     try {
         const allFeedback = await Feedback.find();
 
@@ -72,26 +72,26 @@ export const getFeedbackAnalytics = async (req: Request, res: Response) => {
             },
             learnedDistribution: {
                 yes_lot: allFeedback.filter(
-                    (f) => f.learnedSomething === "yes_lot"
+                    (f) => f.learnedSomething === "yes_lot",
                 ).length,
                 yes_little: allFeedback.filter(
-                    (f) => f.learnedSomething === "yes_little"
+                    (f) => f.learnedSomething === "yes_little",
                 ).length,
                 not_really: allFeedback.filter(
-                    (f) => f.learnedSomething === "not_really"
+                    (f) => f.learnedSomething === "not_really",
                 ).length,
                 already_knew: allFeedback.filter(
-                    (f) => f.learnedSomething === "already_knew"
+                    (f) => f.learnedSomething === "already_knew",
                 ).length,
             },
             changeBehavior: {
                 yes: allFeedback.filter((f) => f.changesSocialMedia === "yes")
                     .length,
                 maybe: allFeedback.filter(
-                    (f) => f.changesSocialMedia === "maybe"
+                    (f) => f.changesSocialMedia === "maybe",
                 ).length,
                 probably_not: allFeedback.filter(
-                    (f) => f.changesSocialMedia === "probably_not"
+                    (f) => f.changesSocialMedia === "probably_not",
                 ).length,
                 no: allFeedback.filter((f) => f.changesSocialMedia === "no")
                     .length,

@@ -34,7 +34,7 @@ function RouteComponent() {
                         <div className="flex flex-col gap-4 sm:flex-row">
                             <Link
                                 to="/sign-up"
-                                className="inline-flex items-center justify-center gap-2 theme-accent-solid px-8 py-4 font-bold text-black text-lg uppercase tracking-wide transition-all hover:translate-x-1 hover:opacity-90"
+                                className="theme-accent-solid inline-flex items-center justify-center gap-2 px-8 py-4 font-bold text-black text-lg uppercase tracking-wide transition-all hover:translate-x-1 hover:opacity-90"
                             >
                                 Get Started
                                 <ArrowRight size={20} />
@@ -76,12 +76,12 @@ function RouteComponent() {
                         <h2 className="mb-4 font-black text-3xl text-white uppercase tracking-tight lg:text-4xl">
                             Training Modules
                         </h2>
-                        <div className="mx-auto h-1 w-20 theme-accent-bg" />
+                        <div className="theme-accent-bg mx-auto h-1 w-20" />
                     </div>
 
                     <div className="grid gap-8 md:grid-cols-3">
-                        <div className="group border border-zinc-800 bg-zinc-900/20 p-8 transition-colors hover:theme-accent-border">
-                            <div className="mb-6 inline-flex border border-zinc-800 bg-zinc-900 p-3 theme-accent transition-colors group-hover:bg-current/20 group-hover:text-white">
+                        <div className="group hover:theme-accent-border border border-zinc-800 bg-zinc-900/20 p-8 transition-colors">
+                            <div className="theme-accent mb-6 inline-flex border border-zinc-800 bg-zinc-900 p-3 transition-colors group-hover:bg-current/20 group-hover:text-white">
                                 <ShieldCheck size={32} />
                             </div>
                             <h3 className="mb-3 font-bold text-white text-xl uppercase">
@@ -94,8 +94,8 @@ function RouteComponent() {
                             </p>
                         </div>
 
-                        <div className="group border border-zinc-800 bg-zinc-900/20 p-8 transition-colors hover:theme-accent-border">
-                            <div className="mb-6 inline-flex border border-zinc-800 bg-zinc-900 p-3 theme-accent transition-colors group-hover:bg-current/20 group-hover:text-white">
+                        <div className="group hover:theme-accent-border border border-zinc-800 bg-zinc-900/20 p-8 transition-colors">
+                            <div className="theme-accent mb-6 inline-flex border border-zinc-800 bg-zinc-900 p-3 transition-colors group-hover:bg-current/20 group-hover:text-white">
                                 <BrainCircuit size={32} />
                             </div>
                             <h3 className="mb-3 font-bold text-white text-xl uppercase">
@@ -108,8 +108,8 @@ function RouteComponent() {
                             </p>
                         </div>
 
-                        <div className="group border border-zinc-800 bg-zinc-900/20 p-8 transition-colors hover:theme-accent-border">
-                            <div className="mb-6 inline-flex border border-zinc-800 bg-zinc-900 p-3 theme-accent transition-colors group-hover:bg-current/20 group-hover:text-white">
+                        <div className="group hover:theme-accent-border border border-zinc-800 bg-zinc-900/20 p-8 transition-colors">
+                            <div className="theme-accent mb-6 inline-flex border border-zinc-800 bg-zinc-900 p-3 transition-colors group-hover:bg-current/20 group-hover:text-white">
                                 <Target size={32} />
                             </div>
                             <h3 className="mb-3 font-bold text-white text-xl uppercase">

@@ -9,9 +9,9 @@ import { toast } from "sonner";
 import { completeCampaignLevel, getLevel } from "@/apis/campaign";
 import { GameState } from "@/components/GameState";
 import useUser from "@/hooks/useUser";
+import type { IPost } from "@/types";
 import { getApiErrorMessage } from "@/utils/api";
 import { requireAuth } from "@/utils/requireAuth";
-import type { IPost } from "@/types";
 
 export const Route = createFileRoute("/campaign/$level/$id")({
     beforeLoad: requireAuth,
@@ -24,7 +24,7 @@ export const Route = createFileRoute("/campaign/$level/$id")({
         } catch (error) {
             const message = getApiErrorMessage(
                 error,
-                "Failed to load campaign level"
+                "Failed to load campaign level",
             );
             throw new Error(message);
         }
@@ -92,7 +92,7 @@ function RouteComponent() {
         } catch (error) {
             const message = getApiErrorMessage(
                 error,
-                "Failed to save progress"
+                "Failed to save progress",
             );
             toast.error(message);
         } finally {
@@ -101,19 +101,19 @@ function RouteComponent() {
     };
     if (!currentPost) {
         return (
-            <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-8 bg-zinc-950 font-mono p-5">
-                <div className="max-w-md border-2 theme-accent-border bg-black p-10 text-center shadow-[0_0_50px_rgba(22,163,74,0.2)]">
+            <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-8 bg-zinc-950 p-5 font-mono">
+                <div className="theme-accent-border max-w-md border-2 bg-black p-10 text-center shadow-[0_0_50px_rgba(22,163,74,0.2)]">
                     <h2 className="mb-2 font-black text-4xl text-white uppercase">
                         Mission Complete
                     </h2>
-                    <p className="mb-8 theme-accent">
+                    <p className="theme-accent mb-8">
                         Training module processed successfully.
                     </p>
                     <button
                         type="button"
                         onClick={handleCompleteLevel}
                         disabled={isSaving}
-                        className="w-full cursor-pointer theme-accent-solid px-8 py-4 font-bold text-black uppercase tracking-widest hover:bg-[var(--accent-light)] disabled:opacity-50"
+                        className="theme-accent-solid w-full cursor-pointer px-8 py-4 font-bold text-black uppercase tracking-widest hover:bg-[var(--accent-light)] disabled:opacity-50"
                     >
                         {isSaving ? "Uploading..." : "Confirm"}
                     </button>
@@ -122,7 +122,7 @@ function RouteComponent() {
         );
     }
     return (
-        <div className="h-full flex flex-col md:flex-row min-h-[calc(100vh-4rem)] items-stretch md:items-center md:justify-center gap-4 md:gap-6 p-5">
+        <div className="flex h-full min-h-[calc(100vh-4rem)] flex-col items-stretch gap-4 p-5 md:flex-row md:items-center md:justify-center md:gap-6">
             <div className="flex h-full flex-1 flex-col items-center justify-center">
                 <GameState
                     currentPost={currentPost}
@@ -134,23 +134,23 @@ function RouteComponent() {
                     onReject={handleReject}
                     onNext={handleNext}
                     headerInfo={
-                        <span className="font-bold theme-accent-dark text-xs uppercase">
+                        <span className="theme-accent-dark font-bold text-xs uppercase">
                             CAMPAIGN MODE
                         </span>
                     }
                 />
             </div>
-            <div className="relative flex flex-1 flex-col theme-accent-border border-2 bg-black/50 p-8">
+            <div className="theme-accent-border relative flex flex-1 flex-col border-2 bg-black/50 p-8">
                 <div className="pointer-events-none absolute inset-0 z-0 bg-[length:100%_4px,3px_100%] bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))]" />
                 <div className="relative z-10 flex h-full flex-col">
-                    <div className="mb-8 theme-accent-border border-b pb-4">
+                    <div className="theme-accent-border mb-8 border-b pb-4">
                         <h1 className="font-black text-3xl text-white uppercase leading-none tracking-tight">
                             {data.title}
                         </h1>
                     </div>
 
                     <div className="flex-1 overflow-y-auto pr-4">
-                        <div className="whitespace-pre-wrap border theme-accent-border bg-green-900/10 p-6 font-medium text-white text-sm leading-7">
+                        <div className="theme-accent-border whitespace-pre-wrap border bg-green-900/10 p-6 font-medium text-sm text-white leading-7">
                             {data.briefing}
                         </div>
                     </div>

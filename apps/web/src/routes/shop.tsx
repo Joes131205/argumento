@@ -1,11 +1,11 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { Check, Loader2, Lock, MailWarning, ShoppingCart } from "lucide-react";
-import { toast } from "sonner";
-import { buyShopItem, getShops } from "@/apis/shop";
-import useUser from "@/hooks/useUser";
-import { equipTheme } from "@/apis/user";
-import { sendVerifyEmail } from "@/apis/auth";
 import { useState } from "react";
+import { toast } from "sonner";
+import { sendVerifyEmail } from "@/apis/auth";
+import { buyShopItem, getShops } from "@/apis/shop";
+import { equipTheme } from "@/apis/user";
+import useUser from "@/hooks/useUser";
 
 interface ShopItem {
     id: string;
@@ -37,6 +37,7 @@ function RouteComponent() {
                     description: "Check your inbox for the verify link.",
                 });
             } catch (err) {
+                console.log(err);
                 toast.error("Transmission Error", {
                     description: "Please wait 60 seconds before retrying.",
                 });
@@ -46,12 +47,12 @@ function RouteComponent() {
         };
 
         return (
-            <div className="col-span-full flex min-h-[60vh] flex-col items-center justify-center rounded-sm border border-dashed border-zinc-800 bg-zinc-950/50 p-8 text-center">
-                <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-red-500/5 text-red-500 border border-red-500/20 shadow-[0_0_30px_rgba(239,68,68,0.1)]">
+            <div className="col-span-full flex min-h-[60vh] flex-col items-center justify-center rounded-sm border border-zinc-800 border-dashed bg-zinc-950/50 p-8 text-center">
+                <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full border border-red-500/20 bg-red-500/5 text-red-500 shadow-[0_0_30px_rgba(239,68,68,0.1)]">
                     <Lock size={32} />
                 </div>
 
-                <h2 className="mb-3 text-2xl font-black uppercase tracking-tight text-white">
+                <h2 className="mb-3 font-black text-2xl text-white uppercase tracking-tight">
                     Restricted Area
                 </h2>
 
@@ -59,12 +60,12 @@ function RouteComponent() {
                     You have to be verified to access this feature!
                 </p>
 
-                <div className="flex flex-col sm:flex-row items-center gap-4">
+                <div className="flex flex-col items-center gap-4 sm:flex-row">
                     <button
                         type="button"
                         onClick={handleResend}
                         disabled={isResending}
-                        className="cursor-pointer flex min-w-[180px] items-center justify-center gap-2 border border-zinc-700 bg-zinc-900 px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-all hover:bg-zinc-800 hover:border-zinc-500 disabled:opacity-50"
+                        className="flex min-w-[180px] cursor-pointer items-center justify-center gap-2 border border-zinc-700 bg-zinc-900 px-6 py-3 font-bold text-white text-xs uppercase tracking-widest transition-all hover:border-zinc-500 hover:bg-zinc-800 disabled:opacity-50"
                     >
                         {isResending ? (
                             <>
@@ -159,7 +160,19 @@ function RouteComponent() {
     );
 }
 
-function ThemeShopCard({ item, isOwned, isEquipped, onBuy, onEquip }: any) {
+function ThemeShopCard({
+    item,
+    isOwned,
+    isEquipped,
+    onBuy,
+    onEquip,
+}: {
+    item: ShopItem;
+    isOwned: boolean;
+    isEquipped: boolean;
+    onBuy: () => void;
+    onEquip: () => void;
+}) {
     return (
         <div
             className={`group relative flex flex-col gap-6 border bg-zinc-900/30 p-6 transition-all duration-300 ${
@@ -170,7 +183,7 @@ function ThemeShopCard({ item, isOwned, isEquipped, onBuy, onEquip }: any) {
         `}
         >
             {isEquipped && (
-                <div className="absolute top-0 right-0 theme-accent-solid px-2 py-1 font-bold text-[10px] text-black uppercase tracking-widest">
+                <div className="theme-accent-solid absolute top-0 right-0 px-2 py-1 font-bold text-[10px] text-black uppercase tracking-widest">
                     Active
                 </div>
             )}
@@ -219,7 +232,7 @@ function ThemeShopCard({ item, isOwned, isEquipped, onBuy, onEquip }: any) {
                         className={`flex w-full items-center justify-center gap-2 py-3 font-bold text-xs uppercase tracking-widest transition-all ${
                             isEquipped
                                 ? "cursor-default bg-zinc-800 text-zinc-500 opacity-50"
-                                : "bg-zinc-800 cursor-pointer text-white hover:bg-[var(--accent-color)] hover:text-black"
+                                : "cursor-pointer bg-zinc-800 text-white hover:bg-[var(--accent-color)] hover:text-black"
                         }
                         `}
                     >

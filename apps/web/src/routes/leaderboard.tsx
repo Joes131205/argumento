@@ -76,7 +76,7 @@ function RouteComponent() {
             };
         if (index === 1)
             return {
-                backgroundColor: "rgba(24, 24, 27, 0.3)",
+                backgroundColor: "rgba(24, 24, 27, 1)",
                 borderLeftWidth: "2px",
                 borderLeftColor: "rgb(113, 113, 122)",
             };
@@ -95,7 +95,7 @@ function RouteComponent() {
 
     if (isLoading && !data) {
         return (
-            <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-4 font-mono theme-accent">
+            <div className="theme-accent flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-4 font-mono">
                 <Loader2 className="animate-spin" size={40} />
                 <p className="animate-pulse text-sm uppercase tracking-widest">
                     Fetching Global Rankings...
@@ -128,8 +128,8 @@ function RouteComponent() {
                                 onClick={() => setType(t.key)}
                                 className={`cursor-pointer border px-4 py-2 font-bold text-xs uppercase tracking-wider transition-all ${
                                     type === t.key
-                                        ? "border-current theme-accent-solid text-black theme-glow"
-                                        : "border-zinc-800 bg-zinc-950 text-zinc-500 hover:border-current hover:theme-accent"
+                                        ? "theme-accent-solid theme-glow border-current text-black"
+                                        : "hover:theme-accent border-zinc-800 bg-zinc-950 text-zinc-500 hover:border-current"
                                 }
                                 `}
                             >
@@ -151,7 +151,7 @@ function RouteComponent() {
                             (entry: LeaderboardEntry, index: number) => {
                                 const isCurrentUser = user?._id === entry._id;
                                 const activeSortLabel = sortFields.find(
-                                    (s) => s.key === type
+                                    (s) => s.key === type,
                                 )?.label;
 
                                 return (
@@ -162,7 +162,7 @@ function RouteComponent() {
                                         className="grid grid-cols-[60px_1fr_120px] items-center gap-4 p-4 transition-all md:grid-cols-[80px_1fr_150px]"
                                         style={getRowStyle(
                                             index,
-                                            isCurrentUser
+                                            isCurrentUser,
                                         )}
                                     >
                                         <div className="flex items-center justify-center">
@@ -176,7 +176,7 @@ function RouteComponent() {
                                                 {entry.username}
                                             </span>
                                             {isCurrentUser && (
-                                                <span className="hidden rounded border theme-accent-border theme-accent-bg px-1.5 py-0.5 text-[10px] theme-accent uppercase md:inline-block">
+                                                <span className="theme-accent-border theme-accent-bg theme-accent hidden rounded border px-1.5 py-0.5 text-[10px] uppercase md:inline-block">
                                                     YOU
                                                 </span>
                                             )}
@@ -196,7 +196,7 @@ function RouteComponent() {
                                         </div>
                                     </Link>
                                 );
-                            }
+                            },
                         )}
                     </div>
 

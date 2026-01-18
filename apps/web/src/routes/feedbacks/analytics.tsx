@@ -1,16 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import {
+    BarChart3,
+    Loader2,
+    MessageSquare,
+    PieChart,
+    TrendingUp,
+} from "lucide-react";
+import { type JSX, useEffect, useState } from "react";
 import { getFeedbackAnalytics } from "@/apis/feedback";
 import { requireAuth } from "@/utils/requireAuth";
-import {
-    Loader2,
-    BarChart3,
-    PieChart,
-    Sparkles,
-    MessageSquare,
-    TrendingUp,
-    AlertCircle,
-} from "lucide-react";
 
 interface ExpectationsDist {
     better: number;
@@ -83,7 +81,7 @@ function StatCard({
         <div className="flex items-center gap-3 border border-zinc-800 bg-zinc-950/50 p-4">
             {icon}
             <div className="flex flex-col">
-                <span className="font-bold text-xs uppercase text-zinc-500 tracking-wider">
+                <span className="font-bold text-xs text-zinc-500 uppercase tracking-wider">
                     {title}
                 </span>
                 <span className="font-black text-2xl text-white">{value}</span>
@@ -104,7 +102,7 @@ function DistRow({
     const pct = total > 0 ? Math.round((value / total) * 100) : 0;
     return (
         <div className="flex items-center gap-3">
-            <span className="w-40 text-xs font-bold uppercase text-zinc-500">
+            <span className="w-40 font-bold text-xs text-zinc-500 uppercase">
                 {label}
             </span>
             <div className="h-2 w-full bg-zinc-900">
@@ -146,7 +144,7 @@ function RouteComponent() {
 
     if (isLoading && !data) {
         return (
-            <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-4 font-mono theme-accent">
+            <div className="theme-accent flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-4 font-mono">
                 <Loader2 className="animate-spin" size={40} />
                 <p className="animate-pulse text-sm uppercase tracking-widest">
                     Fetching Feedback Analytics...
@@ -158,7 +156,7 @@ function RouteComponent() {
     return (
         <div className="min-h-[calc(100vh-4rem)] p-6 font-mono text-zinc-300 lg:p-12">
             <div className="mx-auto flex max-w-4xl flex-col gap-8">
-                <div className="mt-4 border-b border-zinc-800 pb-6">
+                <div className="mt-4 border-zinc-800 border-b pb-6">
                     <h1 className="font-black text-4xl text-white uppercase tracking-tight md:text-5xl">
                         Feedback Analytics
                     </h1>
@@ -210,7 +208,7 @@ function RouteComponent() {
 
                         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                             <div className="flex flex-col gap-3 border border-zinc-800 bg-zinc-950/50 p-5">
-                                <h2 className="font-bold text-xs uppercase text-zinc-500 tracking-widest">
+                                <h2 className="font-bold text-xs text-zinc-500 uppercase tracking-widest">
                                     Expectation vs Reality
                                 </h2>
                                 <DistRow
@@ -231,7 +229,7 @@ function RouteComponent() {
                             </div>
 
                             <div className="flex flex-col gap-3 border border-zinc-800 bg-zinc-950/50 p-5">
-                                <h2 className="font-bold text-xs uppercase text-zinc-500 tracking-widest">
+                                <h2 className="font-bold text-xs text-zinc-500 uppercase tracking-widest">
                                     Learning Outcome
                                 </h2>
                                 <DistRow
@@ -259,7 +257,7 @@ function RouteComponent() {
                             </div>
 
                             <div className="flex flex-col gap-3 border border-zinc-800 bg-zinc-950/50 p-5 md:col-span-2">
-                                <h2 className="font-bold text-xs uppercase text-zinc-500 tracking-widest">
+                                <h2 className="font-bold text-xs text-zinc-500 uppercase tracking-widest">
                                     Behavior Change (Social Media)
                                 </h2>
                                 <DistRow
@@ -287,40 +285,40 @@ function RouteComponent() {
 
                         {allFeedback.length > 0 && (
                             <div className="flex flex-col gap-3 border border-zinc-800 bg-zinc-950/50 p-5">
-                                <h2 className="flex items-center gap-2 font-bold text-xs uppercase text-blue-500 tracking-widest">
+                                <h2 className="flex items-center gap-2 font-bold text-blue-500 text-xs uppercase tracking-widest">
                                     <MessageSquare size={14} />
                                     All Feedback ({allFeedback.length}{" "}
                                     responses)
                                 </h2>
                                 <div className="overflow-x-auto">
-                                    <table className="w-full text-xs border-collapse">
+                                    <table className="w-full border-collapse text-xs">
                                         <thead>
-                                            <tr className="border-b border-zinc-700">
-                                                <th className="text-left p-2 text-zinc-500 font-bold">
+                                            <tr className="border-zinc-700 border-b">
+                                                <th className="p-2 text-left font-bold text-zinc-500">
                                                     Description
                                                 </th>
-                                                <th className="text-left p-2 text-zinc-500 font-bold">
+                                                <th className="p-2 text-left font-bold text-zinc-500">
                                                     Favorite
                                                 </th>
-                                                <th className="text-left p-2 text-zinc-500 font-bold">
+                                                <th className="p-2 text-left font-bold text-zinc-500">
                                                     Frustrated
                                                 </th>
-                                                <th className="text-center p-2 text-zinc-500 font-bold">
+                                                <th className="p-2 text-center font-bold text-zinc-500">
                                                     Clarity
                                                 </th>
-                                                <th className="text-center p-2 text-zinc-500 font-bold">
+                                                <th className="p-2 text-center font-bold text-zinc-500">
                                                     Retention
                                                 </th>
-                                                <th className="text-center p-2 text-zinc-500 font-bold">
+                                                <th className="p-2 text-center font-bold text-zinc-500">
                                                     Expectation
                                                 </th>
-                                                <th className="text-left p-2 text-zinc-500 font-bold">
+                                                <th className="p-2 text-left font-bold text-zinc-500">
                                                     Improvements
                                                 </th>
-                                                <th className="text-left p-2 text-zinc-500 font-bold">
+                                                <th className="p-2 text-left font-bold text-zinc-500">
                                                     Learned
                                                 </th>
-                                                <th className="text-left p-2 text-zinc-500 font-bold">
+                                                <th className="p-2 text-left font-bold text-zinc-500">
                                                     Behavior Change
                                                 </th>
                                             </tr>
@@ -328,28 +326,28 @@ function RouteComponent() {
                                         <tbody>
                                             {allFeedback.map((item, i) => (
                                                 <tr
-                                                    key={i}
-                                                    className="border-b border-zinc-800 hover:bg-zinc-900/30"
+                                                    key={i.toString()}
+                                                    className="border-zinc-800 border-b hover:bg-zinc-900/30"
                                                 >
-                                                    <td className="p-2 text-zinc-300 max-w-xs truncate">
+                                                    <td className="max-w-xs truncate p-2 text-zinc-300">
                                                         {item.description}
                                                     </td>
-                                                    <td className="p-2 text-zinc-300 max-w-xs truncate">
+                                                    <td className="max-w-xs truncate p-2 text-zinc-300">
                                                         {item.favoritePart}
                                                     </td>
-                                                    <td className="p-2 text-zinc-300 max-w-xs truncate">
+                                                    <td className="max-w-xs truncate p-2 text-zinc-300">
                                                         {item.frustrated}
                                                     </td>
-                                                    <td className="text-center p-2 text-zinc-300">
+                                                    <td className="p-2 text-center text-zinc-300">
                                                         {item.clarity}/4
                                                     </td>
-                                                    <td className="text-center p-2 text-zinc-300">
+                                                    <td className="p-2 text-center text-zinc-300">
                                                         {item.playAgainTomorrow}
                                                         /5
                                                     </td>
-                                                    <td className="text-center p-2">
+                                                    <td className="p-2 text-center">
                                                         <span
-                                                            className={`px-2 py-1 rounded text-xs font-bold ${
+                                                            className={`rounded px-2 py-1 font-bold text-xs ${
                                                                 item.expectation ===
                                                                 "better"
                                                                     ? "bg-green-900 text-green-300"
@@ -362,13 +360,13 @@ function RouteComponent() {
                                                             {item.expectation}
                                                         </span>
                                                     </td>
-                                                    <td className="p-2 text-zinc-300 max-w-xs truncate">
+                                                    <td className="max-w-xs truncate p-2 text-zinc-300">
                                                         {item.improvements}
                                                     </td>
-                                                    <td className="p-2 text-zinc-300 max-w-xs truncate">
+                                                    <td className="max-w-xs truncate p-2 text-zinc-300">
                                                         {item.learnedSomething}
                                                     </td>
-                                                    <td className="p-2 text-zinc-300 max-w-xs truncate">
+                                                    <td className="max-w-xs truncate p-2 text-zinc-300">
                                                         {
                                                             item.changesSocialMedia
                                                         }

@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ShieldCheck, ArrowRight, ShieldAlert, Terminal } from "lucide-react";
+import { ArrowRight, ShieldAlert, ShieldCheck, Terminal } from "lucide-react";
 import { motion } from "motion/react";
+import { useEffect } from "react";
 import { verifyEmail } from "@/apis/auth";
 import useUser from "@/hooks/useUser";
-import { useEffect } from "react";
 
 export const Route = createFileRoute("/verify/$id")({
     component: RouteComponent,
@@ -31,24 +31,24 @@ function RouteComponent() {
             <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="w-full max-w-md border border-green-900 bg-green-950/10 p-8 backdrop-blur-sm relative overflow-hidden"
+                className="relative w-full max-w-md overflow-hidden border border-green-900 bg-green-950/10 p-8 backdrop-blur-sm"
             >
                 <div className="text-center">
-                    <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-500/10 text-green-500 border border-green-500/30 shadow-[0_0_30px_rgba(34,197,94,0.2)]">
+                    <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full border border-green-500/30 bg-green-500/10 text-green-500 shadow-[0_0_30px_rgba(34,197,94,0.2)]">
                         <ShieldCheck size={40} />
                     </div>
 
-                    <h1 className="text-2xl font-black uppercase tracking-tight text-white mb-2">
+                    <h1 className="mb-2 font-black text-2xl text-white uppercase tracking-tight">
                         Identity Confirmed
                     </h1>
 
-                    <p className="text-sm text-zinc-400 mb-8">
+                    <p className="mb-8 text-sm text-zinc-400">
                         Your account has been successfully verified!
                     </p>
 
                     <Link
                         to="/sign-in"
-                        className="cursor-pointer group relative flex w-full items-center justify-center gap-2 overflow-hidden bg-green-600 px-4 py-3 text-sm font-bold uppercase tracking-widest text-black transition-all hover:bg-green-500"
+                        className="group relative flex w-full cursor-pointer items-center justify-center gap-2 overflow-hidden bg-green-600 px-4 py-3 font-bold text-black text-sm uppercase tracking-widest transition-all hover:bg-green-500"
                     >
                         Go Back
                         <ArrowRight
@@ -65,21 +65,21 @@ function RouteComponent() {
 function ErrorComponent() {
     return (
         <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-zinc-950 p-6 font-mono text-zinc-300">
-            <div className="w-full max-w-md border border-red-900 bg-red-950/10 p-8 relative">
+            <div className="relative w-full max-w-md border border-red-900 bg-red-950/10 p-8">
                 <div className="text-center">
-                    <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-red-500/10 text-red-500 border border-red-500/30">
+                    <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full border border-red-500/30 bg-red-500/10 text-red-500">
                         <ShieldAlert size={40} />
                     </div>
 
-                    <h1 className="text-2xl font-black uppercase tracking-tight text-white mb-2">
+                    <h1 className="mb-2 font-black text-2xl text-white uppercase tracking-tight">
                         Verification Failed
                     </h1>
 
-                    <div className="mb-8 space-y-1 text-xs font-bold text-red-600/80 uppercase tracking-widest">
+                    <div className="mb-8 space-y-1 font-bold text-red-600/80 text-xs uppercase tracking-widest">
                         <p>Token invalid</p>
                     </div>
 
-                    <p className="text-sm text-zinc-400 mb-8">
+                    <p className="mb-8 text-sm text-zinc-400">
                         The verification link is invalid or has expired. Please
                         request a new verification email from the login
                         terminal.
@@ -87,7 +87,7 @@ function ErrorComponent() {
 
                     <Link
                         to="/sign-in"
-                        className="flex w-full items-center justify-center gap-2 border border-zinc-800 bg-black px-4 py-3 text-sm font-bold uppercase tracking-widest text-white hover:bg-zinc-900 hover:border-zinc-600 transition-all"
+                        className="flex w-full items-center justify-center gap-2 border border-zinc-800 bg-black px-4 py-3 font-bold text-sm text-white uppercase tracking-widest transition-all hover:border-zinc-600 hover:bg-zinc-900"
                     >
                         <Terminal size={16} />
                         Return

@@ -1,21 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
     Activity,
-    AlertTriangle,
     BarChart3,
     CheckCircle,
-    CheckCircle2,
     Coins,
     Flame,
     Play,
     Shield,
 } from "lucide-react";
+import { motion } from "motion/react";
 import { useEffect, useState } from "react";
+import { refreshStreak } from "@/apis/user";
 import useUser from "@/hooks/useUser";
 import { requireAuth } from "@/utils/requireAuth";
-import { motion } from "motion/react";
-import { refreshStreak } from "@/apis/user";
-import { sendVerifyEmail } from "@/apis/auth";
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -44,7 +41,7 @@ export const Route = createFileRoute("/dashboard")({
 function HomeComponent() {
     const { user } = useUser();
     const [currentTime, setCurrentTime] = useState(
-        new Date().toLocaleTimeString()
+        new Date().toLocaleTimeString(),
     );
 
     useEffect(() => {
@@ -68,7 +65,7 @@ function HomeComponent() {
 
     const accuracy = user?.postsHistory.length
         ? (((user.postsCorrect || 0) / user.postsHistory.length) * 100).toFixed(
-              1
+              1,
           )
         : "0.0";
 
@@ -82,15 +79,15 @@ function HomeComponent() {
                 animate="show"
                 className="mx-auto max-w-6xl space-y-8"
             >
-                <div className="flex flex-col items-start justify-between gap-4 border-b border-gray-800 pb-6 md:flex-row md:items-end">
+                <div className="flex flex-col items-start justify-between gap-4 border-gray-800 border-b pb-6 md:flex-row md:items-end">
                     <div className="space-y-2">
                         <div className="mb-2 flex items-center gap-2">
                             <Shield size={20} className="theme-accent" />
-                            <span className="font-bold text-xs uppercase tracking-widest theme-accent">
+                            <span className="theme-accent font-bold text-xs uppercase tracking-widest">
                                 Logged in as
                             </span>
                         </div>
-                        <h1 className="font-black text-4xl uppercase tracking-tight text-white md:text-5xl">
+                        <h1 className="font-black text-4xl text-white uppercase tracking-tight md:text-5xl">
                             {user?.username}
                         </h1>
                     </div>
@@ -107,7 +104,7 @@ function HomeComponent() {
                 <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
                     <motion.div
                         variants={itemVariants}
-                        className="flex flex-col justify-between border theme-accent-border bg-zinc-950/50 p-6 transition-colors"
+                        className="theme-accent-border flex flex-col justify-between border bg-zinc-950/50 p-6 transition-colors"
                     >
                         <div className="mb-4 flex items-start justify-between">
                             <span className="font-bold text-xs text-zinc-500 uppercase tracking-wider">
@@ -127,7 +124,7 @@ function HomeComponent() {
 
                     <motion.div
                         variants={itemVariants}
-                        className="flex flex-col justify-between border theme-accent-border bg-zinc-950/50 p-6 transition-colors"
+                        className="theme-accent-border flex flex-col justify-between border bg-zinc-950/50 p-6 transition-colors"
                     >
                         <div className="mb-4 flex items-start justify-between">
                             <span className="font-bold text-xs text-zinc-500 uppercase tracking-wider">
@@ -147,7 +144,7 @@ function HomeComponent() {
 
                     <motion.div
                         variants={itemVariants}
-                        className="flex flex-col justify-between border theme-accent-border bg-zinc-950/50 p-6 transition-color"
+                        className="theme-accent-border flex flex-col justify-between border bg-zinc-950/50 p-6 transition-color"
                     >
                         <div className="mb-4 flex items-start justify-between">
                             <span className="font-bold text-xs text-zinc-500 uppercase tracking-wider">
@@ -177,7 +174,7 @@ function HomeComponent() {
 
                     <motion.div
                         variants={itemVariants}
-                        className="flex flex-col justify-between border theme-accent-border bg-zinc-950/50 p-6 transition-colors"
+                        className="theme-accent-border flex flex-col justify-between border bg-zinc-950/50 p-6 transition-colors"
                     >
                         <div className="mb-4 flex items-start justify-between">
                             <span className="font-bold text-xs text-zinc-500 uppercase tracking-wider">
@@ -205,7 +202,7 @@ function HomeComponent() {
 
                     <motion.div
                         variants={itemVariants}
-                        className={`flex flex-col justify-between border-l-4 border theme-accent-border p-6 transition-all ${
+                        className={`theme-accent-border flex flex-col justify-between border border-l-4 p-6 transition-all ${
                             isShiftDone
                                 ? "border-zinc-700 border-l-zinc-500 bg-zinc-950/30"
                                 : "theme-accent-bg/40 hover:theme-accent-bg/50"
@@ -226,7 +223,7 @@ function HomeComponent() {
                             ) : (
                                 <Play
                                     size={18}
-                                    className="animate-pulse theme-accent"
+                                    className="theme-accent animate-pulse"
                                 />
                             )}
                         </div>
@@ -247,7 +244,7 @@ function HomeComponent() {
                                 </span>
                                 <Link
                                     to="/play/daily"
-                                    className="w-full theme-accent-solid px-4 py-2 text-center font-bold text-sm text-black uppercase transition-colors hover:opacity-90"
+                                    className="theme-accent-solid w-full cursor-pointer px-4 py-2 text-center font-bold text-black text-sm uppercase transition-colors hover:opacity-90"
                                 >
                                     Initiate Shift
                                 </Link>
@@ -256,22 +253,22 @@ function HomeComponent() {
                     </motion.div>
                     <motion.div
                         variants={itemVariants}
-                        className="flex flex-col justify-between border border-l-4 bg-blue-950/20 p-6 transition-all border-blue-700"
+                        className="flex flex-col justify-between border border-blue-700 border-l-4 bg-blue-950/20 p-6 transition-all"
                     >
                         <div className="mb-4 flex items-start justify-between">
-                            <span className="font-bold text-xs text-blue-400 uppercase tracking-wider">
+                            <span className="font-bold text-blue-400 text-xs uppercase tracking-wider">
                                 Practice Mode
                             </span>
                             <Shield size={18} className="text-blue-400" />
                         </div>
 
                         <div className="flex flex-col gap-3">
-                            <span className="text-sm text-blue-300">
+                            <span className="text-blue-300 text-sm">
                                 Train without pressure.
                             </span>
                             <Link
                                 to="/play/practice"
-                                className="w-full border border-blue-500 bg-blue-500/10 px-4 py-2 text-center font-bold text-sm text-blue-400 uppercase transition-colors hover:bg-blue-500 hover:text-white"
+                                className="w-full border border-blue-500 bg-blue-500/10 px-4 py-2 text-center font-bold text-blue-400 text-sm uppercase transition-colors hover:bg-blue-500 hover:text-white"
                             >
                                 Start Practice
                             </Link>

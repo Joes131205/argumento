@@ -28,7 +28,7 @@ const Manual = () => {
                             <button
                                 type="button"
                                 onClick={() => setIsOpened(false)}
-                                className="mb-6 flex cursor-pointer items-center gap-2 font-bold font-mono theme-accent text-sm uppercase tracking-wide transition-colors hover:text-[var(--accent-light)]"
+                                className="theme-accent mb-6 flex cursor-pointer items-center gap-2 font-bold font-mono text-sm uppercase tracking-wide transition-colors hover:text-[var(--accent-light)]"
                             >
                                 <ArrowLeft /> Return
                             </button>
@@ -70,7 +70,7 @@ const Manual = () => {
                                                 <button
                                                     type="button"
                                                     key={type.name}
-                                                    className="text-white group/btn relative cursor-pointer overflow-hidden border theme-accent-border px-4 py-2 font-bold text-xs uppercase tracking-wider transition-all hover:bg-[var(--accent-color)] hover:text-black"
+                                                    className="group/btn theme-accent-border relative cursor-pointer overflow-hidden border px-4 py-2 font-bold text-white text-xs uppercase tracking-wider transition-all hover:bg-[var(--accent-color)] hover:text-black"
                                                     onClick={() => {
                                                         setCurrTypeIndex(i);
                                                         setCurrTopicIndex(j);

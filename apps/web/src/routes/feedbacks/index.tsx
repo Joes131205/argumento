@@ -1,10 +1,9 @@
-import { createFileRoute, useNavigate, redirect } from "@tanstack/react-router";
-import { submitFeedback } from "@/apis/feedback";
-import { Loader2 } from "lucide-react";
 import { useForm } from "@tanstack/react-form";
-import { z } from "zod";
-import { getMe } from "@/apis/auth";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Loader2 } from "lucide-react";
 import { motion } from "motion/react";
+import { z } from "zod";
+import { submitFeedback } from "@/apis/feedback";
 import { requireAuth } from "@/utils/requireAuth";
 
 export const Route = createFileRoute("/feedbacks/")({
@@ -59,12 +58,12 @@ function RouteComponent() {
     });
 
     return (
-        <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center  p-6 font-mono text-zinc-300">
+        <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-6 font-mono text-zinc-300">
             <motion.div
                 initial={{ y: 5, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.2 }}
-                className="w-full max-w-5xl border-5 border-green-500 p-5"
+                className="theme-accent-border w-full max-w-5xl border-5 p-5"
             >
                 <div className="mb-8">
                     <h1 className="font-bold text-3xl text-white tracking-tight">
@@ -85,7 +84,7 @@ function RouteComponent() {
                 >
                     <form.Field name="description">
                         {(field) => (
-                            <div className="border border-zinc-800 bg-zinc-900/30 p-5 flex flex-col gap-1.5">
+                            <div className="flex flex-col gap-1.5 border border-zinc-800 bg-zinc-900/30 p-5">
                                 <label
                                     htmlFor={field.name}
                                     className="font-bold text-xs text-zinc-500 uppercase"
@@ -114,7 +113,7 @@ function RouteComponent() {
 
                     <form.Field name="expectation">
                         {(field) => (
-                            <div className="border border-zinc-800 bg-zinc-900/30 p-5 flex flex-col gap-1.5">
+                            <div className="flex flex-col gap-1.5 border border-zinc-800 bg-zinc-900/30 p-5">
                                 <label
                                     htmlFor="expectation"
                                     className="font-bold text-xs text-zinc-500 uppercase"
@@ -141,12 +140,12 @@ function RouteComponent() {
                                                     }
                                                     onChange={(e) =>
                                                         field.handleChange(
-                                                            e.target.value
+                                                            e.target.value,
                                                         )
                                                     }
-                                                    className="w-4 h-4"
+                                                    className="h-4 w-4"
                                                 />
-                                                <span className="capitalize text-sm">
+                                                <span className="text-sm capitalize">
                                                     {option === "better"
                                                         ? "Better than expected"
                                                         : option === "same"
@@ -154,7 +153,7 @@ function RouteComponent() {
                                                           : "Worse than expected"}
                                                 </span>
                                             </label>
-                                        )
+                                        ),
                                     )}
                                 </div>
                                 {!field.state.meta.isValid && (
@@ -168,7 +167,7 @@ function RouteComponent() {
 
                     <form.Field name="favoritePart">
                         {(field) => (
-                            <div className="border border-zinc-800 bg-zinc-900/30 p-5 flex flex-col gap-1.5">
+                            <div className="flex flex-col gap-1.5 border border-zinc-800 bg-zinc-900/30 p-5">
                                 <label
                                     htmlFor="favoritePart"
                                     className="font-bold text-xs text-zinc-500 uppercase"
@@ -197,7 +196,7 @@ function RouteComponent() {
 
                     <form.Field name="frustrated">
                         {(field) => (
-                            <div className="border border-zinc-800 bg-zinc-900/30 p-5 flex flex-col gap-1.5">
+                            <div className="flex flex-col gap-1.5 border border-zinc-800 bg-zinc-900/30 p-5">
                                 <label
                                     htmlFor="frustrated"
                                     className="font-bold text-xs text-zinc-500 uppercase"
@@ -226,7 +225,7 @@ function RouteComponent() {
 
                     <form.Field name="clarity">
                         {(field) => (
-                            <div className="border border-zinc-800 bg-zinc-900/30 p-5 flex flex-col gap-1.5">
+                            <div className="flex flex-col gap-1.5 border border-zinc-800 bg-zinc-900/30 p-5">
                                 <label
                                     htmlFor="clarity"
                                     className="font-bold text-xs text-zinc-500 uppercase"
@@ -256,7 +255,7 @@ function RouteComponent() {
                                                 }
                                                 onChange={(e) =>
                                                     field.handleChange(
-                                                        e.target.value
+                                                        e.target.value,
                                                     )
                                                 }
                                                 className="h-4 w-4"
@@ -278,7 +277,7 @@ function RouteComponent() {
 
                     <form.Field name="playAgainTomorrow">
                         {(field) => (
-                            <div className="border border-zinc-800 bg-zinc-900/30 p-5 flex flex-col gap-1.5">
+                            <div className="flex flex-col gap-1.5 border border-zinc-800 bg-zinc-900/30 p-5">
                                 <label
                                     htmlFor="playAgainTomorrow"
                                     className="font-bold text-xs text-zinc-500 uppercase"
@@ -286,7 +285,7 @@ function RouteComponent() {
                                     How likely are you to play again tomorrow?{" "}
                                     <span className="text-red-500">*</span>
                                 </label>
-                                <div className="flex justify-between text-xs text-zinc-500 mb-2">
+                                <div className="mb-2 flex justify-between text-xs text-zinc-500">
                                     <span>Definitely not</span>
                                     <span>Definitely yes</span>
                                 </div>
@@ -310,7 +309,7 @@ function RouteComponent() {
 
                     <form.Field name="improvements">
                         {(field) => (
-                            <div className="border border-zinc-800 bg-zinc-900/30 p-5 flex flex-col gap-1.5">
+                            <div className="flex flex-col gap-1.5 border border-zinc-800 bg-zinc-900/30 p-5">
                                 <label
                                     htmlFor="improvements"
                                     className="font-bold text-xs text-zinc-500 uppercase"
@@ -339,7 +338,7 @@ function RouteComponent() {
 
                     <form.Field name="learnedSomething">
                         {(field) => (
-                            <div className="border border-zinc-800 bg-zinc-900/30 p-5 flex flex-col gap-1.5">
+                            <div className="flex flex-col gap-1.5 border border-zinc-800 bg-zinc-900/30 p-5">
                                 <label
                                     htmlFor="learnedSomething"
                                     className="font-bold text-xs text-zinc-500 uppercase"
@@ -381,10 +380,10 @@ function RouteComponent() {
                                                 }
                                                 onChange={(e) =>
                                                     field.handleChange(
-                                                        e.target.value
+                                                        e.target.value,
                                                     )
                                                 }
-                                                className="w-4 h-4"
+                                                className="h-4 w-4"
                                             />
                                             <span className="text-sm">
                                                 {option.label}
@@ -403,7 +402,7 @@ function RouteComponent() {
 
                     <form.Field name="changesSocialMedia">
                         {(field) => (
-                            <div className="border border-zinc-800 bg-zinc-900/30 p-5 flex flex-col gap-1.5">
+                            <div className="flex flex-col gap-1.5 border border-zinc-800 bg-zinc-900/30 p-5">
                                 <label
                                     htmlFor="changesSocialMedia"
                                     className="font-bold text-xs text-zinc-500 uppercase"
@@ -442,10 +441,10 @@ function RouteComponent() {
                                                 }
                                                 onChange={(e) =>
                                                     field.handleChange(
-                                                        e.target.value
+                                                        e.target.value,
                                                     )
                                                 }
-                                                className="w-4 h-4"
+                                                className="h-4 w-4"
                                             />
                                             <span className="text-sm">
                                                 {option.label}
@@ -464,7 +463,7 @@ function RouteComponent() {
 
                     <form.Field name="anythingElse">
                         {(field) => (
-                            <div className="border border-zinc-800 bg-zinc-900/30 p-5 flex flex-col gap-1.5">
+                            <div className="flex flex-col gap-1.5 border border-zinc-800 bg-zinc-900/30 p-5">
                                 <label
                                     htmlFor="anythingElse"
                                     className="font-bold text-xs text-zinc-500 uppercase"
@@ -496,7 +495,7 @@ function RouteComponent() {
                             <button
                                 type="submit"
                                 disabled={!canSubmit || isSubmitting}
-                                className="cursor-pointer w-full theme-accent-solid px-6 py-3 font-bold text-black uppercase transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                                className="theme-accent-solid flex w-full cursor-pointer items-center justify-center gap-2 px-6 py-3 font-bold text-black uppercase transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                             >
                                 {isSubmitting ? (
                                     <>

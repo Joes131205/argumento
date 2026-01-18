@@ -30,7 +30,7 @@ export const buyShopItem = async (req: Request, res: Response) => {
         }
 
         const item = shop[type as keyof typeof shop].find(
-            (it) => it.id === itemId
+            (it) => it.id === itemId,
         );
 
         if (!item) {
@@ -52,13 +52,13 @@ export const buyShopItem = async (req: Request, res: Response) => {
         } else {
             if (
                 user.inventory[type as keyof typeof user.inventory].find(
-                    (it) => typeof it === "object" && it.itemId === itemId
+                    (it) => typeof it === "object" && it.itemId === itemId,
                 )
             ) {
                 const index = user.inventory[
                     type as keyof typeof user.inventory
                 ].findIndex(
-                    (it) => typeof it === "object" && it.itemId === itemId
+                    (it) => typeof it === "object" && it.itemId === itemId,
                 );
                 const item =
                     user.inventory[type as keyof typeof user.inventory][index];
@@ -66,7 +66,11 @@ export const buyShopItem = async (req: Request, res: Response) => {
                     item.amount++;
                 }
             } else {
-                user.inventory[type as keyof typeof user.inventory].push({
+                (
+                    user.inventory[
+                        type as keyof typeof user.inventory
+                    ] as Array<{ itemId: string; amount: number }>
+                ).push({
                     itemId,
                     amount: 1,
                 });
