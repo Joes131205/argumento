@@ -15,8 +15,7 @@
         "dev:native": "turbo -F native dev",
         "dev:web": "turbo -F web dev",
         "dev:server": "turbo -F server dev",
-        "seed:posts": "tsx --env-file=apps/server/.env apps/server/src/db/seeder/post.ts",
-        "install": "bun install"
+        "seed:posts": "tsx --env-file=apps/server/.env apps/server/src/db/seeder/post.ts"
     },
     "type": "module",
     "workspaces": [
