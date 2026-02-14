@@ -50,7 +50,9 @@ function RouteComponent() {
         | IPost
         | undefined;
     const [isSaving, setIsSaving] = useState(false);
-
+    const [mobileMode, setMobileMode] = useState<"briefing" | "game_state">(
+        "game_state",
+    );
     const handleApprove = () => {
         const isSafe = currentPost?.type === "safe";
         setVerdict({
@@ -121,39 +123,76 @@ function RouteComponent() {
             </div>
         );
     }
-    return (
-        <div className="flex h-full min-h-[calc(100vh-4rem)] flex-col items-stretch gap-4 p-5 md:flex-row md:items-center md:justify-center md:gap-6">
-            <div className="flex h-full flex-1 flex-col items-center justify-center">
-                <GameState
-                    currentPost={currentPost}
-                    currentIndex={index}
-                    verdict={verdict}
-                    isResult={isResult}
-                    isAnalyzing={isAnalyzing}
-                    onApprove={handleApprove}
-                    onReject={handleReject}
-                    onNext={handleNext}
-                    headerInfo={
-                        <span className="theme-accent-dark font-bold text-xs uppercase">
-                            CAMPAIGN MODE
-                        </span>
-                    }
-                />
-            </div>
-            <div className="theme-accent-border relative flex flex-1 flex-col border-2 bg-black/50 p-8">
-                <div className="pointer-events-none absolute inset-0 z-0 bg-[length:100%_4px,3px_100%] bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))]" />
-                <div className="relative z-10 flex h-full flex-col">
-                    <div className="theme-accent-border mb-8 border-b pb-4">
-                        <h1 className="font-black text-3xl text-white uppercase leading-none tracking-tight">
-                            {data.title}
-                        </h1>
-                    </div>
 
-                    <div className="flex-1 overflow-y-auto pr-4">
-                        <div className="theme-accent-border whitespace-pre-wrap border bg-green-900/10 p-6 font-medium text-sm text-white leading-7">
-                            {data.briefing}
+    return (
+        <div className="flex flex-col h-[calc(100vh-4rem)] overflow-hidden md:flex-row md:gap-5 md:items-start md:justify-center">
+            <div className="flex-1 w-full overflow-hidden relative flex md:gap-5">
+                <div
+                    className={`h-full w-full overflow-y-auto ${mobileMode === "briefing" ? "hidden md:block" : "block"}`}
+                >
+                    <GameState
+                        currentPost={currentPost}
+                        currentIndex={index}
+                        verdict={verdict}
+                        isResult={isResult}
+                        isAnalyzing={isAnalyzing}
+                        onApprove={handleApprove}
+                        onReject={handleReject}
+                        onNext={handleNext}
+                        headerInfo={
+                            <span className="theme-accent-dark font-bold text-xs uppercase">
+                                CAMPAIGN MODE
+                            </span>
+                        }
+                    />
+                </div>
+
+                <div
+                    className={`h-full w-full overflow-hidden ${mobileMode === "game_state" ? "hidden md:block" : "block"}`}
+                >
+                    <div className="theme-accent-border relative flex flex-1 flex-col border-2 bg-black/50 p-8">
+                        <div className="pointer-events-none absolute inset-0 z-0 bg-[length:100%_4px,3px_100%] bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))]" />
+                        <div className="relative z-10 flex h-full flex-col">
+                            <div className="theme-accent-border mb-8 border-b pb-4">
+                                <h1 className="font-black text-3xl text-white uppercase leading-none tracking-tight">
+                                    {data.title}
+                                </h1>
+                            </div>
+
+                            <div className="flex-1 overflow-y-auto pr-4">
+                                <div className="theme-accent-border whitespace-pre-wrap border bg-green-900/10 p-6 font-medium text-sm text-white leading-7">
+                                    {data.briefing}
+                                </div>
+                            </div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div className="w-full shrink-0 md:hidden border-t border-zinc-800 bg-black p-4 z-50">
+                <div className="flex gap-4 justify-center">
+                    <button
+                        type="button"
+                        onClick={() => setMobileMode("game_state")}
+                        className={`cursor-pointer flex-1 py-3 text-xs font-bold uppercase tracking-widest transition-colors ${
+                            mobileMode === "game_state"
+                                ? "bg-[var(--accent-color)] text-black"
+                                : "bg-zinc-900 text-zinc-500 border border-zinc-800"
+                        }`}
+                    >
+                        Terminal
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setMobileMode("briefing")}
+                        className={`cursor-pointer flex-1 py-3 text-xs font-bold uppercase tracking-widest transition-colors ${
+                            mobileMode === "briefing"
+                                ? "bg-[var(--accent-color)] text-black"
+                                : "bg-zinc-900 text-zinc-500 border border-zinc-800"
+                        }`}
+                    >
+                        Briefing
+                    </button>
                 </div>
             </div>
         </div>

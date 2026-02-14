@@ -44,9 +44,11 @@ function RouteComponent() {
         message: string;
     } | null>(null);
     const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
-
+    const [mobileMode, setMobileMode] = useState<"game_state" | "manual">(
+        "game_state",
+    );
     useEffect(() => {
-        const storage = localStorage.getItem("shift_data");
+        const storage = localStorage.getItem("practice_shift_data");
         if (storage) {
             const parsed = JSON.parse(storage);
             console.log(parsed);
@@ -69,7 +71,10 @@ function RouteComponent() {
             const postData = posts?.data || posts;
             const newGame = { currPosts: postData, log: [] };
 
-            localStorage.setItem("shift_data", JSON.stringify(newGame));
+            localStorage.setItem(
+                "practice_shift_data",
+                JSON.stringify(newGame),
+            );
             setData(newGame);
             setLogs([]);
             setIndex(0);
@@ -141,7 +146,7 @@ function RouteComponent() {
             ];
             setLogs(newLogs);
             localStorage.setItem(
-                "shift_data",
+                "practice_shift_data",
                 JSON.stringify({ ...data, log: newLogs }),
             );
         }
@@ -152,7 +157,7 @@ function RouteComponent() {
 
     const handleEndShift = async () => {
         toast.success("Practice Complete!");
-        localStorage.removeItem("shift_data");
+        localStorage.removeItem("practice_shift_data");
         router.navigate({ to: "/dashboard" });
     };
 
@@ -196,21 +201,55 @@ function RouteComponent() {
     }
 
     return (
-        <div className="flex items-center justify-center gap-5">
-            <div className="flex-2">
-                <GameState
-                    currentPost={currentPost}
-                    currentIndex={index}
-                    verdict={verdict}
-                    isResult={isResult}
-                    isAnalyzing={isAnalyzing}
-                    onApprove={handleApprove}
-                    onReject={handleReject}
-                    onNext={handleNext}
-                />
+        <div className="flex flex-col h-[calc(100vh-4rem)] overflow-hidden md:flex-row md:gap-5 md:items-start md:justify-center">
+            <div className="flex-1 w-full overflow-hidden relative flex md:gap-5">
+                <div
+                    className={`h-full w-full overflow-y-auto ${mobileMode === "manual" ? "hidden md:block" : "block"}`}
+                >
+                    <GameState
+                        currentPost={currentPost}
+                        currentIndex={index}
+                        verdict={verdict}
+                        isResult={isResult}
+                        isAnalyzing={isAnalyzing}
+                        onApprove={handleApprove}
+                        onReject={handleReject}
+                        onNext={handleNext}
+                    />
+                </div>
+
+                <div
+                    className={`h-full w-full overflow-hidden ${mobileMode === "game_state" ? "hidden md:block" : "block"}`}
+                >
+                    <Manual />
+                </div>
             </div>
-            <div className="flex-2">
-                <Manual />
+
+            <div className="w-full shrink-0 md:hidden border-t border-zinc-800 bg-black p-4 z-50">
+                <div className="flex gap-4 justify-center">
+                    <button
+                        type="button"
+                        onClick={() => setMobileMode("game_state")}
+                        className={`cursor-pointer flex-1 py-3 text-xs font-bold uppercase tracking-widest transition-colors ${
+                            mobileMode === "game_state"
+                                ? "bg-[var(--accent-color)] text-black"
+                                : "bg-zinc-900 text-zinc-500 border border-zinc-800"
+                        }`}
+                    >
+                        Terminal
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setMobileMode("manual")}
+                        className={`cursor-pointer flex-1 py-3 text-xs font-bold uppercase tracking-widest transition-colors ${
+                            mobileMode === "manual"
+                                ? "bg-[var(--accent-color)] text-black"
+                                : "bg-zinc-900 text-zinc-500 border border-zinc-800"
+                        }`}
+                    >
+                        Manual
+                    </button>
+                </div>
             </div>
         </div>
     );
