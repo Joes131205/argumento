@@ -12,7 +12,7 @@
 
 html,
 body {
-    @apply bg-zinc-950 font-mono;
+    @apply bg-zinc-950 font-sans;
 
     @media (prefers-color-scheme: dark) {
         color-scheme: dark;
@@ -137,11 +137,14 @@ body {
     body {
         @apply bg-background text-foreground;
     }
+    :focus-visible {
+        @apply outline-none ring-2 ring-[var(--accent-color)] ring-offset-2 ring-offset-zinc-950;
+    }
 }
 
 @layer components {
     .theme-root {
-        @apply min-h-screen w-full font-mono transition-colors duration-500;
+        @apply min-h-screen w-full transition-colors duration-500;
         background: linear-gradient(
             135deg,
             color-mix(in srgb, var(--accent-color) 8%, rgb(9, 9, 11)) 0%,
@@ -180,5 +183,41 @@ body {
 
     .theme-glow-lg {
         box-shadow: 0 0 40px var(--accent-muted);
+    }
+
+    .ui-card {
+        @apply border border-zinc-800 bg-zinc-950/50;
+    }
+
+    .ui-card-accent {
+        @apply ui-card border-[var(--accent-color)]/70;
+    }
+
+    .ui-title {
+        @apply font-black text-white uppercase tracking-tight;
+    }
+
+    .ui-subtle {
+        @apply text-zinc-400;
+    }
+
+    .ui-btn {
+        @apply inline-flex cursor-pointer items-center justify-center gap-2 px-4 py-2 font-bold text-xs uppercase tracking-wider transition-colors disabled:cursor-not-allowed disabled:opacity-50;
+    }
+
+    .ui-btn-primary {
+        @apply ui-btn bg-[var(--accent-color)] text-black hover:bg-[var(--accent-dark)];
+    }
+
+    .ui-btn-ghost {
+        @apply ui-btn border border-zinc-800 bg-zinc-900 text-zinc-300 hover:bg-zinc-800 hover:text-white;
+    }
+
+    .ui-btn-danger {
+        @apply ui-btn border border-red-700 bg-red-900/20 text-red-400 hover:bg-red-600 hover:text-black;
+    }
+
+    .ui-input {
+        @apply border border-zinc-700 bg-zinc-950 px-3 py-2 text-zinc-100 placeholder:text-zinc-500 focus:border-[var(--accent-color)] focus:outline-none;
     }
 }

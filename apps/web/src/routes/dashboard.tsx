@@ -246,7 +246,9 @@ function HomeComponent() {
                                     to="/play/daily"
                                     className="theme-accent-solid w-full cursor-pointer px-4 py-2 text-center font-bold text-black text-sm uppercase transition-colors hover:opacity-90"
                                 >
-                                    Initiate Shift
+                                    {localStorage.getItem("shift_data")
+                                        ? "Continue"
+                                        : "Initiate Shift"}
                                 </Link>
                             </div>
                         )}
@@ -270,7 +272,9 @@ function HomeComponent() {
                                 to="/play/practice"
                                 className="w-full border border-blue-500 bg-blue-500/10 px-4 py-2 text-center font-bold text-blue-400 text-sm uppercase transition-colors hover:bg-blue-500 hover:text-white"
                             >
-                                Start Practice
+                                {localStorage.getItem("practice_shift_data")
+                                    ? "Continue"
+                                    : "Initiate Shift"}
                             </Link>
                         </div>
                     </motion.div>

@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
+import { BookOpen, Terminal } from "lucide-react";
 import { completeCampaignLevel, getLevel } from "@/apis/campaign";
 import { GameState } from "@/components/GameState";
 import useUser from "@/hooks/useUser";
@@ -125,10 +126,10 @@ function RouteComponent() {
     }
 
     return (
-        <div className="flex flex-col h-[calc(100vh-4rem)] overflow-hidden md:flex-row md:gap-5 md:items-start md:justify-center">
-            <div className="flex-1 w-full overflow-hidden relative flex md:gap-5">
+        <div className="flex flex-col h-[calc(100vh-4rem)] overflow-y-hidden md:overflow-y-auto md:flex-row md:gap-3">
+            <div className="flex-1 w-full overflow-y-hidden md:overflow-y-auto relative flex md:gap-3 md:h-full pb-20 md:pb-0">
                 <div
-                    className={`h-full w-full overflow-y-auto ${mobileMode === "briefing" ? "hidden md:block" : "block"}`}
+                    className={`h-full w-full md:flex-1 overflow-y-hidden md:overflow-y-auto ${mobileMode === "briefing" ? "hidden md:block" : "block"}`}
                 >
                     <GameState
                         currentPost={currentPost}
@@ -148,18 +149,18 @@ function RouteComponent() {
                 </div>
 
                 <div
-                    className={`h-full w-full overflow-hidden ${mobileMode === "game_state" ? "hidden md:block" : "block"}`}
+                    className={`h-full w-full md:flex-1 overflow-hidden ${mobileMode === "game_state" ? "hidden md:block" : "block"} p-3`}
                 >
-                    <div className="theme-accent-border relative flex flex-1 flex-col border-2 bg-black/50 p-8">
+                    <div className="theme-accent-border relative flex h-full flex-col border-2 bg-black/50 p-8">
                         <div className="pointer-events-none absolute inset-0 z-0 bg-[length:100%_4px,3px_100%] bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))]" />
                         <div className="relative z-10 flex h-full flex-col">
-                            <div className="theme-accent-border mb-8 border-b pb-4">
+                            <div className="theme-accent-border mb-8 border-b pb-4 shrink-0">
                                 <h1 className="font-black text-3xl text-white uppercase leading-none tracking-tight">
                                     {data.title}
                                 </h1>
                             </div>
 
-                            <div className="flex-1 overflow-y-auto pr-4">
+                            <div className="flex-1 min-h-0 overflow-y-auto pr-4">
                                 <div className="theme-accent-border whitespace-pre-wrap border bg-green-900/10 p-6 font-medium text-sm text-white leading-7">
                                     {data.briefing}
                                 </div>
@@ -169,28 +170,30 @@ function RouteComponent() {
                 </div>
             </div>
 
-            <div className="w-full shrink-0 md:hidden border-t border-zinc-800 bg-black p-4 z-50">
-                <div className="flex gap-4 justify-center">
+            <div className="fixed bottom-0 left-0 right-0 w-full md:hidden border-t border-zinc-800 bg-black p-4 z-50">
+                <div className="flex gap-3 justify-center">
                     <button
                         type="button"
                         onClick={() => setMobileMode("game_state")}
-                        className={`cursor-pointer flex-1 py-3 text-xs font-bold uppercase tracking-widest transition-colors ${
+                        className={`cursor-pointer flex-1 px-6 py-4 text-sm font-black uppercase tracking-wider transition-all duration-200 border-2 flex items-center justify-center gap-2 ${
                             mobileMode === "game_state"
-                                ? "bg-[var(--accent-color)] text-black"
-                                : "bg-zinc-900 text-zinc-500 border border-zinc-800"
+                                ? "theme-accent-solid border-[var(--accent-color)] text-black shadow-[0_0_20px_rgba(22,163,74,0.4)]"
+                                : "border-zinc-700 text-zinc-400 bg-zinc-900/40 hover:border-zinc-600 hover:text-zinc-300"
                         }`}
                     >
+                        <Terminal size={18} />
                         Terminal
                     </button>
                     <button
                         type="button"
                         onClick={() => setMobileMode("briefing")}
-                        className={`cursor-pointer flex-1 py-3 text-xs font-bold uppercase tracking-widest transition-colors ${
+                        className={`cursor-pointer flex-1 px-6 py-4 text-sm font-black uppercase tracking-wider transition-all duration-200 border-2 flex items-center justify-center gap-2 ${
                             mobileMode === "briefing"
-                                ? "bg-[var(--accent-color)] text-black"
-                                : "bg-zinc-900 text-zinc-500 border border-zinc-800"
+                                ? "theme-accent-solid border-[var(--accent-color)] text-black shadow-[0_0_20px_rgba(22,163,74,0.4)]"
+                                : "border-zinc-700 text-zinc-400 bg-zinc-900/40 hover:border-zinc-600 hover:text-zinc-300"
                         }`}
                     >
+                        <BookOpen size={18} />
                         Briefing
                     </button>
                 </div>

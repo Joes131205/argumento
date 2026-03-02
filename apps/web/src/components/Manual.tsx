@@ -1,4 +1,4 @@
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, BookMarked, ListChecks } from "lucide-react";
 import { useState } from "react";
 import { content_types } from "@/utils/content_types";
 
@@ -9,59 +9,78 @@ const Manual = () => {
     const [isOpened, setIsOpened] = useState<boolean>(false);
 
     return (
-        <div className="relative flex h-full w-full flex-col overflow-y-scroll rounded-lg border border-zinc-700 bg-zinc-900 shadow-[0_0_30px_rgba(0,255,100,0.1)]">
-            <div className="flex shrink-0 items-center justify-between border-zinc-700 border-b bg-zinc-950 p-4">
-                <div className="flex flex-col gap-3">
-                    <p className="font-bold text-2xl text-white">
-                        Manual v1.1.1
-                    </p>
-                    <p className="text-white">
-                        Use the manual when it's necessary
-                    </p>
+        <div className="relative flex h-full w-full flex-col overflow-hidden rounded-lg border border-zinc-700 bg-zinc-900 shadow-[0_0_30px_rgba(0,255,100,0.1)]">
+            <div className="flex shrink-0 items-center justify-between border-b border-zinc-700 bg-gradient-to-r from-zinc-950 via-zinc-900 to-zinc-950 p-6">
+                <div className="flex items-center gap-4">
+                    <div className="theme-accent mb-4 inline-flex rounded bg-zinc-900/50 p-2">
+                        <BookMarked size={24} />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <p className="font-black text-xl uppercase tracking-tight text-white">
+                            Manual
+                        </p>
+                        <p className="text-sm text-zinc-400">
+                            Use this whenever necessary
+                        </p>
+                    </div>
                 </div>
             </div>
 
-            <div className=" overflow-visible scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent flex-1 overflow-y-auto p-6">
+            <div className="flex-1 overflow-y-auto p-6 scrollbar-track-transparent scrollbar-thumb-zinc-700 scrollbar-thin">
                 {isOpened ? (
-                    <div>
+                    <div className="space-y-8">
                         <button
                             type="button"
                             onClick={() => setIsOpened(false)}
-                            className="theme-accent mb-6 flex cursor-pointer items-center gap-2 font-bold font-mono text-sm uppercase tracking-wide transition-colors hover:text-[var(--accent-light)]"
+                            className="theme-accent mb-6 flex cursor-pointer items-center gap-2 font-bold font-mono text-sm uppercase tracking-wide transition-all hover:text-[var(--accent-light)] hover:translate-x-1"
                         >
-                            <ArrowLeft /> Return
+                            <ArrowLeft size={16} /> Back to Topics
                         </button>
 
-                        <h3 className="mb-6 font-black text-4xl text-white tracking-tight">
-                            {
-                                content_types[currTypeIndex].types[
-                                    currTopicIndex
-                                ].name
-                            }
-                        </h3>
-
-                        <div className="prose prose-invert max-w-none">
-                            <p className="mb-8 font-light text-xl text-zinc-300 leading-relaxed">
+                        <div className="theme-accent-border border-l-4 pl-6">
+                            <h3 className="mb-4 font-black text-4xl uppercase tracking-tight text-white">
                                 {
                                     content_types[currTypeIndex].types[
                                         currTopicIndex
-                                    ].definition
+                                    ].name
                                 }
+                            </h3>
+                            <p className="font-mono text-sm uppercase tracking-widest text-zinc-400">
+                                {content_types[currTypeIndex].name} • Topic{" "}
+                                {currTopicIndex + 1}
                             </p>
+                        </div>
+
+                        <div className="space-y-6">
+                            <div className="space-y-3 rounded-lg border border-zinc-800 bg-zinc-950/50 p-6">
+                                <h4 className="font-bold text-lg text-white uppercase tracking-wider">
+                                    Definition
+                                </h4>
+                                <p className="font-light text-lg leading-relaxed text-zinc-300">
+                                    {
+                                        content_types[currTypeIndex].types[
+                                            currTopicIndex
+                                        ].definition
+                                    }
+                                </p>
+                            </div>
                         </div>
                     </div>
                 ) : (
-                    <div>
-                        <div className="grid grid-cols-1 gap-4 overflow-y-auto sm:grid-cols-2">
+                    <div className="space-y-8">
+                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                             {content_types.map((item, i) => (
                                 <div
                                     key={i.toString()}
-                                    className="rounded-lg border border-zinc-800 bg-zinc-950 p-4 transition-all duration-300 hover:border-[var(--accent-light)] hover:shadow-[0_0_15px_rgba(0,255,100,0.1)]"
+                                    className="group rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900/50 to-zinc-950 p-6 transition-all duration-300 hover:border-[var(--accent-color)] hover:bg-zinc-900 hover:shadow-[0_0_20px_rgba(22,163,74,0.15)]"
                                 >
-                                    <h3 className="mb-1 font-bold text-lg text-white">
+                                    <div className="theme-accent mb-4 inline-flex rounded bg-zinc-900/50 p-2">
+                                        <BookMarked size={20} />
+                                    </div>
+                                    <h3 className="mb-2 font-black text-lg text-white uppercase tracking-tight">
                                         {item.name}
                                     </h3>
-                                    <p className="mb-3 text-sm text-zinc-400">
+                                    <p className="mb-6 text-sm text-zinc-400 leading-relaxed">
                                         {item.description}
                                     </p>
                                     <div className="flex flex-wrap items-center gap-2">
@@ -69,7 +88,7 @@ const Manual = () => {
                                             <button
                                                 type="button"
                                                 key={type.name}
-                                                className="group/btn theme-accent-border relative cursor-pointer overflow-hidden border px-4 py-2 font-bold text-white text-xs uppercase tracking-wider transition-all hover:bg-[var(--accent-color)] hover:text-black"
+                                                className="theme-accent-border relative cursor-pointer overflow-hidden border px-4 py-2 font-bold text-white text-xs uppercase tracking-wider transition-all duration-200 hover:bg-[var(--accent-color)] hover:text-black hover:shadow-[0_0_15px_rgba(22,163,74,0.3)]"
                                                 onClick={() => {
                                                     setCurrTypeIndex(i);
                                                     setCurrTopicIndex(j);

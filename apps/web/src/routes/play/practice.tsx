@@ -1,6 +1,7 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { BookOpen, Terminal } from "lucide-react";
 import { judge } from "@/apis/judge";
 import { generatePracticeShift } from "@/apis/shifts";
 import { GameSetup } from "@/components/GameSetup";
@@ -201,10 +202,10 @@ function RouteComponent() {
     }
 
     return (
-        <div className="flex flex-col h-[calc(100vh-4rem)] overflow-hidden md:flex-row md:gap-5 md:items-start md:justify-center">
-            <div className="flex-1 w-full overflow-hidden relative flex md:gap-5">
+        <div className="flex flex-col h-[calc(100vh-4rem)] overflow-hidden md:flex-row md:gap-5">
+            <div className="flex-1 w-full overflow-hidden relative flex md:gap-5 md:h-full pb-20 md:pb-0">
                 <div
-                    className={`h-full w-full overflow-y-auto ${mobileMode === "manual" ? "hidden md:block" : "block"}`}
+                    className={`h-full w-full md:flex-1 overflow-y-auto ${mobileMode === "manual" ? "hidden md:block" : "block"}`}
                 >
                     <GameState
                         currentPost={currentPost}
@@ -219,34 +220,36 @@ function RouteComponent() {
                 </div>
 
                 <div
-                    className={`h-full w-full overflow-hidden ${mobileMode === "game_state" ? "hidden md:block" : "block"}`}
+                    className={`h-full w-full md:flex-1 overflow-hidden ${mobileMode === "game_state" ? "hidden md:block" : "block"} p-3`}
                 >
                     <Manual />
                 </div>
             </div>
 
-            <div className="w-full shrink-0 md:hidden border-t border-zinc-800 bg-black p-4 z-50">
-                <div className="flex gap-4 justify-center">
+            <div className="fixed bottom-0 left-0 right-0 w-full md:hidden border-t border-zinc-800 bg-black p-4 z-50">
+                <div className="flex gap-3 justify-center">
                     <button
                         type="button"
                         onClick={() => setMobileMode("game_state")}
-                        className={`cursor-pointer flex-1 py-3 text-xs font-bold uppercase tracking-widest transition-colors ${
+                        className={`cursor-pointer flex-1 px-6 py-4 text-sm font-black uppercase tracking-wider transition-all duration-200 border-2 flex items-center justify-center gap-2 ${
                             mobileMode === "game_state"
-                                ? "bg-[var(--accent-color)] text-black"
-                                : "bg-zinc-900 text-zinc-500 border border-zinc-800"
+                                ? "theme-accent-solid border-[var(--accent-color)] text-black shadow-[0_0_20px_rgba(22,163,74,0.4)]"
+                                : "border-zinc-700 text-zinc-400 bg-zinc-900/40 hover:border-zinc-600 hover:text-zinc-300"
                         }`}
                     >
+                        <Terminal size={18} />
                         Terminal
                     </button>
                     <button
                         type="button"
                         onClick={() => setMobileMode("manual")}
-                        className={`cursor-pointer flex-1 py-3 text-xs font-bold uppercase tracking-widest transition-colors ${
+                        className={`cursor-pointer flex-1 px-6 py-4 text-sm font-black uppercase tracking-wider transition-all duration-200 border-2 flex items-center justify-center gap-2 ${
                             mobileMode === "manual"
-                                ? "bg-[var(--accent-color)] text-black"
-                                : "bg-zinc-900 text-zinc-500 border border-zinc-800"
+                                ? "theme-accent-solid border-[var(--accent-color)] text-black shadow-[0_0_20px_rgba(22,163,74,0.4)]"
+                                : "border-zinc-700 text-zinc-400 bg-zinc-900/40 hover:border-zinc-600 hover:text-zinc-300"
                         }`}
                     >
+                        <BookOpen size={18} />
                         Manual
                     </button>
                 </div>

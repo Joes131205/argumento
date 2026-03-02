@@ -36,9 +36,9 @@ export const GameState = ({
     };
 
     return (
-        <div className="flex-col items-center gap-4 p-3 lg:flex-row">
-            <div className="flex w-full flex-[2] flex-col justify-center">
-                <div className="theme-accent-border theme-glow relative rounded border-2 bg-zinc-950 p-8">
+        <div className="flex-col items-center gap-4 p-3 lg:flex-row h-full">
+            <div className="flex w-full flex-[2] flex-col justify-center h-full">
+                <div className="theme-accent-border theme-glow relative rounded border-2 bg-zinc-950 p-8 h-full">
                     <div className="mb-6 flex items-end justify-between border-b border-b-current/20 pb-4">
                         <div className="flex flex-col">
                             <h2 className="theme-accent font-bold text-xl uppercase">

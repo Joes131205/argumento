@@ -17,18 +17,21 @@ function RouteComponent() {
                 <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2">
                     <div className="space-y-8">
                         <h1 className="font-black text-5xl text-white uppercase leading-[0.9] tracking-tighter lg:text-7xl">
-                            Increase Your
+                            Master Critical
                             <br />
-                            <span className="theme-accent">
-                                Logical Thinking
-                            </span>
+                            <span className="theme-accent">Thinking</span>
                         </h1>
 
-                        <p className="max-w-xl text-lg text-zinc-500 leading-relaxed">
-                            The information age nowadays is a battlefield,
-                            either good, either bad. Train your mind to detect
-                            logical fallacies, spot media manipulation, and
-                            neutralize AI hallucinations before they trick you.
+                        <p className="max-w-xl text-lg text-zinc-400 leading-relaxed">
+                            In a world drowning in misinformation, your mind is
+                            your greatest weapon. Train to instantly detect
+                            logical fallacies, expose media manipulation, and
+                            see through AI-generated deception. Don't just
+                            consume information—
+                            <span className="theme-accent font-semibold">
+                                {" "}
+                                decode it.
+                            </span>
                         </p>
 
                         <div className="flex flex-col gap-4 sm:flex-row">
@@ -44,7 +47,10 @@ function RouteComponent() {
 
                     <div className="space-y-4 p-6">
                         <div className="flex items-center justify-between text-xs">
-                            <span className="text-zinc-500">POST #1</span>
+                            <span className="text-zinc-500">LIVE EXAMPLE</span>
+                            <span className="theme-accent font-mono text-xs">
+                                ANALYSIS MODE
+                            </span>
                         </div>
 
                         <div className="space-y-2 border border-zinc-800 bg-zinc-900/30 p-4">
@@ -59,10 +65,10 @@ function RouteComponent() {
                             </div>
                             <div>
                                 <div className="font-bold text-red-400 text-xs uppercase">
-                                    Fallacy Found!
+                                    Reasoning
                                 </div>
                                 <div className="text-red-500/70 text-xs">
-                                    Found Fallacy: Ad Hominem
+                                    Ad Hominem • Attack on person, not argument
                                 </div>
                             </div>
                         </div>
@@ -74,51 +80,61 @@ function RouteComponent() {
                 <div className="mx-auto max-w-7xl">
                     <div className="mb-16 text-center">
                         <h2 className="mb-4 font-black text-3xl text-white uppercase tracking-tight lg:text-4xl">
-                            Training Modules
+                            How You'll Train
                         </h2>
-                        <div className="theme-accent-bg mx-auto h-1 w-20" />
+                        <p className="mx-auto mt-4 max-w-2xl text-zinc-400">
+                            Three powerful modes designed to transform you from
+                            information consumer to critical analyst
+                        </p>
+                        <div className="theme-accent-bg mx-auto mt-6 h-1 w-20" />
                     </div>
 
                     <div className="grid gap-8 md:grid-cols-3">
                         <div className="group hover:theme-accent-border border border-zinc-800 bg-zinc-900/20 p-8 transition-colors">
-                            <div className="theme-accent mb-6 inline-flex border border-zinc-800 bg-zinc-900 p-3 transition-colors group-hover:bg-current/20 group-hover:text-white">
+                            <div className="theme-accent mb-6 inline-flex border border-zinc-800 bg-zinc-900 p-3 transition-colors">
                                 <ShieldCheck size={32} />
                             </div>
                             <h3 className="mb-3 font-bold text-white text-xl uppercase">
-                                Defense Drills
+                                Daily Defense
                             </h3>
-                            <p className="text-zinc-500 leading-relaxed">
-                                Process daily feeds of real-world headlines.
-                                Identify "slop", clickbait, and fallacies to
-                                earn XP and maintain your streak.
+                            <p className="text-zinc-400 leading-relaxed">
+                                Sharpen your skills with real-world content
+                                every day. Hunt down fallacies, expose
+                                clickbait, and filter the noise. Build your
+                                streak, level up, and make critical thinking a
+                                habit.
                             </p>
                         </div>
 
                         <div className="group hover:theme-accent-border border border-zinc-800 bg-zinc-900/20 p-8 transition-colors">
-                            <div className="theme-accent mb-6 inline-flex border border-zinc-800 bg-zinc-900 p-3 transition-colors group-hover:bg-current/20 group-hover:text-white">
+                            <div className="theme-accent mb-6 inline-flex border border-zinc-800 bg-zinc-900 p-3 transition-colors">
                                 <BrainCircuit size={32} />
                             </div>
                             <h3 className="mb-3 font-bold text-white text-xl uppercase">
                                 Campaign Mode
                             </h3>
-                            <p className="text-zinc-500 leading-relaxed">
-                                Progress through structured levels. From "Ad
-                                Hominem" attacks to complex "AI Hallucinations,"
-                                master the theory behind the lies.
+                            <p className="text-zinc-400 leading-relaxed">
+                                Journey from novice to expert through curated
+                                challenges. Start with classic fallacies like Ad
+                                Hominem, then tackle modern threats like AI
+                                hallucinations and deepfakes. Master the science
+                                of persuasion—and resistance.
                             </p>
                         </div>
 
                         <div className="group hover:theme-accent-border border border-zinc-800 bg-zinc-900/20 p-8 transition-colors">
-                            <div className="theme-accent mb-6 inline-flex border border-zinc-800 bg-zinc-900 p-3 transition-colors group-hover:bg-current/20 group-hover:text-white">
+                            <div className="theme-accent mb-6 inline-flex border border-zinc-800 bg-zinc-900 p-3 transition-colors">
                                 <Target size={32} />
                             </div>
                             <h3 className="mb-3 font-bold text-white text-xl uppercase">
                                 Skill Radar
                             </h3>
-                            <p className="text-zinc-500 leading-relaxed">
-                                Track your analytical accuracy. Our system
-                                generates a dynamic skill matrix to highlight
-                                your cognitive weak points.
+                            <p className="text-zinc-400 leading-relaxed">
+                                See your cognitive strengths and blind spots
+                                visualized. Our system analyzes your performance
+                                across fallacy types and reasoning patterns,
+                                revealing exactly where to focus your training
+                                for maximum impact.
                             </p>
                         </div>
                     </div>
