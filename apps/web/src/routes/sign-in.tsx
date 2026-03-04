@@ -72,7 +72,6 @@ function RouteComponent() {
                 }
             } catch (error) {
                 console.error(error);
-                toast.error("Connection Error.");
             }
         },
     });

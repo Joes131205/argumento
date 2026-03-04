@@ -6,7 +6,13 @@ import {
 } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
-import { BookOpen, Terminal } from "lucide-react";
+import {
+    BookOpen,
+    Terminal,
+    FileWarning,
+    AlertCircle,
+    Crosshair,
+} from "lucide-react";
 import { completeCampaignLevel, getLevel } from "@/apis/campaign";
 import { GameState } from "@/components/GameState";
 import useUser from "@/hooks/useUser";
@@ -151,18 +157,73 @@ function RouteComponent() {
                 <div
                     className={`h-full w-full md:flex-1 overflow-hidden ${mobileMode === "game_state" ? "hidden md:block" : "block"} p-3`}
                 >
-                    <div className="theme-accent-border relative flex h-full flex-col border-2 bg-black/50 p-8">
-                        <div className="pointer-events-none absolute inset-0 z-0 bg-[length:100%_4px,3px_100%] bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))]" />
-                        <div className="relative z-10 flex h-full flex-col">
-                            <div className="theme-accent-border mb-8 border-b pb-4 shrink-0">
-                                <h1 className="font-black text-3xl text-white uppercase leading-none tracking-tight">
+                    <div className="theme-accent-border relative flex h-full flex-col overflow-hidden rounded-sm border-2 bg-zinc-950">
+                        <div className="theme-accent-bg/10 relative z-10 border-b-2 theme-accent-border px-6 py-4">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <FileWarning className="theme-accent h-5 w-5" />
+                                    <div>
+                                        <h2 className="theme-accent font-bold text-lg uppercase tracking-wider">
+                                            Mission Briefing
+                                        </h2>
+                                    </div>
+                                </div>
+                                <div className="theme-accent-border theme-accent-bg theme-accent rounded-sm border px-3 py-1 font-mono text-xs tracking-wider">
+                                    {params.level
+                                        .replace("campaign_", "C")
+                                        .toUpperCase()}
+                                    -
+                                    {params.id
+                                        .replace("level_", "L")
+                                        .toUpperCase()}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="relative z-10 flex flex-1 flex-col overflow-hidden p-6">
+                            <div className="mb-6 border-b border-zinc-800 pb-4">
+                                <span className="theme-accent mb-2 block text-[10px] font-bold uppercase tracking-[0.2em]">
+                                    Operation Name
+                                </span>
+                                <h1 className="font-black text-2xl text-white uppercase leading-none tracking-tight md:text-3xl">
                                     {data.title}
                                 </h1>
                             </div>
 
-                            <div className="flex-1 min-h-0 overflow-y-auto pr-4">
-                                <div className="theme-accent-border whitespace-pre-wrap border bg-green-900/10 p-6 font-medium text-sm text-white leading-7">
-                                    {data.briefing}
+                            <div className="flex-1 overflow-y-auto">
+                                <div className="theme-accent-border mb-6 border-l-4 bg-zinc-900/50 p-5">
+                                    <p className="whitespace-pre-wrap font-light text-sm leading-7 text-zinc-300">
+                                        {data.briefing}
+                                    </p>
+                                </div>
+
+                                <div className="border-2 border-dashed border-zinc-800 bg-zinc-900/30 p-4">
+                                    <div className="mb-2 flex items-center gap-2">
+                                        <Crosshair className="theme-accent h-4 w-4" />
+                                        <span className="theme-accent text-[10px] font-bold uppercase tracking-[0.2em]">
+                                            Standing Orders
+                                        </span>
+                                    </div>
+                                    <ul className="space-y-1 text-xs text-zinc-400">
+                                        <li className="flex items-center gap-2">
+                                            <span className="text-green-500">
+                                                ▸
+                                            </span>
+                                            <span>
+                                                [APPROVE] verified, factual
+                                                content
+                                            </span>
+                                        </li>
+                                        <li className="flex items-center gap-2">
+                                            <span className="text-red-500">
+                                                ▸
+                                            </span>
+                                            <span>
+                                                [REJECT] manipulative or
+                                                misleading content
+                                            </span>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>

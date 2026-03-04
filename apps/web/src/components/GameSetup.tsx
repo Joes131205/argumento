@@ -45,7 +45,7 @@ export const GameSetup = ({
                     <div className="mb-4 flex items-center gap-3">
                         <h1 className="font-black text-4xl text-white uppercase tracking-tighter md:text-5xl">
                             {mode === "practice"
-                                ? "Practice Mode"
+                                ? "Demo Mode"
                                 : "Custom Simulation"}
                         </h1>
                         {mode === "practice" && (
@@ -58,7 +58,7 @@ export const GameSetup = ({
                     </div>
                     <p className="mt-4 max-w-2xl text-gray-600">
                         {mode === "practice"
-                            ? "Perfect your detection skills with no pressure. Your progress won't be recorded."
+                            ? "Try out the app without going through the campaign!"
                             : "Select specific protocols to test your detection ability."}
                     </p>
                 </div>

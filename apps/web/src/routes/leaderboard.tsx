@@ -57,7 +57,7 @@ function RouteComponent() {
         if (index === 0) return <Crown className="text-yellow-400" size={24} />;
         if (index === 1) return <Medal className="text-zinc-300" size={24} />;
         if (index === 2) return <Medal className="text-amber-600" size={24} />;
-        return <span className="font-mono text-zinc-600">#{index + 1}</span>;
+        return <span className="font-mono text-zinc-400">#{index + 1}</span>;
     };
 
     const getRowStyle = (index: number, isMe: boolean) => {
@@ -189,7 +189,7 @@ function RouteComponent() {
                                                 ]?.toLocaleString() || 0}
                                             </span>
                                             {index === 0 && (
-                                                <span className="hidden text-[10px] text-zinc-600 uppercase md:block">
+                                                <span className="hidden text-[10px] text-zinc-400 uppercase md:block">
                                                     {activeSortLabel}
                                                 </span>
                                             )}

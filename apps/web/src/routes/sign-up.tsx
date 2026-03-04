@@ -59,7 +59,7 @@ function RouteComponent() {
                     {
                         message: "Passwords do not match",
                         path: ["confirmationPassword"],
-                    }
+                    },
                 ),
         },
         onSubmit: async ({ value }) => {
@@ -67,7 +67,7 @@ function RouteComponent() {
                 const response = await register(
                     value.username,
                     value.password,
-                    value.email
+                    value.email,
                 );
                 if (response?.token) {
                     localStorage.setItem("token", response.token);
@@ -78,7 +78,6 @@ function RouteComponent() {
                     toast.error("Registration failed.");
                 }
             } catch (error) {
-                toast.error("Connection error during registration.");
                 console.error(error);
             }
         },
@@ -233,7 +232,7 @@ function RouteComponent() {
                                         type="button"
                                         onClick={() =>
                                             setShowConfirmationPassword(
-                                                !showConfirmationPassword
+                                                !showConfirmationPassword,
                                             )
                                         }
                                         className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-zinc-500 transition-colors hover:text-white"

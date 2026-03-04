@@ -259,7 +259,7 @@ function HomeComponent() {
                     >
                         <div className="mb-4 flex items-start justify-between">
                             <span className="font-bold text-blue-400 text-xs uppercase tracking-wider">
-                                Practice Mode
+                                Demo Mode
                             </span>
                             <Shield size={18} className="text-blue-400" />
                         </div>

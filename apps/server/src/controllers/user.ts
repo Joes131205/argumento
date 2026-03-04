@@ -104,3 +104,50 @@ export const refreshStreak = async (req: Request, res: Response) => {
         });
     }
 };
+
+export const resetStreaks = async (req: Request, res: Response) => {
+    try {
+        // Verify cron secret to prevent unauthorized access
+        const cronSecret = req.headers.authorization?.replace("Bearer ", "");
+        if (cronSecret !== process.env.CRON_SECRET) {
+            return res.status(401).json({
+                success: false,
+                message: "Unauthorized",
+            });
+        }
+
+        // Get current date at midnight
+        const now = new Date();
+        now.setHours(0, 0, 0, 0);
+        const nowTime = now.getTime();
+        const msPerDay = 1000 * 60 * 60 * 24;
+
+        // Find all users whose streak should be reset
+        const users = await User.find();
+        
+        let resetCount = 0;
+        for (const user of users) {
+            const lastPlayed = new Date(user.lastPlayedDate || 0).getTime();
+            const daysDiff = Math.floor((nowTime - lastPlayed) / msPerDay);
+
+            if (daysDiff > 1 && user.currentStreak > 0) {
+                user.currentStreak = 0;
+                await user.save();
+                resetCount++;
+            }
+        }
+
+        res.status(200).json({
+            success: true,
+            message: `Reset ${resetCount} streaks`,
+            resetCount,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error,
+        });
+    }
+};
